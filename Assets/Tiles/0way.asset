@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49616d7243ca253469099bed5fb9e1ea, type: 3}
   m_Name: 0way
   m_EditorClassIdentifier: 
-  <Sprite>k__BackingField: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  directions: 0
+  <Sprite>k__BackingField: {fileID: 21300000, guid: 8323fea867969481c86d78d53ea7424c, type: 3}
+  <Directions>k__BackingField: 0

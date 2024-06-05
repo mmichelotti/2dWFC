@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Cell : MonoBehaviour
 {
-    [SerializeField] private List<TileObject> allTiles = new();
-    public List<TileObject> Entropy { get; set; }
+    [SerializeField] private List<Tile> allTiles = new();
+    public List<Tile> Entropy { get; set; }
     public Vector2Int Coordinate { get; set; }
-    public TileObject CurrentTile { get; set; }
+    public Tile CurrentTile { get; set; }
     public bool IsStable { get; set; }
     public int EntropyStatus => Entropy.Count;
     private void Awake()
@@ -19,7 +19,7 @@ public class Cell : MonoBehaviour
         foreach (var tile in allTiles)
         {
             Entropy.Add(tile);
-            TileObject rotate = new(tile);
+            Tile rotate = new(tile);
             for (int i = 0; i < 3; i++)
             {
                 RotateTile(rotate);
@@ -36,7 +36,7 @@ public class Cell : MonoBehaviour
             Debug.Log(item.Directions.ToStringCustom());
         }
     }
-    private void RotateTile(TileObject tile)
+    private void RotateTile(Tile tile)
     {
         tile.DirectionShift();
         transform.Rotate(0, 0, 90);
