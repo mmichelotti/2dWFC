@@ -14,7 +14,7 @@ public class Cell : MonoBehaviour
         Initialize();
         foreach (var tile in Entropy)
         {
-            Debug.Log(tile.Directions);
+            Debug.Log(tile.Directions.ToStringCustom());
         }
     }
     public void Initialize()
@@ -22,19 +22,12 @@ public class Cell : MonoBehaviour
         foreach (var tile in allTiles)
         {
             Entropy.Add(tile);
-
-            TileObject ninetyDegrees = new(tile);
-            ninetyDegrees.DirectionShift();
-            Entropy.Add(ninetyDegrees);
-
-            TileObject oneEightyDegrees = new(ninetyDegrees);
-            oneEightyDegrees.DirectionShift();
-            Entropy.Add(oneEightyDegrees);
-
-            TileObject twoSeventyDegrees = new(oneEightyDegrees);
-            twoSeventyDegrees.DirectionShift();
-            Entropy.Add(twoSeventyDegrees);
-
+            TileObject rotate = new(tile);
+            for (int i = 0; i < 3; i++)
+            {
+                rotate.DirectionShift();
+                Entropy.Add(new(rotate));
+            }
         }
     }
 }
