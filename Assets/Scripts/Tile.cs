@@ -9,4 +9,7 @@ public class Tile : ScriptableObject
     public Vector3 Rotation { get; set; }
     public Tile(Tile to) => (Sprite, Directions, Rotation) = (to.Sprite, to.Directions, to.Rotation);
     public void DirectionShift() => Directions = Directions.Bitshift(); 
+    public void DebugStatus() => Debug.Log
+        ($"Tile Entries: {Directions.ToStringCustom()}, " +
+         $"Transform Rotation : {Rotation}");
 }

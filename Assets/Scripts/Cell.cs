@@ -46,20 +46,17 @@ public class Cell : MonoBehaviour
 
         PossibleTiles.Clear();
         PossibleTiles.Add(selectedTile);
-        DebugStatus(selectedTile);
-        
     }
-    public void DebugStatus(Tile tile)
-    {
-        Debug.Log($"Amount of entropy {Entropy}");
-        Debug.Log("Possibility Tiles: ");
-        Debug.Log($"Tile Rotation : {tile.Rotation}");
-        Debug.Log(tile.Directions.ToStringCustom());
 
-    }
     private void RotateTile(Tile tile)
     {
         tile.DirectionShift();
         tile.Rotation += new Vector3(0, 0, 90);
+    }
+    public void DebugCellStatus()
+    {
+        Debug.Log($"Amount of entropy {Entropy}");
+        Debug.Log("Possibility Tiles: ");
+        foreach (var tile in PossibleTiles) tile.DebugStatus();
     }
 }
