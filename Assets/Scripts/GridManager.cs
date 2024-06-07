@@ -29,7 +29,7 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         InitializeCells();
-        cellAtPosition[RandomCell].RandomSet();
+        cellAtPosition[RandomCell].Entangle();
     }
 
 

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49616d7243ca253469099bed5fb9e1ea, type: 3}
   m_Name: 2wayS
   m_EditorClassIdentifier: 
+  <Name>k__BackingField: 2 Ways Straight
   <Sprite>k__BackingField: {fileID: 21300000, guid: ca66254d99b31ff419e07789147a0e03, type: 3}
   <Directions>k__BackingField: 5
