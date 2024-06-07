@@ -13,4 +13,11 @@ public static class Extensions
             }
         }
     }
+    public static Vector2Int RandomVector(Vector2Int min, Vector2Int max) => new
+        (UnityEngine.Random.Range(min.x, max.x),
+         UnityEngine.Random.Range(min.y, max.y));
+
+    public static Vector2Int RandomVector(Vector2Int max) => new
+        (UnityEngine.Random.Range(0, max.x),
+         UnityEngine.Random.Range(0, max.y));
 }

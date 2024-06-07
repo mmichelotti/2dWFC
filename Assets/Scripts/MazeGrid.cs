@@ -5,7 +5,7 @@ public class MazeGrid : ScriptableObject
 {
     #region properties
     [field: SerializeField] public int Length { get; set; } = 11;
-    [field: SerializeField] public Vector2 Size { get; set; } = new(20, 10);
+    [field: SerializeField] public Vector2Int Size { get; set; } = new(20, 10);
     #endregion
 
     #region methods

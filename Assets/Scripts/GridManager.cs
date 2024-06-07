@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Extensions;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField] private Directions startingPoint;
     [SerializeField] private Cell prefab;
     private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
     [field: SerializeField] public MazeGrid Grid { get; private set; }
+    private Vector2Int RandomCell => RandomVector(Grid.Size);
     private Vector2Int LowestEntropy
     {
         get
@@ -27,10 +30,9 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         InitializeCells();
-        SetLowestEntropy();
+        cellAtPosition[RandomCell].RandomSet();
     }
 
-    private void SetLowestEntropy() => cellAtPosition[LowestEntropy].RandomSet();
 
 
     private void InitializeCells()
@@ -50,7 +52,7 @@ public class GridManager : MonoBehaviour
     {
         Cell cell = Instantiate(prefab, parent);
         cell.transform.position = Grid.CoordinateToPosition(pos);
-        cell.transform.localScale = Grid.Size;
+        cell.transform.localScale = (Vector2)Grid.Size;
         cell.Coordinate = pos;
         cellAtPosition.Add(pos, cell);
     }
