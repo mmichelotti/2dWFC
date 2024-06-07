@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Extensions;
 
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Cell : MonoBehaviour
 {
-
     [SerializeField] private List<Tile> allTiles = new();
-    public List<Tile> PossibleTiles { get; set; }
+    public List<Tile> PossibleTiles { get; set; } = new();
     public int Entropy => PossibleTiles.Count;
     public Vector2Int Coordinate { get; set; }
     public Tile CurrentTile { get; set; }
-    public bool IsStable { get; set; }
 
     private SpriteRenderer spriteRenderer;
 
@@ -20,43 +19,26 @@ public class Cell : MonoBehaviour
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         Initialize();
-        
     }
     public void Initialize()
     {
-        PossibleTiles = new();
-        foreach (var tile in allTiles)
-        {
-            PossibleTiles.Add(tile);
-            Tile rotate = new(tile);
-            for (int i = 0; i < 3; i++)
-            {
-                RotateTile(rotate);
-                PossibleTiles.Add(new(rotate));
-            }
-        }
+        foreach (var tile in allTiles) PossibleTiles.AddRange(tile.AllConfigurations);
     }
+
     public void RandomSet()
     {
-        int randomTile = Random.Range(0, Entropy);
-        Tile selectedTile = PossibleTiles[randomTile];
+        Tile selectedTile = PossibleTiles[PositiveRandom(Entropy)];
 
         spriteRenderer.sprite = selectedTile.Sprite;
         transform.Rotate(selectedTile.Rotation);
 
-        PossibleTiles.Clear();
-        PossibleTiles.Add(selectedTile);
+        PossibleTiles = new() { selectedTile };
+        DebugCellStatus();
     }
 
-    private void RotateTile(Tile tile)
-    {
-        tile.DirectionShift();
-        tile.Rotation += new Vector3(0, 0, 90);
-    }
     public void DebugCellStatus()
     {
-        Debug.Log($"Amount of entropy {Entropy}");
-        Debug.Log("Possibility Tiles: ");
+        Debug.Log($"{Entropy} entropy at {Coordinate}");
         foreach (var tile in PossibleTiles) tile.DebugStatus();
     }
 }

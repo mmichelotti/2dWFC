@@ -10,8 +10,8 @@ public class MazeGrid : ScriptableObject
 
     #region methods
     public Vector2 GetCoordinatesAt(Directions dir) => dir.DirectionToMatrix() * (Length - 1);
-    public Vector3 CoordinateToPosition(Vector2 coord) => new(GetHalfPoint(Size.x, (int)coord.x), GetHalfPoint(Size.y, (int)coord.y));
+    public Vector3 CoordinateToPosition(Vector2Int pos) => new(GetHalfPoint(Size.x, (int)pos.x), GetHalfPoint(Size.y, (int)pos.y));
     private float GetHalfPoint(float tileDimension, int gridIndex) => tileDimension * (gridIndex - Length / 2);
-    public bool IsWithinGrid(Vector2 position) => position.x >= 0 && position.y >= 0 && position.x < Length && position.y < Length;
+    public bool IsWithinGrid(Vector2Int pos) => pos.x >= 0 && pos.y >= 0 && pos.x < Length && pos.y < Length;
     #endregion
 }
