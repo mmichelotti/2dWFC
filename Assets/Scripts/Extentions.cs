@@ -21,7 +21,5 @@ public static class Extensions
     public static Vector2Int RandomVector(Vector2Int max) => new
         (PositiveRandom(max.x),
          PositiveRandom(max.y));
-
-
-
 }
+

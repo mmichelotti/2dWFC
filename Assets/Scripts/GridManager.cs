@@ -5,7 +5,6 @@ using static Extensions;
 
 public class GridManager : MonoBehaviour
 {
-    [SerializeField] private Directions startingPoint;
     [SerializeField] private Cell prefab;
     private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
     [field: SerializeField] public MazeGrid Grid { get; private set; }
@@ -18,9 +17,9 @@ public class GridManager : MonoBehaviour
 
             foreach (var (pos, cell) in cellAtPosition)
             {
-                if (cell.Entropy <= lowestEntropy.Entropy)
+                if (cell.State.Density <= lowestEntropy.Entropy)
                 {
-                    lowestEntropy = (pos, cell.Entropy);
+                    lowestEntropy = (pos, cell.State.Density);
                 }
             }
             return lowestEntropy.Position;

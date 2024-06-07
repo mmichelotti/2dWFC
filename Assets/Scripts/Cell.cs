@@ -1,19 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Extensions;
-
 
 [RequireComponent(typeof(SpriteRenderer))]
 public class Cell : MonoBehaviour
 {
     [SerializeField] private List<Tile> allTiles = new();
-    public List<Tile> PossibleTiles { get; set; } = new();
-    public int Entropy => PossibleTiles.Count;
+    public QuantumState<Tile> State { get; private set; } = new();
     public Vector2Int Coordinate { get; set; }
-    public Tile CurrentTile { get; set; }
+    public Tile CurrentTile { get; private set; }
 
     private SpriteRenderer spriteRenderer;
-
 
     private void Awake()
     {
@@ -22,23 +18,23 @@ public class Cell : MonoBehaviour
     }
     public void Initialize()
     {
-        foreach (var tile in allTiles) PossibleTiles.AddRange(tile.AllConfigurations);
+        foreach (var tile in allTiles) State.Add(tile.AllConfigurations);
     }
 
     public void RandomSet()
     {
-        Tile selectedTile = PossibleTiles[PositiveRandom(Entropy)];
+        Tile selectedTile = State.ObserveRandom;
 
         spriteRenderer.sprite = selectedTile.Sprite;
         transform.Rotate(selectedTile.Rotation);
 
-        PossibleTiles = new() { selectedTile };
+        State = new(selectedTile);
         DebugCellStatus();
     }
 
     public void DebugCellStatus()
     {
-        Debug.Log($"{Entropy} entropy at {Coordinate}");
-        foreach (var tile in PossibleTiles) tile.DebugStatus();
+        Debug.Log($"{State.Entropy} entropy at {Coordinate}");
+        foreach (var tile in State.Superposition) tile.DebugStatus();
     }
 }
