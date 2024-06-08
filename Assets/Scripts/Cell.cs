@@ -44,7 +44,6 @@ public class Cell : MonoBehaviour
     {
         Tile tile = State.Entangle(State.RandomIndex);
         Set(tile);
-        CurrentTile = tile;
         DebugStatus();
     }
 
@@ -52,6 +51,7 @@ public class Cell : MonoBehaviour
     {
         spriteRenderer.sprite = tile.Sprite;
         transform.Rotate(tile.Rotation);
+        CurrentTile = tile;
     }
 
     public void DebugStatus()
