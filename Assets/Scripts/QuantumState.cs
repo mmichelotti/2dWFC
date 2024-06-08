@@ -8,13 +8,17 @@ public record QuantumState<T>
     public bool IsEntangled => Entropy == 0;
     public int RandomIndex => PositiveRandom(Density);
     public float Entropy
-    {   get
+    {
+        get
         {
             float probability = 1.0f / Density;
             float entropy = -Density * probability * (float)System.Math.Log(probability);
-            return Density == 0 ? 0 : entropy; //density cant be 0, at minimum should be 1
+            return Density == 0 ? 0 : entropy;
         }
     }
+    public QuantumState() => Superposition = new();
+    public QuantumState(T tile) => Superposition = new() { tile };
+    public QuantumState(List<T> tiles) => Superposition = new(tiles);
     public void Add(T obj) => Superposition.Add(obj);
     public void Add(List<T> list) => Superposition.AddRange(list);
     public void Collapse() => Superposition.Clear();

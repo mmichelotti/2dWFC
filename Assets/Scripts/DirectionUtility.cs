@@ -24,7 +24,8 @@ public static class DirectionUtility
         { Directions.Left,  Vector2Int.left }
     };
     public static Vector2 DirectionToMatrix(this Directions dir) => ((Vector2)dir.GetCompositeOffset() / 2f) + new Vector2(.5f, .5f);
-    public static Directions GetOpposite(this Directions dir) => (Directions)((int)dir >> 2 | ((int)dir & 0b0011) << 2); 
+    public static Directions GetOpposite(this Directions dir) => (Directions)((int)dir >> 2 | ((int)dir & 0b0011) << 2);
+    public static bool Contains(this Directions dir, Directions toCheck) => (dir & toCheck) == toCheck;
     public static Vector2Int GetCompositeOffset(this Directions compositeDir)
     {
         Vector2Int result = Vector2Int.zero;
@@ -51,6 +52,8 @@ public static class DirectionUtility
         | (Convert.ToInt32(target.x - origin.x < 0) * (int)Directions.Left));
 
     public static Directions Bitshift(this Directions dir) => (Directions)((((int)dir >> 1) | ((int)dir << 3)) & (int)Directions.All);
+
+
     private static Directions Neutralize(this Directions dir)
     {
         int bits = (int)dir;

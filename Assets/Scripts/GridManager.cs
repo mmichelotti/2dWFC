@@ -2,36 +2,66 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static Extensions;
+using static DirectionUtility;
+using Unity.VisualScripting;
 
 public class GridManager : MonoBehaviour
 {
     [SerializeField] private Cell prefab;
     private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
+
     [field: SerializeField] public MazeGrid Grid { get; private set; }
     private Vector2Int RandomCell => RandomVector(Grid.Size);
     private Vector2Int LowestEntropy
     {
         get
         {
-            (Vector2Int Position, int Entropy) lowestEntropy = (new(), int.MaxValue);
+            (Vector2Int Position, float Entropy) lowestEntropy = (new(), float.PositiveInfinity);
 
             foreach (var (pos, cell) in cellAtPosition)
             {
-                if (cell.State.Density <= lowestEntropy.Entropy)
-                {
-                    lowestEntropy = (pos, cell.State.Density);
-                }
+                if (cell.State.IsEntangled) continue;
+                if (cell.State.Entropy < lowestEntropy.Entropy) lowestEntropy = (pos, cell.State.Entropy);
+
             }
             return lowestEntropy.Position;
         }
     }
 
+
     private void Start()
     {
         InitializeCells();
-        cellAtPosition[RandomCell].Entangle();
+        SetCell(RandomCell);
     }
 
+
+    private void SetCell(Vector2Int pos)
+    {
+        Directions toRespect = Directions.None;
+        foreach (var (dir, off) in OrientationOf)
+        {
+            if (cellAtPosition.TryGetValue(pos + off, out Cell adjacent))
+            {
+                if (adjacent.State.IsEntangled)
+                {
+                    toRespect |= adjacent.CurrentTile.Directions & dir.GetOpposite();
+                }
+                else
+                {
+                    if (UnityEngine.Random.value >= .5f)
+                    {
+                        toRespect |= dir;
+                    }
+                }
+            }
+        }
+        cellAtPosition[pos].UpdateState(toRespect);
+        cellAtPosition[pos].Entangle();
+        Vector2Int nextPos = LowestEntropy;
+        if (cellAtPosition[nextPos].State.IsEntangled) return;
+        SetCell(nextPos);
+    }
 
 
     private void InitializeCells()
@@ -47,6 +77,7 @@ public class GridManager : MonoBehaviour
         Action<Vector2Int> action = pos => DrawLine(pos);
         action.MatrixLoop(Grid.Length);
     }
+
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
         Cell cell = Instantiate(prefab, parent);
@@ -55,6 +86,7 @@ public class GridManager : MonoBehaviour
         cell.Coordinate = pos;
         cellAtPosition.Add(pos, cell);
     }
+
     private void DrawLine(Vector2Int pos)
     {
         Vector3 wsPos = Grid.CoordinateToPosition(pos);
