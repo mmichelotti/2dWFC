@@ -1,11 +1,17 @@
 using UnityEngine;
+using static Extensions;
 
+/// <summary>
+/// Just a grid with useful functionality like transforming grid space into world space 
+/// Its a scriptable object without any specific reason
+/// </summary>
 [CreateAssetMenu(fileName = "Grid", menuName = "ScriptableObjects/Grid", order = 1)]
 public class MazeGrid : ScriptableObject
 {
     #region properties
     [field: SerializeField] public int Length { get; set; } = 11;
     [field: SerializeField] public Vector2Int Size { get; set; } = new(20, 10);
+    public Vector2Int RandomCoordinate => RandomVector(Size);
     #endregion
 
     #region methods

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: 0way
   m_EditorClassIdentifier: 
   <Name>k__BackingField: 0 Way
-  <Sprite>k__BackingField: {fileID: 21300000, guid: 8323fea867969481c86d78d53ea7424c, type: 3}
+  <Sprite>k__BackingField: {fileID: 21300000, guid: d3b84d2f0ee31e243914f1c8e1c7d9ac, type: 3}
   <Directions>k__BackingField: 0

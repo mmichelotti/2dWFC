@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// Just an extension class for some syntax sugar
+/// </summary>
 public static class Extensions
 {
     public static void MatrixLoop(this Action<Vector2Int> action, int length)
