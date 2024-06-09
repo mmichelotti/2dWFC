@@ -4,15 +4,15 @@ using static DirectionUtility;
 
 public class Neighbour
 {
-    private readonly Dictionary<Vector2Int, Cell> cellAtPosition;
-    public Neighbour(Dictionary<Vector2Int, Cell> cellAtPosition) => this.cellAtPosition = cellAtPosition;
+    private readonly Dictionary<Vector2Int, Cell> initialCells;
+    public Neighbour(Dictionary<Vector2Int, Cell> initialCells) => this.initialCells = initialCells;
 
     public List<Cell> GetNeighbours(Vector2Int pos, bool areEntangled)
     {
         List<Cell> neighbours = new();
         foreach (var off in OrientationOf.Values)
         {
-            if (cellAtPosition.TryGetValue(pos + off, out Cell adjacent))
+            if (initialCells.TryGetValue(pos + off, out Cell adjacent))
             {
                 if (adjacent.State.IsEntangled == areEntangled) neighbours.Add(adjacent);
 
@@ -28,7 +28,7 @@ public class Neighbour
             Directions direction = pos.GetDirectionTo(neighborCell.Coordinate);
             (Directions required, Directions excluded) = (direction.GetOpposite(), Directions.None);
 
-            if (!cellAtPosition[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
+            if (!initialCells[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
 
             neighborCell.UpdateState(required, excluded);
         }

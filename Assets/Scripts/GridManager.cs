@@ -2,8 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static DirectionUtility;
 using static Extensions;
+using static DirectionUtility;
 
 public class GridManager : MonoBehaviour
 {
@@ -15,6 +15,12 @@ public class GridManager : MonoBehaviour
     private static Neighbour Neighbours { get; } = new(cellAtPosition);
     private bool allCellsEntangled;
     private Vector2Int nextPos;
+
+    private Queue<Vector2Int> entropyQueue = new();
+
+    private PriorityQueue<(Vector2Int Position, float Entropy)> minHeap;
+
+
 
     private Vector2Int LowestEntropy
     {
