@@ -15,6 +15,7 @@ public class Neighbour
             if (cellAtPosition.TryGetValue(pos + off, out Cell adjacent))
             {
                 if (adjacent.State.IsEntangled == areEntangled) neighbours.Add(adjacent);
+
             }
         }
         return neighbours;

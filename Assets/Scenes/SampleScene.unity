@@ -387,7 +387,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2323590711849152487, guid: 6ffa2419c64127f4fa8dde99a58fe4f2, type: 3}
-  <Grid>k__BackingField: {fileID: 11400000, guid: d894604f7c790a84dad8827cdf992098, type: 2}
+  grid: {fileID: 11400000, guid: d894604f7c790a84dad8827cdf992098, type: 2}
+  startingPoint: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

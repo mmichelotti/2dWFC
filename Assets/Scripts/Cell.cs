@@ -9,10 +9,10 @@ public class Cell : MonoBehaviour
     [SerializeField] private List<Tile> allTiles = new();
     public QuantumState<Tile> State { get; private set; } = new();
     public Vector2Int Coordinate { get; set; }
-    public Tile CurrentTile { get; private set; }
+    public Tile EntangledTile { get; private set; }
     public Directions Direction { get; set; }
 
-    public bool HasDirection(Directions dir) => CurrentTile.Directions.HasFlag(dir);
+    public bool HasDirection(Directions dir) => EntangledTile.Directions.HasFlag(dir);
 
     private void Awake()
     {
@@ -43,14 +43,14 @@ public class Cell : MonoBehaviour
         Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {requiredDirections}, Excluded directions: {excludedDirections}");
     }
 
-    public void Set(Tile tile)
+    public void EntangleState() => EntangledTile = State.Entangle();
+    public void Instantiate()
     {
-        spriteRenderer.sprite = tile.Sprite;
-        transform.Rotate(tile.Rotation);
-        CurrentTile = tile;
+        spriteRenderer.sprite = EntangledTile.Sprite;
+        transform.Rotate(EntangledTile.Rotation);
     }
 
-    public void DebugStatus()
+    public void DebugState()
     {
         Debug.Log($"{State.Entropy} entropy at {Coordinate}");
         foreach (var tile in State.Superposition) tile.DebugStatus();

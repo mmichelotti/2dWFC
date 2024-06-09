@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
 
-/// <summary>
-/// Just an extension class for some syntax sugar
-/// </summary>
 public static class Extensions
 {
     public static void MatrixLoop(this Action<Vector2Int> action, int length)
@@ -24,5 +21,9 @@ public static class Extensions
     public static Vector2Int RandomVector(Vector2Int max) => new
         (PositiveRandom(max.x),
          PositiveRandom(max.y));
+
+    public static Vector2Int RandomVector(int max) => new
+        (PositiveRandom(max),
+         PositiveRandom(max));
 }
 
