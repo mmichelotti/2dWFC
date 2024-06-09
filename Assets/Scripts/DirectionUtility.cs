@@ -30,6 +30,12 @@ public static class DirectionUtility
         { Directions.Left,  Vector2Int.left }
     };
 
+    #region operators
+    public static Directions Plus(this Directions dir, Directions toAdd) => dir | toAdd;
+    public static Directions PlusEqual(this ref Directions dir, Directions toAdd) => dir |= toAdd;
+    public static Directions Minus(this Directions dir, Directions toRemove) => dir & ~toRemove;
+    public static Directions MinusEqual(this ref Directions dir, Directions toRemove) => dir &= ~toRemove;
+    #endregion
     /// <summary>
     /// Convert a direction into a matrix space
     /// (for example the center of a Vector2 is 0,0 but for a matrix that starts from the bottom left is 0.5, 0.5)
@@ -81,7 +87,7 @@ public static class DirectionUtility
     /// <param name="origin"></param>
     /// <param name="target"></param>
     /// <returns></returns>
-    public static Directions GetDirectionTo(this Vector2 origin, Vector2 target) => (Directions)
+    public static Directions GetDirectionTo(this Vector2Int origin, Vector2Int target) => (Directions)
         ( (Convert.ToInt32(target.y - origin.y > 0) * (int)Directions.Up)
         | (Convert.ToInt32(target.y - origin.y < 0) * (int)Directions.Down)
         | (Convert.ToInt32(target.x - origin.x > 0) * (int)Directions.Right)
