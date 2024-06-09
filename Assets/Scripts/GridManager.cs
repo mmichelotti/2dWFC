@@ -16,12 +16,6 @@ public class GridManager : MonoBehaviour
     private bool allCellsEntangled;
     private Vector2Int nextPos;
 
-    private Queue<Vector2Int> entropyQueue = new();
-
-    private PriorityQueue<(Vector2Int Position, float Entropy)> minHeap;
-
-
-
     private Vector2Int LowestEntropy
     {
         get
@@ -49,8 +43,6 @@ public class GridManager : MonoBehaviour
         }
     }
 
-
-
     private void Start()
     {
         InitializeCells();
@@ -60,6 +52,7 @@ public class GridManager : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.R)) ResetGrid();
         if (!allCellsEntangled) SetCells();
     }
 
@@ -70,28 +63,13 @@ public class GridManager : MonoBehaviour
             allCellsEntangled = true;
             return;
         }
-
         SetCell(nextPos);
-        Neighbours.UpdateNeighboursState(nextPos);
-        nextPos = LowestEntropy;
-    }
-    private IEnumerator SetCellsCoroutine(float time)
-    {
-        Vector2Int nextPos = grid.RandomCoordinate;
-        while (true)
-        {
-            if (cellAtPosition[nextPos].State.IsEntangled) yield break;
-            SetCell(nextPos);
-            Neighbours.UpdateNeighboursState(nextPos);
-            yield return new WaitForSeconds(time);
-            nextPos = LowestEntropy;
-        }
+        nextPos = LowestEntropy;     
     }
 
     private void SetCell(Vector2Int pos)
     {
         (Directions requiredDirections, Directions excludedDirections) = (Directions.None, Directions.None);
-
 
         List<Cell> entangledNeighbours = Neighbours.GetNeighbours(pos, true);
         foreach (var cell in entangledNeighbours)
@@ -112,6 +90,7 @@ public class GridManager : MonoBehaviour
         currentCell.EntangleState();
         currentCell.Instantiate();
         currentCell.DebugState();
+        Neighbours.UpdateNeighboursState(pos);
     }
 
     private void InitializeCell(Vector2Int pos, Transform parent)
@@ -141,5 +120,16 @@ public class GridManager : MonoBehaviour
         Gizmos.color = Color.black;
         Action<Vector2Int> action = pos => DrawLine(pos);
         action.MatrixLoop(grid.Length);
+    }
+
+    public void ResetGrid()
+    {
+        // Clear existing cells
+        foreach (var cell in cellAtPosition.Values)
+        {
+            cell.ResetState();
+        }
+        nextPos = grid.GetCoordinatesAt(startingPoint);
+        allCellsEntangled = false;
     }
 }

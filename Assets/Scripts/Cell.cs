@@ -17,16 +17,21 @@ public class Cell : MonoBehaviour
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
-        Initialize();
+        InitializeState();
     }
 
-    public void Initialize()
+    public void InitializeState()
     {
-        foreach (var tile in allTiles)
-        {
-            State.Add(tile.AllConfigurations);
-        }
-        Debug.Log($"Cell at {Coordinate} initialized with {State.Density} configurations.");
+        State.Collapse();
+        foreach (var tile in allTiles) State.Add(tile.AllConfigurations);
+    }
+
+    public void ResetState()
+    {
+        InitializeState(); 
+        spriteRenderer.sprite = null;
+        Direction = Directions.None;
+        transform.rotation = Quaternion.identity;
     }
 
     public void UpdateState(Directions requiredDirections, Directions excludedDirections)
