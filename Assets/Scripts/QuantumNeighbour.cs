@@ -27,12 +27,12 @@ public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionabl
     {
         foreach (var neighborCell in GetNeighbours(pos, false))
         {
-            Directions direction = pos.GetDirectionTo(neighborCell.Coordinate);
-            (Directions required, Directions excluded) = (direction.GetOpposite(), Directions.None);
+            Directions dir = pos.GetDirectionTo(neighborCell.Coordinate);
+            DirectionsRequired required = new(dir.GetOpposite());
 
-            if (!initialCells[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
+            if (!initialCells[pos].HasDirection(dir)) required.Flip();
 
-            neighborCell.DirectionsRequired.SetRequirements(required, excluded);
+            neighborCell.DirectionsRequired = required;
             neighborCell.UpdateState();
         }
     }

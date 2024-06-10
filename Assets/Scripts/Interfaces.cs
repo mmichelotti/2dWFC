@@ -22,10 +22,3 @@ public interface IQuantumStatable<T>
     public void EntangleState() => Entangled = State.Entangle();
 
 }
-
-public record DirectionsRequired
-{
-    public Directions Required { get; private set; }
-    public Directions Excluded { get; private set; }
-    public void SetRequirements(Directions required, Directions excluded) => (Required, Excluded) = (required, excluded);
-}

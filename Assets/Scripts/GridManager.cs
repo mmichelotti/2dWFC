@@ -87,7 +87,7 @@ public class GridManager : MonoBehaviour
         }
 
         Cell currentCell = cellAtPosition[pos];
-        currentCell.DirectionsRequired.SetRequirements(required, excluded);
+        currentCell.DirectionsRequired = new(required, excluded);
         currentCell.UpdateState();
         currentCell.EntangleState();
         currentCell.Instantiate();

@@ -14,7 +14,7 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
     public Directions Directions { get; set; }
     public QuantumState<Tile> State { get; set; } = new();
     public Tile Entangled { get; set; }
-    public bool HasDirection(Directions dir) => Entangled.Directions.HasFlag(dir);
+    public bool HasDirection(Directions dir) => Entangled.HasDirection(dir);
 
     private void Awake()
     {
