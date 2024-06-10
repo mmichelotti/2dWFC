@@ -3,16 +3,18 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2Int>, IDirectionable
+public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2Int>, IDirectionable, IDirectionableRequired
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private List<Tile> allTiles = new();
 
     public Vector2Int Coordinate { get; set; }
-    public Directions Directions { get; set; } = new();
+    public DirectionsRequired DirectionsRequired { get; set; } = new();
+
+    public Directions Directions { get; set; }
     public QuantumState<Tile> State { get; set; } = new();
     public Tile Entangled { get; set; }
-    public bool HasDirection(Direction dir) => Entangled.Directions.HasFlag(dir);
+    public bool HasDirection(Directions dir) => Entangled.Directions.HasFlag(dir);
 
     private void Awake()
     {
@@ -30,7 +32,8 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
     {
         InitializeState(); 
         spriteRenderer.sprite = null;
-        Directions = new();
+        DirectionsRequired = new();
+        Directions = Directions.None;
         transform.rotation = Quaternion.identity;
     }
 
@@ -39,13 +42,13 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
         List<Tile> newState = new();
         foreach (var tile in State.Superposition)
         {
-            if (tile.Directions.HasFlag(Directions.Required) && (tile.Directions & Directions.Excluded) == Direction.None)
+            if (tile.Directions.HasFlag(DirectionsRequired.Required) && (tile.Directions & DirectionsRequired.Excluded) == Directions.None)
             {
                 newState.Add(tile);
             }
         }
         State = new QuantumState<Tile>(newState);
-        Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {Directions.Required}, Excluded directions: {Directions.Excluded}");
+        Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {DirectionsRequired.Required}, Excluded directions: {DirectionsRequired.Excluded}");
     }
 
     public void EntangleState() => Entangled = State.Entangle();

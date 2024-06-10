@@ -9,7 +9,7 @@ public class GridManager : MonoBehaviour
 {
     [SerializeField] private Cell prefab;
     [SerializeField] private MazeGrid grid;
-    [SerializeField] private Direction startingPoint;
+    [SerializeField] private Directions startingPoint;
 
     private static readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
     private static QuantumNeighbour<Cell,Tile> Neighbours { get; } = new(cellAtPosition);
@@ -70,12 +70,12 @@ public class GridManager : MonoBehaviour
 
     private void SetCell(Vector2Int pos)
     {
-        (Direction required, Direction excluded) = (Direction.None, Direction.None);
+        (Directions required, Directions excluded) = (Directions.None, Directions.None);
 
         List<Cell> entangledNeighbours = Neighbours.GetNeighbours(pos, true);
         foreach (var cell in entangledNeighbours)
         {
-            Direction dir = cell.Directions.Opposite;
+            Directions dir = cell.Directions.GetOpposite();
             if (cell.HasDirection(dir)) required.PlusEqual(dir);
             else excluded.PlusEqual(dir);
 
@@ -87,7 +87,7 @@ public class GridManager : MonoBehaviour
         }
 
         Cell currentCell = cellAtPosition[pos];
-        currentCell.Directions.SetRequirements(required, excluded);
+        currentCell.DirectionsRequired.SetRequirements(required, excluded);
         currentCell.UpdateState();
         currentCell.EntangleState();
         currentCell.Instantiate();

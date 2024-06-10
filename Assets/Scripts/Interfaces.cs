@@ -6,7 +6,11 @@ public interface IPositionable<T>
 public interface IDirectionable
 {
     public Directions Directions { get; set; }
-    public bool HasDirection(Direction dir);
+    public bool HasDirection(Directions dir);
+}
+public interface IDirectionableRequired
+{
+    public DirectionsRequired DirectionsRequired { get; set; }
 }
 public interface IQuantumStatable<T>
 {
@@ -19,12 +23,9 @@ public interface IQuantumStatable<T>
 
 }
 
-public record Directions
+public record DirectionsRequired
 {
-    public Direction Identity { get; set; }
-    public Direction Required { get; private set; }
-    public Direction Excluded { get; private set; }
-    public Direction Opposite => Identity.GetOpposite();
-    public bool Contains(Direction dir) => Identity.HasFlag(dir);
-    public void SetRequirements(Direction required, Direction excluded) => (Required, Excluded) = (required, excluded);
+    public Directions Required { get; private set; }
+    public Directions Excluded { get; private set; }
+    public void SetRequirements(Directions required, Directions excluded) => (Required, Excluded) = (required, excluded);
 }

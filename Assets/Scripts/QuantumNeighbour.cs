@@ -7,7 +7,7 @@ using static DirectionUtility;
 /// </summary>
 /// <typeparam name="T">The type of the container</typeparam>
 /// <typeparam name="T2">The type of the content</typeparam>
-public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable
+public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable, IDirectionableRequired
 {
     private readonly Dictionary<Vector2Int, T> initialCells;
     public QuantumNeighbour(Dictionary<Vector2Int, T> initialCells) => this.initialCells = initialCells;
@@ -27,12 +27,12 @@ public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionabl
     {
         foreach (var neighborCell in GetNeighbours(pos, false))
         {
-            Direction direction = pos.GetDirectionTo(neighborCell.Coordinate);
-            (Direction required, Direction excluded) = (direction.GetOpposite(), Direction.None);
+            Directions direction = pos.GetDirectionTo(neighborCell.Coordinate);
+            (Directions required, Directions excluded) = (direction.GetOpposite(), Directions.None);
 
             if (!initialCells[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
 
-            neighborCell.Directions.SetRequirements(required, excluded);
+            neighborCell.DirectionsRequired.SetRequirements(required, excluded);
             neighborCell.UpdateState();
         }
     }
