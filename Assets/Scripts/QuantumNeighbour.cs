@@ -2,11 +2,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using static DirectionUtility;
 
-public class Neighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable
+/// <summary>
+/// Useful methods to talk with adjacents neighbours that have a QuantumState.
+/// </summary>
+/// <typeparam name="T">The type of the container</typeparam>
+/// <typeparam name="T2">The type of the content</typeparam>
+public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable
 {
     private readonly Dictionary<Vector2Int, T> initialCells;
-    public Neighbour(Dictionary<Vector2Int, T> initialCells) => this.initialCells = initialCells;
-
+    public QuantumNeighbour(Dictionary<Vector2Int, T> initialCells) => this.initialCells = initialCells;
     public List<T> GetNeighbours(Vector2Int pos, bool areEntangled)
     {
         List<T> neighbours = new();
@@ -19,7 +23,6 @@ public class Neighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vecto
         }
         return neighbours;
     }
-    
     public void UpdateNeighboursState(Vector2Int pos)
     {
         foreach (var neighborCell in GetNeighbours(pos, false))
@@ -29,7 +32,7 @@ public class Neighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vecto
 
             if (!initialCells[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
 
-            (neighborCell.Required, neighborCell.Excluded) = (required, excluded);
+            neighborCell.Directions.SetRequirements(required, excluded);
             neighborCell.UpdateState();
         }
     }

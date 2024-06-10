@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
-
 
 public record QuantumState<T>
 {
@@ -31,5 +29,4 @@ public record QuantumState<T>
     public void Add(T obj) => Superposition.Add(obj);
     public void Add(List<T> list) => Superposition.AddRange(list);
     public void Collapse() => Superposition.Clear();
-
 }

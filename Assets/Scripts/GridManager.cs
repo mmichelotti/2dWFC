@@ -12,7 +12,7 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Direction startingPoint;
 
     private static readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
-    private static Neighbour<Cell,Tile> Neighbours { get; } = new(cellAtPosition);
+    private static QuantumNeighbour<Cell,Tile> Neighbours { get; } = new(cellAtPosition);
 
     private bool allCellsEntangled;
     private Vector2Int nextPos;
@@ -75,7 +75,7 @@ public class GridManager : MonoBehaviour
         List<Cell> entangledNeighbours = Neighbours.GetNeighbours(pos, true);
         foreach (var cell in entangledNeighbours)
         {
-            Direction dir = cell.Direction.GetOpposite();
+            Direction dir = cell.Directions.Opposite;
             if (cell.HasDirection(dir)) required.PlusEqual(dir);
             else excluded.PlusEqual(dir);
 
@@ -87,9 +87,7 @@ public class GridManager : MonoBehaviour
         }
 
         Cell currentCell = cellAtPosition[pos];
-
-        (currentCell.Required, currentCell.Excluded) = (required, excluded);
-
+        currentCell.Directions.SetRequirements(required, excluded);
         currentCell.UpdateState();
         currentCell.EntangleState();
         currentCell.Instantiate();

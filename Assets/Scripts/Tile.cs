@@ -9,7 +9,6 @@ public class Tile : ScriptableObject
     [field: SerializeField] public Direction Directions { get; set; }
     public Vector3 Rotation { get; set; }
     public Tile(Tile tile) => (Name, Sprite, Directions, Rotation) = (tile.Name, tile.Sprite, tile.Directions, tile.Rotation);
-
     public List<Tile> AllConfigurations
     {
         get
@@ -24,12 +23,10 @@ public class Tile : ScriptableObject
             return allDirections;
         }
     }
-
     private void Rotate()
     {
         Directions = Directions.Bitshift();
         Rotation += new Vector3(0, 0, 90);
     }
-
     public void DebugStatus() => Debug.Log($"{Name}, {Directions.ToStringCustom()} roads with {Rotation.z} degrees rotation.");
 }
