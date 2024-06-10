@@ -15,7 +15,6 @@ public class Neighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vecto
             if (initialCells.TryGetValue(pos + off, out T adjacent))
             {
                 if (adjacent.State.IsEntangled == areEntangled) neighbours.Add(adjacent);
-
             }
         }
         return neighbours;
@@ -25,8 +24,8 @@ public class Neighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vecto
     {
         foreach (var neighborCell in GetNeighbours(pos, false))
         {
-            Directions direction = pos.GetDirectionTo(neighborCell.Coordinate);
-            (Directions required, Directions excluded) = (direction.GetOpposite(), Directions.None);
+            Direction direction = pos.GetDirectionTo(neighborCell.Coordinate);
+            (Direction required, Direction excluded) = (direction.GetOpposite(), Direction.None);
 
             if (!initialCells[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
 

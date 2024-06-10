@@ -10,10 +10,12 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
     public QuantumState<Tile> State { get; set; } = new();
     public Vector2Int Coordinate { get; set; }
     public Tile Entangled { get; set; }
-    public Directions Direction { get; set; }
-    public Directions Required { get; set; }
-    public Directions Excluded { get; set; }
-    public bool HasDirection(Directions dir) => Entangled.Directions.HasFlag(dir);
+
+    public Directions Directions { get; set; }
+    public Direction Direction { get; set; }
+    public Direction Required { get; set; }
+    public Direction Excluded { get; set; }
+    public bool HasDirection(Direction dir) => Entangled.Directions.HasFlag(dir);
 
     private void Awake()
     {
@@ -31,7 +33,8 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
     {
         InitializeState(); 
         spriteRenderer.sprite = null;
-        Direction = Directions.None;
+        Direction = Direction.None;
+        Directions = new();
         transform.rotation = Quaternion.identity;
     }
 
@@ -40,7 +43,7 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
         List<Tile> newState = new();
         foreach (var tile in State.Superposition)
         {
-            if (tile.Directions.HasFlag(Required) && (tile.Directions & Excluded) == Directions.None)
+            if (tile.Directions.HasFlag(Required) && (tile.Directions & Excluded) == Direction.None)
             {
                 newState.Add(tile);
             }

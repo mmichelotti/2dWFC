@@ -1,29 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-public interface IQuantumStatable<T>
-{
-    public abstract QuantumState<T> State { get; set; }
-    public T Entangled { get; set; }
-    public abstract void InitializeState();
-    public abstract void ResetState();
-    public abstract void UpdateState();
 
-    public void EntangleState() => Entangled = State.Entangle();
-
-}
-public interface IPositionable<T>
-{
-    public T Coordinate { get; set; }
-
-}
-
-public interface IDirectionable
-{
-    public Directions Direction { get; set; }
-    public Directions Required { get; set; }
-    public Directions Excluded { get; set; }
-    public abstract bool HasDirection(Directions dir);
-}
 
 public record QuantumState<T>
 {

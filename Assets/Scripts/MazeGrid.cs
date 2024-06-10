@@ -10,7 +10,7 @@ public class MazeGrid : ScriptableObject
     #endregion
 
     #region methods
-    public Vector2Int GetCoordinatesAt(Directions dir)
+    public Vector2Int GetCoordinatesAt(Direction dir)
     {
         Vector2 vector = dir.DirectionToMatrix() * (Length - 1);
         return new((int)vector.x, (int)vector.y);
