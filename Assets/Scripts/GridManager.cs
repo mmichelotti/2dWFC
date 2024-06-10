@@ -12,7 +12,8 @@ public class GridManager : MonoBehaviour
     [SerializeField] private Directions startingPoint;
 
     private static readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
-    private static Neighbour Neighbours { get; } = new(cellAtPosition);
+    private static Neighbour<Cell,Tile> Neighbours { get; } = new(cellAtPosition);
+
     private bool allCellsEntangled;
     private Vector2Int nextPos;
 
@@ -69,24 +70,27 @@ public class GridManager : MonoBehaviour
 
     private void SetCell(Vector2Int pos)
     {
-        (Directions requiredDirections, Directions excludedDirections) = (Directions.None, Directions.None);
+        (Directions required, Directions excluded) = (Directions.None, Directions.None);
 
         List<Cell> entangledNeighbours = Neighbours.GetNeighbours(pos, true);
         foreach (var cell in entangledNeighbours)
         {
             Directions dir = cell.Direction.GetOpposite();
-            if (cell.HasDirection(dir)) requiredDirections.PlusEqual(dir);
-            else excludedDirections.PlusEqual(dir);
+            if (cell.HasDirection(dir)) required.PlusEqual(dir);
+            else excluded.PlusEqual(dir);
 
         }
 
         foreach (var (dir, off) in OrientationOf)
         {
-            if (!grid.IsWithinGrid(pos + off)) excludedDirections.PlusEqual(dir);
+            if (!grid.IsWithinGrid(pos + off)) excluded.PlusEqual(dir);
         }
 
         Cell currentCell = cellAtPosition[pos];
-        currentCell.UpdateState(requiredDirections, excludedDirections);
+
+        (currentCell.Required, currentCell.Excluded) = (required, excluded);
+
+        currentCell.UpdateState();
         currentCell.EntangleState();
         currentCell.Instantiate();
         currentCell.DebugState();

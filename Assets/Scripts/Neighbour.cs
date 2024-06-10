@@ -2,17 +2,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using static DirectionUtility;
 
-public class Neighbour
+public class Neighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable
 {
-    private readonly Dictionary<Vector2Int, Cell> initialCells;
-    public Neighbour(Dictionary<Vector2Int, Cell> initialCells) => this.initialCells = initialCells;
+    private readonly Dictionary<Vector2Int, T> initialCells;
+    public Neighbour(Dictionary<Vector2Int, T> initialCells) => this.initialCells = initialCells;
 
-    public List<Cell> GetNeighbours(Vector2Int pos, bool areEntangled)
+    public List<T> GetNeighbours(Vector2Int pos, bool areEntangled)
     {
-        List<Cell> neighbours = new();
+        List<T> neighbours = new();
         foreach (var off in OrientationOf.Values)
         {
-            if (initialCells.TryGetValue(pos + off, out Cell adjacent))
+            if (initialCells.TryGetValue(pos + off, out T adjacent))
             {
                 if (adjacent.State.IsEntangled == areEntangled) neighbours.Add(adjacent);
 
@@ -30,7 +30,8 @@ public class Neighbour
 
             if (!initialCells[pos].HasDirection(direction)) (required, excluded) = (excluded, required);
 
-            neighborCell.UpdateState(required, excluded);
+            (neighborCell.Required, neighborCell.Excluded) = (required, excluded);
+            neighborCell.UpdateState();
         }
     }
 }

@@ -3,16 +3,17 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Cell : MonoBehaviour
+public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2Int>, IDirectionable
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private List<Tile> allTiles = new();
-    public QuantumState<Tile> State { get; private set; } = new();
+    public QuantumState<Tile> State { get; set; } = new();
     public Vector2Int Coordinate { get; set; }
-    public Tile EntangledTile { get; private set; }
+    public Tile Entangled { get; set; }
     public Directions Direction { get; set; }
-
-    public bool HasDirection(Directions dir) => EntangledTile.Directions.HasFlag(dir);
+    public Directions Required { get; set; }
+    public Directions Excluded { get; set; }
+    public bool HasDirection(Directions dir) => Entangled.Directions.HasFlag(dir);
 
     private void Awake()
     {
@@ -34,25 +35,25 @@ public class Cell : MonoBehaviour
         transform.rotation = Quaternion.identity;
     }
 
-    public void UpdateState(Directions requiredDirections, Directions excludedDirections)
+    public void UpdateState()
     {
         List<Tile> newState = new();
         foreach (var tile in State.Superposition)
         {
-            if (tile.Directions.HasFlag(requiredDirections) && (tile.Directions & excludedDirections) == Directions.None)
+            if (tile.Directions.HasFlag(Required) && (tile.Directions & Excluded) == Directions.None)
             {
                 newState.Add(tile);
             }
         }
         State = new QuantumState<Tile>(newState);
-        Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {requiredDirections}, Excluded directions: {excludedDirections}");
+        Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {Required}, Excluded directions: {Excluded}");
     }
 
-    public void EntangleState() => EntangledTile = State.Entangle();
+    public void EntangleState() => Entangled = State.Entangle();
     public void Instantiate()
     {
-        spriteRenderer.sprite = EntangledTile.Sprite;
-        transform.Rotate(EntangledTile.Rotation);
+        spriteRenderer.sprite = Entangled.Sprite;
+        transform.Rotate(Entangled.Rotation);
     }
 
     public void DebugState()
@@ -60,4 +61,5 @@ public class Cell : MonoBehaviour
         Debug.Log($"{State.Entropy} entropy at {Coordinate}");
         foreach (var tile in State.Superposition) tile.DebugStatus();
     }
+
 }
