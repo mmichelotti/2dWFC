@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile", order = 1)]
-public class Tile : ScriptableObject, IDirectionable
+public class Tile : ScriptableObject, IDirectionable, IDebuggable
 {
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public Sprite Sprite { get; private set; }
@@ -29,5 +29,5 @@ public class Tile : ScriptableObject, IDirectionable
         Directions = Directions.Bitshift();
         Rotation += new Vector3(0, 0, 90);
     }
-    public void DebugStatus() => Debug.Log($"{Name}, {Directions.ToStringCustom()} roads with {Rotation.z} degrees rotation.");
+    public void Debug() => UnityEngine.Debug.Log($"{Name}, {Directions.ToStringCustom()} roads with {Rotation.z} degrees rotation.");
 }

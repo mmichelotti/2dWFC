@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2Int>, IDirectionable, IDirectionableRequired
+public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2Int>, IDirectionable, IRequirable, IDebuggable
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private List<Tile> allTiles = new();
@@ -48,7 +48,7 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
             }
         }
         State = new QuantumState<Tile>(newState);
-        Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {DirectionsRequired.Required}, Excluded directions: {DirectionsRequired.Excluded}");
+        UnityEngine.Debug.Log($"Cell at {Coordinate} updated with {State.Density} possible tiles. Required directions: {DirectionsRequired.Required}, Excluded directions: {DirectionsRequired.Excluded}");
     }
 
     public void EntangleState() => Entangled = State.Entangle();
@@ -58,10 +58,10 @@ public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2
         transform.Rotate(Entangled.Rotation);
     }
 
-    public void DebugState()
+    public void Debug()
     {
-        Debug.Log($"{State.Entropy} entropy at {Coordinate}");
-        foreach (var tile in State.Superposition) tile.DebugStatus();
+        UnityEngine.Debug.Log($"{State.Entropy} entropy at {Coordinate}");
+        foreach (var tile in State.Superposition) tile.Debug();
     }
 
 }

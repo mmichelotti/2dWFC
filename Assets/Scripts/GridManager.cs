@@ -91,7 +91,7 @@ public class GridManager : MonoBehaviour
         currentCell.UpdateState();
         currentCell.EntangleState();
         currentCell.Instantiate();
-        currentCell.DebugState();
+        currentCell.Debug();
         Neighbours.UpdateNeighboursState(pos);
     }
 

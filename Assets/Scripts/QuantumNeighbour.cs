@@ -7,7 +7,7 @@ using static DirectionUtility;
 /// </summary>
 /// <typeparam name="T">The type of the container</typeparam>
 /// <typeparam name="T2">The type of the content</typeparam>
-public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable, IDirectionableRequired
+public class QuantumNeighbour<T,T2> where T : IQuantumStatable<T2>, IPositionable<Vector2Int>, IDirectionable, IRequirable
 {
     private readonly Dictionary<Vector2Int, T> initialCells;
     public QuantumNeighbour(Dictionary<Vector2Int, T> initialCells) => this.initialCells = initialCells;
