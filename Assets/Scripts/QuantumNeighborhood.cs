@@ -5,30 +5,31 @@ using UnityEngine;
 public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionable<Vector2Int>, IDirectionable, IRequirable
 {
     private readonly Dictionary<Vector2Int, T> initialCells;
-    private readonly SortedSet<(float Entropy, Vector2Int Position)> entropyQueue;
+    private PriorityQueue<Vector2Int> entropyQueue;
 
     public QuantumNeighborhood(Dictionary<Vector2Int, T> initialCells)
     {
         this.initialCells = initialCells;
-        entropyQueue = new SortedSet<(float Entropy, Vector2Int Position)>(new EntropyComparer());
+        entropyQueue = new PriorityQueue<Vector2Int>();
     }
+
     public Vector2Int LowestEntropy
     {
         get
         {
             while (entropyQueue.Count > 0)
             {
-                var lowestEntropyPos = entropyQueue.Min;
-                entropyQueue.Remove(lowestEntropyPos);
-                if (!initialCells[lowestEntropyPos.Position].State.IsEntangled)
+                var lowestEntropyPos = entropyQueue.Dequeue();
+                if (!initialCells[lowestEntropyPos].State.IsEntangled)
                 {
-                    Enqueue(lowestEntropyPos.Position);
-                    return lowestEntropyPos.Position;
+                    Enqueue(lowestEntropyPos);
+                    return lowestEntropyPos;
                 }
             }
             return Vector2Int.zero;
         }
     }
+
     public List<T> Get(Vector2Int pos, bool areEntangled)
     {
         List<T> neighbours = new();
@@ -44,12 +45,12 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
 
     public void Enqueue(Vector2Int pos)
     {
-        List<T> neighboursList = Get(pos, false);
-        foreach (var neighbour in neighboursList)
+        List<T> neighborsList = Get(pos, false);
+        foreach (var neighbor in neighborsList)
         {
-            if (!neighbour.State.IsEntangled)
+            if (!neighbor.State.IsEntangled)
             {
-                entropyQueue.Add((neighbour.State.Entropy, neighbour.Coordinate));
+                entropyQueue.Enqueue(neighbor.Coordinate, neighbor.State.Entropy);
             }
         }
     }
@@ -67,6 +68,7 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
             neighborCell.UpdateState();
         }
     }
+
     public DirectionsRequired GetDirectionsRequired(Vector2Int pos)
     {
         DirectionsRequired dirRequired = new();
@@ -80,5 +82,6 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
         }
         return dirRequired;
     }
-    public void ClearQueue() => entropyQueue.Clear();
+
+    public void ClearQueue() => entropyQueue = new PriorityQueue<Vector2Int>();
 }
