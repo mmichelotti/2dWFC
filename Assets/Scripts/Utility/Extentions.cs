@@ -2,6 +2,36 @@ using System;
 using UnityEngine;
 public static class Extensions
 {
+    public static T MakeSingleton<T>(this T manager) where T : MonoBehaviour
+    {
+        T[] instances = UnityEngine.Object.FindObjectsOfType<T>();
+
+        if (instances.Length > 1)
+        {
+            UnityEngine.Object.Destroy(manager.gameObject);
+            return instances[0];
+        }
+        else
+        {
+            UnityEngine.Object.DontDestroyOnLoad(manager.gameObject);
+            return manager;
+        }
+    }
+
+    public static T GetManager<T>(this MonoBehaviour manager) where T : MonoBehaviour
+    {
+        T[] instances = UnityEngine.Object.FindObjectsOfType<T>();
+
+        if (instances.Length > 0)
+        {
+            return instances[0];
+        }
+        else
+        {
+            Debug.LogError("Manager of type " + typeof(T) + " not found in scene!");
+            return null;
+        }
+    }
     public static int CompareTo(this Vector2Int a, Vector2Int b)
     {
         int result = a.x.CompareTo(b.x);

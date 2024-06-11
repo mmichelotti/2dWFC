@@ -11,7 +11,6 @@ public class GridManager : MonoBehaviour
     private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
     private QuantumNeighborhood<Cell, Tile> neighborhood;
 
-    private bool allCellsEntangled;
     private Vector2Int nextPos;
 
     private void Start()
@@ -67,7 +66,6 @@ public class GridManager : MonoBehaviour
     }
     public void ResetGrid()
     {
-        Debug.LogError("porcodio");
         foreach (var cell in cellAtPosition.Values) cell.ResetState();
         nextPos = grid.GetCoordinatesAt(startingPoint);
         neighborhood.ClearQueue();

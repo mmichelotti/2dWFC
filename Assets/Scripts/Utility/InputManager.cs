@@ -1,19 +1,19 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputHandler : MonoBehaviour
+public class InputManager : MonoBehaviour
 {
     private InputActions inputActions;
     private GridManager gridManager;
     private void Awake()
     {
-        inputActions = new InputActions();
-        gridManager = FindObjectOfType<GridManager>();
+        inputActions = new();
         inputActions.Player.ResetGrid.performed += OnPress_R;
-        Debug.Log(gridManager);
-        Debug.Log(inputActions);
     }
-
+    private void Start()
+    {
+        gridManager = GameManager.Instance.GridManager;
+    }
     private void OnEnable()
     {
         inputActions.Enable();
