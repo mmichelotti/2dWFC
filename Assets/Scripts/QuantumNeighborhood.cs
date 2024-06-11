@@ -44,7 +44,7 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
         return neighbours;
     }
 
-    public void Enqueue(Vector2Int pos)
+    public void UpdateEntropy(Vector2Int pos)
     {
         List<T> neighborsList = Get(pos, false);
         foreach (var neighbor in neighborsList)
@@ -68,6 +68,7 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
             neighborCell.DirectionsRequired = required;
             neighborCell.UpdateState();
         }
+        UpdateEntropy(pos);
     }
 
     private Directions GetDirection(Vector2Int from, Vector2Int to)
@@ -93,6 +94,5 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
         }
         return dirRequired;
     }
-
     public void ClearQueue() => entropyQueue = new PriorityQueue<Vector2Int>();
 }

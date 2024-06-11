@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class InputManager : MonoBehaviour
 {
     private InputActions inputActions;
-    private GridManager gridManager;
+    private CellManager gridManager;
     private void Awake()
     {
         inputActions = new();
@@ -26,6 +26,6 @@ public class InputManager : MonoBehaviour
 
     private void OnPress_R(InputAction.CallbackContext context)
     {
-        gridManager.ResetGrid();
+        gridManager.ResetCells();
     }
 }

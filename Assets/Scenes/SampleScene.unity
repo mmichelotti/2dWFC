@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 336154840}
   - component: {fileID: 336154841}
   m_Layer: 0
-  m_Name: InputManager
+  m_Name: Input
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 958954082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &336154841
 MonoBehaviour:
@@ -412,7 +412,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1242971867}
+  - {fileID: 336154840}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &958954083
@@ -437,8 +439,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1242971867}
   - component: {fileID: 1242971868}
+  - component: {fileID: 1242971869}
   m_Layer: 0
-  m_Name: GridManager
+  m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -457,7 +460,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 958954082}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1242971868
 MonoBehaviour:
@@ -468,18 +471,29 @@ MonoBehaviour:
   m_GameObject: {fileID: 1242971865}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b61e56dd649841b4585b1415e10cf14e, type: 3}
+  m_Script: {fileID: 11500000, guid: cc0c4207167433c4d820cc88a3978b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 2323590711849152487, guid: 6ffa2419c64127f4fa8dde99a58fe4f2, type: 3}
-  grid: {fileID: 11400000, guid: d894604f7c790a84dad8827cdf992098, type: 2}
   startingPoint: 0
+--- !u!114 &1242971869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242971865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdcaaf61b22d2c34b86a78fd2345b617, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Length>k__BackingField: 11
+  <Size>k__BackingField: {x: 10, y: 10}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
-  - {fileID: 1242971867}
-  - {fileID: 336154840}
   - {fileID: 958954082}

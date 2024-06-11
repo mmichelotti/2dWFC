@@ -1,7 +1,7 @@
+using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Grid", menuName = "ScriptableObjects/Grid", order = 1)]
-public class MazeGrid : ScriptableObject
+public class Grid : MonoBehaviour
 {
     #region properties
     [field: SerializeField] public int Length { get; set; }
@@ -27,5 +27,19 @@ public class MazeGrid : ScriptableObject
     public Vector3 CoordinateToPosition(Vector2Int pos) => new(GetHalfPoint(Size.x, (int)pos.x), GetHalfPoint(Size.y, (int)pos.y));
     private float GetHalfPoint(float tileDimension, int gridIndex) => tileDimension * (gridIndex - Length / 2);
     public bool IsWithinGrid(Vector2Int pos) => pos.x >= 0 && pos.y >= 0 && pos.x < Length && pos.y < Length;
+    #endregion
+
+    #region gizmos
+    private void DrawLine(Vector2Int pos)
+    {
+        Vector3 wsPos = CoordinateToPosition(pos);
+        Gizmos.DrawWireCube(wsPos, new Vector3(Size.x, Size.y, 0));
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        Action<Vector2Int> action = pos => DrawLine(pos);
+        action.MatrixLoop(Length);
+    }
     #endregion
 }

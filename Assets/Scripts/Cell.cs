@@ -48,10 +48,9 @@ public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>
         State.Update(newState);
     }
 
-
-    public void EntangleState() => Entangled = State.Entangle();
-    public void Instantiate()
+    public void EntangleState()
     {
+        Entangled = State.Entangle();
         spriteRenderer.sprite = Entangled.Sprite;
         transform.Rotate(Entangled.Rotation);
     }
