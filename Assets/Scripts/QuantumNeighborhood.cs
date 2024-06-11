@@ -11,8 +11,8 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
     public QuantumNeighborhood(Dictionary<Vector2Int, T> initialCells)
     {
         this.initialCells = initialCells;
-        entropyQueue = new PriorityQueue<Vector2Int>();
-        directionCache = new Dictionary<(Vector2Int, Vector2Int), Directions>();
+        entropyQueue = new();
+        directionCache = new();
     }
 
     public Vector2Int LowestEntropy
@@ -24,7 +24,6 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
                 var lowestEntropyPos = entropyQueue.Dequeue();
                 if (!initialCells[lowestEntropyPos].State.IsEntangled)
                 {
-                    Enqueue(lowestEntropyPos);
                     return lowestEntropyPos;
                 }
             }
