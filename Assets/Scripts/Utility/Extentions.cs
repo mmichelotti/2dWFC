@@ -1,8 +1,17 @@
 using System;
 using UnityEngine;
-
 public static class Extensions
 {
+    public static int CompareTo(this Vector2Int a, Vector2Int b)
+    {
+        int result = a.x.CompareTo(b.x);
+        if (result == 0)
+        {
+            result = a.y.CompareTo(b.y);
+        }
+        return result;
+    }
+
     public static void MatrixLoop(this Action<Vector2Int> action, int length)
     {
         for (int x = 0; x < length; x++)

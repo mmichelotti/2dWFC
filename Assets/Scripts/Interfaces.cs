@@ -16,7 +16,7 @@ public interface IDebuggable
 {
     public abstract void Debug();
 }
-public interface IQuantumStatable<T>
+public interface IQuantizable<T>
 {
     public abstract QuantumState<T> State { get; set; }
     public T Entangled { get; set; }

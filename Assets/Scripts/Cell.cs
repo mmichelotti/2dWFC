@@ -3,7 +3,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class Cell : MonoBehaviour, IQuantumStatable<Tile>, IPositionable<Vector2Int>, IDirectionable, IRequirable, IDebuggable
+public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>, IDirectionable, IRequirable, IDebuggable
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] private List<Tile> allTiles = new();

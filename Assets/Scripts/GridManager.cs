@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static Extensions;
-using static DirectionUtility;
+using System;
 
 public class GridManager : MonoBehaviour
 {
@@ -11,89 +8,46 @@ public class GridManager : MonoBehaviour
     [SerializeField] private MazeGrid grid;
     [SerializeField] private Directions startingPoint;
 
-    private static readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
-    private static QuantumNeighbour<Cell,Tile> Neighbours { get; } = new(cellAtPosition);
+    private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
+    private QuantumNeighborhood<Cell, Tile> neighborhood;
 
     private bool allCellsEntangled;
     private Vector2Int nextPos;
-
-    private Vector2Int LowestEntropy
-    {
-        get
-        {
-            List<(Vector2Int Position, float Entropy)> lowestEntropyCells = new();
-            float lowestEntropyValue = float.PositiveInfinity;
-
-            foreach (var (pos, cell) in cellAtPosition)
-            {
-                if (cell.State.IsEntangled) continue;
-
-                if (cell.State.Entropy < lowestEntropyValue)
-                {
-                    lowestEntropyCells.Clear();
-                    lowestEntropyCells.Add((pos, cell.State.Entropy));
-                    lowestEntropyValue = cell.State.Entropy;
-                }
-                else if (cell.State.Entropy == lowestEntropyValue)
-                {
-                    lowestEntropyCells.Add((pos, cell.State.Entropy));
-                }
-            }
-
-            return (lowestEntropyCells.Count != 0) ? lowestEntropyCells[PositiveRandom(lowestEntropyCells.Count)].Position : Vector2Int.zero;
-        }
-    }
 
     private void Start()
     {
         InitializeCells();
         nextPos = grid.GetCoordinatesAt(startingPoint);
         allCellsEntangled = false;
+        neighborhood.Enqueue(nextPos); // Initialize the queue with the starting point's neighbors
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.R)) ResetGrid();
+        if (Input.GetKeyDown(KeyCode.R)) ResetGrid();
         if (!allCellsEntangled) SetCells();
-    }
-
-    private void SetCells()
-    {
-        if (cellAtPosition[nextPos].State.IsEntangled)
-        {
-            allCellsEntangled = true;
-            return;
-        }
-        SetCell(nextPos);
-        nextPos = LowestEntropy;     
     }
 
     private void SetCell(Vector2Int pos)
     {
-        (Directions required, Directions excluded) = (Directions.None, Directions.None);
-
-        List<Cell> entangledNeighbours = Neighbours.GetNeighbours(pos, true);
-        foreach (var cell in entangledNeighbours)
-        {
-            Directions dir = cell.Directions.GetOpposite();
-            if (cell.HasDirection(dir)) required.PlusEqual(dir);
-            else excluded.PlusEqual(dir);
-
-        }
-
-        foreach (var (dir, off) in OrientationOf)
-        {
-            if (!grid.IsWithinGrid(pos + off)) excluded.PlusEqual(dir);
-        }
-
         Cell currentCell = cellAtPosition[pos];
-        currentCell.DirectionsRequired = new(required, excluded);
+        DirectionsRequired neighbourRequires = neighborhood.GetDirectionsRequired(pos);
+        Directions outOfBounds = grid.Boundaries(pos);
+        currentCell.DirectionsRequired = neighbourRequires.Exclude(outOfBounds);
         currentCell.UpdateState();
         currentCell.EntangleState();
         currentCell.Instantiate();
         currentCell.Debug();
-        Neighbours.UpdateNeighboursState(pos);
+        neighborhood.UpdateState(pos);
+        neighborhood.Enqueue(pos); // Enqueue neighbors after updating the state
     }
+    private void SetCells()
+    {
+        SetCell(nextPos);
+        nextPos = neighborhood.LowestEntropy;
+        if (cellAtPosition[nextPos].State.IsEntangled) allCellsEntangled = true;
+    }
+
 
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
@@ -109,6 +63,7 @@ public class GridManager : MonoBehaviour
         GameObject group = new("Cells");
         Action<Vector2Int> action = pos => InitializeCell(pos, group.transform);
         action.MatrixLoop(grid.Length);
+        neighborhood = new(cellAtPosition);
     }
 
     private void DrawLine(Vector2Int pos)
@@ -126,12 +81,10 @@ public class GridManager : MonoBehaviour
 
     public void ResetGrid()
     {
-        // Clear existing cells
-        foreach (var cell in cellAtPosition.Values)
-        {
-            cell.ResetState();
-        }
-        nextPos = grid.GetCoordinatesAt(startingPoint);
+        foreach (var cell in cellAtPosition.Values) cell.ResetState();
         allCellsEntangled = false;
+        nextPos = grid.GetCoordinatesAt(startingPoint);
+        neighborhood.ClearQueue();
+        neighborhood.Enqueue(nextPos);
     }
 }

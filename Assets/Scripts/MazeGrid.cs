@@ -15,6 +15,15 @@ public class MazeGrid : ScriptableObject
         Vector2 vector = dir.DirectionToMatrix() * (Length - 1);
         return new((int)vector.x, (int)vector.y);
     }
+    public Directions Boundaries(Vector2Int pos)
+    {
+        Directions exclude = default;
+        foreach (var (dir, off) in DirectionUtility.OrientationOf)
+        {
+            if (!IsWithinGrid(pos + off)) exclude |= dir;
+        }
+        return exclude;
+    }
     public Vector3 CoordinateToPosition(Vector2Int pos) => new(GetHalfPoint(Size.x, (int)pos.x), GetHalfPoint(Size.y, (int)pos.y));
     private float GetHalfPoint(float tileDimension, int gridIndex) => tileDimension * (gridIndex - Length / 2);
     public bool IsWithinGrid(Vector2Int pos) => pos.x >= 0 && pos.y >= 0 && pos.x < Length && pos.y < Length;
