@@ -18,15 +18,13 @@ public record QuantumState<T>
     }
 
     public QuantumState() => Superposition = new();
-    public QuantumState(T tile) => Superposition = new() { tile };
-    public QuantumState(List<T> tiles) => Superposition = new(tiles);
-
+    public void Add(T obj) => Superposition.Add(obj);
+    public void Add(List<T> list) => Superposition.AddRange(list);
+    public void Collapse() => Superposition.Clear();
+    public void Update(List<T> tiles) => Superposition = new(tiles);
     public T Entangle()
     {
         Superposition = new List<T> { Superposition[RandomIndex] };
         return Superposition[0];
     }
-    public void Add(T obj) => Superposition.Add(obj);
-    public void Add(List<T> list) => Superposition.AddRange(list);
-    public void Collapse() => Superposition.Clear();
 }

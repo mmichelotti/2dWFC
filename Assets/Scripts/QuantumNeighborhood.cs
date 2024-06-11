@@ -5,12 +5,14 @@ using UnityEngine;
 public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionable<Vector2Int>, IDirectionable, IRequirable
 {
     private readonly Dictionary<Vector2Int, T> initialCells;
+    private readonly Dictionary<(Vector2Int, Vector2Int), Directions> directionCache;
     private PriorityQueue<Vector2Int> entropyQueue;
 
     public QuantumNeighborhood(Dictionary<Vector2Int, T> initialCells)
     {
         this.initialCells = initialCells;
         entropyQueue = new PriorityQueue<Vector2Int>();
+        directionCache = new Dictionary<(Vector2Int, Vector2Int), Directions>();
     }
 
     public Vector2Int LowestEntropy
@@ -59,7 +61,7 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
     {
         foreach (var neighborCell in Get(pos, false))
         {
-            Directions dir = pos.GetDirectionTo(neighborCell.Coordinate);
+            Directions dir = GetDirection(pos, neighborCell.Coordinate);
             DirectionsRequired required = new(dir.GetOpposite());
 
             if (!initialCells[pos].HasDirection(dir)) required.Flip();
@@ -67,6 +69,16 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
             neighborCell.DirectionsRequired = required;
             neighborCell.UpdateState();
         }
+    }
+
+    private Directions GetDirection(Vector2Int from, Vector2Int to)
+    {
+        if (!directionCache.TryGetValue((from, to), out var direction))
+        {
+            direction = from.GetDirectionTo(to);
+            directionCache[(from, to)] = direction;
+        }
+        return direction;
     }
 
     public DirectionsRequired GetDirectionsRequired(Vector2Int pos)
