@@ -17,17 +17,8 @@ public class GridManager : MonoBehaviour
     private void Start()
     {
         InitializeCells();
-        nextPos = grid.GetCoordinatesAt(startingPoint);
-        allCellsEntangled = false;
-        neighborhood.Enqueue(nextPos); // Initialize the queue with the starting point's neighbors
+        ResetGrid();
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.R)) ResetGrid();
-        if (!allCellsEntangled) SetCells();
-    }
-
     private void SetCell(Vector2Int pos)
     {
         Cell currentCell = cellAtPosition[pos];
@@ -40,14 +31,10 @@ public class GridManager : MonoBehaviour
         currentCell.Debug();
         neighborhood.UpdateState(pos);
         neighborhood.Enqueue(pos); // Enqueue neighbors after updating the state
-    }
-    private void SetCells()
-    {
-        SetCell(nextPos);
         nextPos = neighborhood.LowestEntropy;
-        if (cellAtPosition[nextPos].State.IsEntangled) allCellsEntangled = true;
+        if (cellAtPosition[nextPos].State.IsEntangled) return;
+        SetCell(nextPos);
     }
-
 
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
@@ -78,13 +65,13 @@ public class GridManager : MonoBehaviour
         Action<Vector2Int> action = pos => DrawLine(pos);
         action.MatrixLoop(grid.Length);
     }
-
     public void ResetGrid()
     {
+        Debug.LogError("porcodio");
         foreach (var cell in cellAtPosition.Values) cell.ResetState();
-        allCellsEntangled = false;
         nextPos = grid.GetCoordinatesAt(startingPoint);
         neighborhood.ClearQueue();
         neighborhood.Enqueue(nextPos);
+        SetCell(nextPos);
     }
 }

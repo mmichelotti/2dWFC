@@ -1,5 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
+using JetBrains.Annotations;
+
+[System.Serializable]
+public enum TileType
+{
+    Default,
+
+}
 
 [CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile", order = 1)]
 public class Tile : ScriptableObject, IDirectionable, IDebuggable

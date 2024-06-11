@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3203344489361906743}
   - component: {fileID: 2323590711849152487}
   m_Layer: 0
-  m_Name: Cell
+  m_Name: BeachCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &2323590711849152487
@@ -99,8 +99,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allTiles:
   - {fileID: 11400000, guid: 82c6fc274c4252840b597aeb5b351112, type: 2}
-  - {fileID: 11400000, guid: a59945238bfdd0f45a1295fd21c74f87, type: 2}
-  - {fileID: 11400000, guid: 1b387e93c62d65e43bf09b6807c94b05, type: 2}
-  - {fileID: 11400000, guid: fa44aae7a3c24c143b3bdd3367fbf573, type: 2}
-  - {fileID: 11400000, guid: b0352375d1a255d4c93a2ea896601d9f, type: 2}
-  - {fileID: 11400000, guid: cfc76fcee9fe55345b61c45fec8c4348, type: 2}
+  - {fileID: 11400000, guid: 47f57e92115b4c7458265ad9d358538e, type: 2}
+  - {fileID: 11400000, guid: c5be1795fe5b63a479a3e49824e19505, type: 2}
+  - {fileID: 11400000, guid: c7f943524ff883c4fa1925c841873be6, type: 2}
