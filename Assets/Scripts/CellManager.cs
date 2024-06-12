@@ -4,7 +4,7 @@ using System;
 
 
 [RequireComponent(typeof(Grid))]
-public class CellManager : MonoBehaviour
+public class CellManager : Manager
 {
     [SerializeField] private Cell prefab;
     [SerializeField] private Directions startingPoint;

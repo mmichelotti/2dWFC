@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+
+public class Manager : MonoBehaviour { }
 public class EntropyComparer : IComparer<(float Entropy, Vector2Int Position)>
 {    
     public int Compare((float Entropy, Vector2Int Position) x, (float Entropy, Vector2Int Position) y)

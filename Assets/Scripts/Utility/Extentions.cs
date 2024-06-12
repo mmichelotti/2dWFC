@@ -4,7 +4,7 @@ public static class Extensions
 {
     public static T MakeSingleton<T>(this T manager) where T : MonoBehaviour
     {
-        T[] instances = UnityEngine.Object.FindObjectsOfType<T>();
+        T[] instances = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None);
 
         if (instances.Length > 1)
         {
@@ -18,9 +18,9 @@ public static class Extensions
         }
     }
 
-    public static T GetManager<T>(this MonoBehaviour manager) where T : MonoBehaviour
+    public static T GetManager<T>(this MonoBehaviour manager) where T : Manager
     {
-        T[] instances = UnityEngine.Object.FindObjectsOfType<T>();
+        T[] instances = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None);
 
         if (instances.Length > 0)
         {
