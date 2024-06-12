@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49616d7243ca253469099bed5fb9e1ea, type: 3}
-  m_Name: Beach_4Way
+  m_Name: Beach_2Way
   m_EditorClassIdentifier: 
-  <Name>k__BackingField: Beach 4 way
-  <Sprite>k__BackingField: {fileID: 1276042497, guid: 452ef8c265176424a9535340aecf64b3, type: 3}
-  <Directions>k__BackingField: -1
+  <Name>k__BackingField: Beach 2 Way
+  <Sprite>k__BackingField: {fileID: -2012714724, guid: 452ef8c265176424a9535340aecf64b3, type: 3}
+  <Type>k__BackingField: 1
+  <Directions>k__BackingField: 6

@@ -13,6 +13,11 @@ public enum Directions
     Left = 0b1000,
     All = ~None
 }
+public enum Shift
+{
+    Right,
+    Left
+}
 public struct DirectionsRequired
 {
     public Directions Required { get; set; }
@@ -78,7 +83,15 @@ public static class DirectionUtility
         | (Convert.ToInt32(target.x - origin.x < 0) * (int)Directions.Left));
 
 
-    public static Directions Bitshift(this Directions dir) => (Directions)((((int)dir >> 1) | ((int)dir << 3)) & (int)Directions.All);
+    public static Directions Bitshift(this Directions dir, Shift shift)
+    {
+        return shift switch
+        {
+            Shift.Right => (Directions)((((int)dir >> 1) | ((int)dir << 3)) & (int)Directions.All),
+            Shift.Left => (Directions)((((int)dir << 1) | ((int)dir >> 3)) & (int)Directions.All),
+            _ => throw new ArgumentException("This shift is not available.")
+        };
+    }
 
     private static Directions Neutralize(this Directions dir)
     {

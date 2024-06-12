@@ -5,8 +5,8 @@ using JetBrains.Annotations;
 [System.Serializable]
 public enum TileType
 {
-    Default,
-
+    Road,
+    Free
 }
 
 [CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile", order = 1)]
@@ -14,6 +14,7 @@ public class Tile : ScriptableObject, IDirectionable, IDebuggable
 {
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public Sprite Sprite { get; private set; }
+    [field: SerializeField] public TileType Type { get;private set; }
     [field: SerializeField] public Directions Directions { get; set; }
     public bool HasDirection(Directions dir) => Directions.HasFlag(dir);
     public Vector3 Rotation { get; set; }
@@ -34,7 +35,7 @@ public class Tile : ScriptableObject, IDirectionable, IDebuggable
     }
     private void Rotate()
     {
-        Directions = Directions.Bitshift();
+        Directions = Directions.Bitshift(Shift.Right);
         Rotation += new Vector3(0, 0, 90);
     }
     public void Debug() => UnityEngine.Debug.Log($"{Name}, {Directions.ToStringCustom()} roads with {Rotation.z} degrees rotation.");

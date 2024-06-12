@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8061537479293955157}
   - component: {fileID: 3203344489361906743}
   - component: {fileID: 2323590711849152487}
+  - component: {fileID: -8481120770401621385}
   m_Layer: 0
   m_Name: BeachCell
   m_TagString: Untagged
@@ -50,6 +51,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -99,6 +103,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   allTiles:
   - {fileID: 11400000, guid: 82c6fc274c4252840b597aeb5b351112, type: 2}
-  - {fileID: 11400000, guid: 47f57e92115b4c7458265ad9d358538e, type: 2}
   - {fileID: 11400000, guid: c5be1795fe5b63a479a3e49824e19505, type: 2}
+  - {fileID: 11400000, guid: 8921afa3c812ad5489a7d7398dadb57e, type: 2}
   - {fileID: 11400000, guid: c7f943524ff883c4fa1925c841873be6, type: 2}
+--- !u!114 &-8481120770401621385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6740398581835201533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9ba0cf0fbcdfbb4c8b3da0eeb92feef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

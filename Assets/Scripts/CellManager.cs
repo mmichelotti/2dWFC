@@ -39,6 +39,7 @@ public class CellManager : Manager
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
         Cell cell = Instantiate(prefab, parent);
+        cell.InitializeState();
         cell.transform.position = grid.CoordinateToPosition(pos);
         cell.transform.localScale = (Vector2)grid.Size;
         cell.Coordinate = pos;

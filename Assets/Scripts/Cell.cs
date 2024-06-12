@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-
-[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(CellSpawner))]
 public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>, IDirectionable, IRequirable, IDebuggable
 {
-    private SpriteRenderer spriteRenderer;
+    private CellSpawner spawner;
     [SerializeField] private List<Tile> allTiles = new();
 
     public Vector2Int Coordinate { get; set; }
@@ -16,28 +15,19 @@ public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>
     public QuantumState<Tile> State { get; set; }
     public Tile Entangled { get; set; }
     public bool HasDirection(Directions dir) => Entangled.HasDirection(dir);
-
-    private void Awake()
-    {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        InitializeState();
-    }
-
     public void InitializeState()
     {
+        spawner = GetComponent<CellSpawner>();
         State = new();
         foreach (var tile in allTiles) State.Add(tile.AllConfigurations);
     }
-
     public void ResetState()
     {
-        InitializeState(); 
-        spriteRenderer.sprite = null;
-        DirectionsRequired = new();
-        Directions = Directions.None;
-        transform.rotation = Quaternion.identity;
+        InitializeState();
+        spawner.Cancel();
+        DirectionsRequired = default;
+        Directions = default;
     }
-
     public void UpdateState()
     {
         List<Tile> newState = State.Superposition
@@ -47,14 +37,11 @@ public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>
 
         State.Update(newState);
     }
-
     public void EntangleState()
     {
         Entangled = State.Entangle();
-        spriteRenderer.sprite = Entangled.Sprite;
-        transform.Rotate(Entangled.Rotation);
+        spawner.Draw(Entangled);
     }
-
     public void Debug()
     {
         UnityEngine.Debug.Log($"{State.Entropy} entropy at {Coordinate}");
