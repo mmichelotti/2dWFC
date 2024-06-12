@@ -6,6 +6,7 @@ using UnityEngine;
 public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>, IDirectionable, IRequirable, IDebuggable
 {
     private CellSpawner spawner;
+    [SerializeField] private TileType tileType;
     [SerializeField] private List<Tile> allTiles = new();
 
     public Vector2Int Coordinate { get; set; }

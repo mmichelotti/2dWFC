@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
-public class CellSpawner : MonoBehaviour
+public class CellSpawner : MonoBehaviour 
 {
     private SpriteRenderer spriteRenderer;
     private void Awake()

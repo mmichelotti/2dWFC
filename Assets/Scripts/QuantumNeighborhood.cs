@@ -46,13 +46,9 @@ public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionabl
 
     public void UpdateEntropy(Vector2Int pos)
     {
-        List<T> neighborsList = Get(pos, false);
-        foreach (var neighbor in neighborsList)
+        foreach (var neighbor in Get(pos, false))
         {
-            if (!neighbor.State.IsEntangled)
-            {
-                entropyQueue.Enqueue(neighbor.Coordinate, neighbor.State.Entropy);
-            }
+            entropyQueue.Enqueue(neighbor.Coordinate, neighbor.State.Entropy);
         }
     }
 
