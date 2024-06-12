@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 #region interfaces
 public interface IDimension { int Size { get; } }
@@ -94,6 +95,17 @@ public struct Vector<D, T> : IFormattable
         }
     }
     #region operators
+    public Vector2 ToVector2()
+    {
+        if (typeof(D) != typeof(D2) || typeof(T) != typeof(float))
+        {
+            throw new InvalidOperationException("This method can only be used for Vector<D2, float>.");
+        }
+        return new Vector2(Convert.ToSingle(X), Convert.ToSingle(Y));
+    }
+
+
+
     public static Vector<D, T> operator +(Vector<D, T> a, Vector<D, T> b) => AddSameDimensions(a, b);
     public static Vector<D, T> operator +(Vector<D, T> a, object b)
     {
@@ -141,14 +153,6 @@ public struct Vector<D, T> : IFormattable
             _ => throw new InvalidOperationException("Unsupported type")
         };
     }
-
-
-
-
-
-
-
     public readonly string ToString(string format, IFormatProvider formatProvider) => this.ToString();
     public readonly override string ToString() => $"Vector<{typeof(D).Name}, {typeof(T).Name}>({string.Join(", ", components)})";
-
 }
