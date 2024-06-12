@@ -49,6 +49,7 @@ public class CellManager : Manager
     private void InitializeCells()
     {
         GameObject group = new("Cells");
+        group.transform.parent = transform;
         Action<Vector2Int> action = pos => InitializeCell(pos, group.transform);
         action.MatrixLoop(grid.Length);
         neighborhood = new(cellAtPosition);
