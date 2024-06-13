@@ -2,13 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class QuantumNeighborhood<T,T2> where T : Point, IQuantizable<T2>
+public class CellNeighborhood
 {
-    private readonly Dictionary<Vector2Int, T> initialCells;
+    private readonly Dictionary<Vector2Int, Cell> initialCells;
     private readonly Dictionary<(Vector2Int, Vector2Int), Directions> directionCache;
     private PriorityQueue<Vector2Int> entropyQueue;
 
-    public QuantumNeighborhood(Dictionary<Vector2Int, T> initialCells)
+    public CellNeighborhood(Dictionary<Vector2Int, Cell> initialCells)
     {
         this.initialCells = initialCells;
         entropyQueue = new();
@@ -31,12 +31,12 @@ public class QuantumNeighborhood<T,T2> where T : Point, IQuantizable<T2>
         }
     }
 
-    public List<T> Get(Vector2Int pos, bool areEntangled)
+    public List<Cell> Get(Vector2Int pos, bool areEntangled)
     {
-        List<T> neighbours = new();
+        List<Cell> neighbours = new();
         foreach (var off in DirectionUtility.OrientationOf.Values)
         {
-            if (initialCells.TryGetValue(pos + off, out T adjacent))
+            if (initialCells.TryGetValue(pos + off, out Cell adjacent))
             {
                 if (adjacent.State.IsEntangled == areEntangled) neighbours.Add(adjacent);
             }
@@ -81,7 +81,7 @@ public class QuantumNeighborhood<T,T2> where T : Point, IQuantizable<T2>
     {
         DirectionsRequired dirRequired = new();
 
-        List<T> entangledNeighbours = Get(pos, true);
+        List<Cell> entangledNeighbours = Get(pos, true);
         foreach (var cell in entangledNeighbours)
         {
             Directions dir = cell.Directions.GetOpposite();

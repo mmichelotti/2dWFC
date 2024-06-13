@@ -11,7 +11,7 @@ public class CellManager : Manager
 
     private Grid grid;
     private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
-    private QuantumNeighborhood<Cell, Tile> neighborhood;
+    private CellNeighborhood neighborhood;
 
     private void Start()
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(CellSpawner))]
-public class Cell : Point, IQuantizable<Tile>
+public class Cell : Point, IQuantizable<Tile> 
 {
     private CellSpawner spawner;
     [SerializeField] private TileType tileType;
