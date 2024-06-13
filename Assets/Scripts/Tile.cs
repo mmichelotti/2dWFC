@@ -10,7 +10,7 @@ public enum TileType
 }
 
 [CreateAssetMenu(fileName = "Tile", menuName = "ScriptableObjects/Tile", order = 1)]
-public class Tile : ScriptableObject, IDirectionable, IDebuggable
+public class Tile : ScriptableObject, IDirectionable
 {
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public Sprite Sprite { get; private set; }

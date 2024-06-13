@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class QuantumNeighborhood<T, T2> where T : IQuantizable<T2>, IPositionable<Vector2Int>, IDirectionable, IRequirable
+public class QuantumNeighborhood<T,T2> where T : Point, IQuantizable<T2>
 {
     private readonly Dictionary<Vector2Int, T> initialCells;
     private readonly Dictionary<(Vector2Int, Vector2Int), Directions> directionCache;

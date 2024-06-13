@@ -19,10 +19,8 @@ public interface IDebuggable
 public interface IQuantizable<T>
 {
     public abstract QuantumState<T> State { get; set; }
-    public T Entangled { get; set; }
     public abstract void InitializeState();
     public abstract void ResetState();
     public abstract void UpdateState();
-    public virtual void EntangleState() => Entangled = State.Entangle();
-
+    public virtual void EntangleState() => State.Entangle();
 }

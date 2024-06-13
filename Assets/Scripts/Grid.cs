@@ -7,7 +7,6 @@ public class Grid : MonoBehaviour
     [field: SerializeField] public int Length { get; set; }
     [field: SerializeField] public Vector2Int Size { get; set; }
     public Vector2Int RandomCoordinate => Extensions.RandomVector(Length);
-
     private Vector2 LocalPosition => transform.localPosition;
     #endregion
 

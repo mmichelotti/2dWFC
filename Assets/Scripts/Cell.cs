@@ -3,19 +3,13 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(CellSpawner))]
-public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>, IDirectionable, IRequirable, IDebuggable
+public class Cell : Point, IQuantizable<Tile>
 {
     private CellSpawner spawner;
     [SerializeField] private TileType tileType;
     [SerializeField] private List<Tile> allTiles = new();
-
-    public Vector2Int Coordinate { get; set; }
-    public DirectionsRequired DirectionsRequired { get; set; } = new();
-
-    public Directions Directions { get; set; }
     public QuantumState<Tile> State { get; set; }
-    public Tile Entangled { get; set; }
-    public bool HasDirection(Directions dir) => Entangled.HasDirection(dir);
+    public override bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
     public void InitializeState()
     {
         spawner = GetComponent<CellSpawner>();
@@ -40,13 +34,12 @@ public class Cell : MonoBehaviour, IQuantizable<Tile>, IPositionable<Vector2Int>
     }
     public void EntangleState()
     {
-        Entangled = State.Entangle();
-        spawner.Draw(Entangled);
+        State.Entangle();
+        spawner.Draw(State.Collapsed);
     }
     public void Debug()
     {
         UnityEngine.Debug.Log($"{State.Entropy} entropy at {Coordinate}");
         foreach (var tile in State.Superposition) tile.Debug();
     }
-
 }
