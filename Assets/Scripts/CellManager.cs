@@ -27,7 +27,7 @@ public class CellManager : Manager
 
         currentCell.DirectionsRequired = neighbourRequires.Exclude(outOfBounds);
         currentCell.UpdateState();
-        currentCell.EntangleState();
+        currentCell.CollapseState();
         currentCell.Debug();
         neighborhood.UpdateState(pos);
 

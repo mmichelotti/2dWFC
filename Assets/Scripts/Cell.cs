@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+
 [RequireComponent(typeof(CellSpawner))]
 public class Cell : Point, IQuantizable<Tile>
 {
@@ -32,7 +33,7 @@ public class Cell : Point, IQuantizable<Tile>
 
         State.Update(newState);
     }
-    public void EntangleState()
+    public void CollapseState()
     {
         State.Collapse();
         spawner.Draw(State.Collapsed);

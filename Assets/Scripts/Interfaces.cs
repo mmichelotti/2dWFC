@@ -2,7 +2,6 @@ public interface IPositionable<T>
 {
     public T Coordinate { get; set; }
 }
-
 public interface IDirectionable
 {
     public Directions Directions { get; set; }
@@ -22,5 +21,5 @@ public interface IQuantizable<T>
     public abstract void InitializeState();
     public abstract void ResetState();
     public abstract void UpdateState();
-    public virtual void EntangleState() => State.Collapse();
+    public virtual void CollapseState() => State.Collapse();
 }
