@@ -22,5 +22,5 @@ public interface IQuantizable<T>
     public abstract void InitializeState();
     public abstract void ResetState();
     public abstract void UpdateState();
-    public virtual void EntangleState() => State.Entangle();
+    public virtual void EntangleState() => State.Collapse();
 }

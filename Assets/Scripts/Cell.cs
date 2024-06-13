@@ -34,7 +34,7 @@ public class Cell : Point, IQuantizable<Tile>
     }
     public void EntangleState()
     {
-        State.Entangle();
+        State.Collapse();
         spawner.Draw(State.Collapsed);
     }
     public void Debug()

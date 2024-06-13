@@ -1,12 +1,12 @@
 using System.Collections.Generic;
-
+using System.Linq;
+using System;
 public record QuantumState<T>
 {
-    public List<T> Superposition { get; set; } = new();
-    public T Collapsed => IsEntangled ? Superposition[0] : default;
+    public List<T> Superposition { get; private set; } = new();
+    public T Collapsed => IsEntangled ? Superposition.First() : Collapse();
     public int Density => Superposition.Count;
     public bool IsEntangled => Entropy == 0;
-    public int RandomIndex => Extensions.PositiveRandom(Density);
     public float Entropy
     {
         get
@@ -16,9 +16,16 @@ public record QuantumState<T>
             return Density == 0 ? 0 : entropy;
         }
     }
-    public QuantumState() => Superposition = new();
+    public QuantumState() { }
+    public QuantumState(IEnumerable<T> initialState) => Superposition = new List<T>(initialState);
+
     public void Add(T obj) => Superposition.Add(obj);
-    public void Add(List<T> list) => Superposition.AddRange(list);
-    public void Update(List<T> tiles) => Superposition = new(tiles);
-    public void Entangle() => Superposition = new List<T> { Superposition[RandomIndex] };
+    public void Add(IEnumerable<T> list) => Superposition.AddRange(list);
+    public void Update(IEnumerable<T> tiles) => Superposition = new List<T>(tiles);
+    public T Collapse()
+    {
+        Superposition = Superposition.OrderBy(_ => Guid.NewGuid()).Take(1).ToList();
+        return Superposition.First();
+    }
+
 }
