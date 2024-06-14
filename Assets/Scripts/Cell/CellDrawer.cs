@@ -1,50 +1,53 @@
-using System;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(CellVisualizer))]
 public class CellDrawer : MonoBehaviour
 {
+    private CellManager CellManager => GameManager.Instance.CellManager;
+    private InputManager InputManager => GameManager.Instance.InputManager;
+
     [SerializeField] private Grid grid;
 
-    private SpriteRenderer spriteRenderer;
-    private Color canColor = new(0.62f, 1f, 0f,.5f);
-    private Color cantColor = new(1.0f, 0.334f, 0f, .5f);
-    private Color noneColor = Color.clear;
-    private CellManager CellManager => GameManager.Instance.CellManager;
+    private CellVisualizer cellVisualizer;
+
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        cellVisualizer = GetComponent<CellVisualizer>();
     }
+
     void Update()
     {
-        Vector2Int gridCoordinate = GetMouseGridCoordinate();
+        Vector2Int gridCoordinate = InputManager.GetMouseGridCoordinate(grid);
+
         if (CellManager.cellAtPosition.TryGetValue(gridCoordinate, out Cell cell))
         {
 
-            spriteRenderer.color = canColor;
-            transform.position = grid.CoordinateToPosition(gridCoordinate);
+            cellVisualizer.SetPosition(grid.CoordinateToPosition(gridCoordinate));
+            cellVisualizer.SetColor(InputManager.IsLeftShiftPressed);
+
+            if (InputManager.IsLeftMouseButtonPressed)
+            {
+                if (InputManager.IsLeftShiftPressed)
+                {
+                    if (cell.State.IsEntangled) CellManager.RemoveCell(gridCoordinate);
+                }
+                else
+                {
+                    if (!cell.State.IsEntangled) CellManager.SetCell(gridCoordinate);
+                }
+            }
+
+
+            if (cell.State.IsEntangled)
+            {
+                Debug.Log($"I'm entangled at {gridCoordinate}");
+                cell.Debug();
+            }
         }
         else
         {
-            spriteRenderer.color = noneColor;
+            cellVisualizer.ClearColor();
         }
-
-        Debug.Log($"Mouse is over grid coordinate: {gridCoordinate}");
-    }
-
-    private Vector2Int GetMouseGridCoordinate()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new(Vector3.forward, grid.transform.position);
-
-        if (plane.Raycast(ray, out float enter))
-        {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            Vector3 localPosition = grid.transform.InverseTransformPoint(hitPoint);
-            Vector2Int pos = grid.ToGridCoordinate(localPosition);
-            return pos;
-        }
-        return -Vector2Int.one;
     }
 }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
 [RequireComponent(typeof(Grid))]
 public class CellManager : Manager
 {
@@ -20,7 +19,7 @@ public class CellManager : Manager
         InitializeCells();
         ResetCells();
     }
-    private void SetCell(Vector2Int pos)
+    public void SetCell(Vector2Int pos)
     {
         Cell currentCell = cellAtPosition[pos];
         DirectionsRequired neighbourRequires = neighborhood.GetDirectionsRequired(pos);
@@ -33,10 +32,22 @@ public class CellManager : Manager
         neighborhood.UpdateState(pos);
 
         Vector2Int nextPos = neighborhood.LowestEntropy;
+
+
+        //automated version
+        /*
         if (cellAtPosition[nextPos].State.IsEntangled) return;
         SetCell(nextPos);
+        */
+        
     }
 
+    public void RemoveCell(Vector2Int pos)
+    {
+        Cell currentCell = cellAtPosition[pos];
+        currentCell.ResetState();
+        neighborhood.UpdateEntropy(pos);
+    }
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
         var defCell = defaultCell.SpawnInGrid(grid, pos, parent);
@@ -58,6 +69,6 @@ public class CellManager : Manager
         Vector2Int startingPos = grid.GetCoordinatesAt(startingPoint);
         neighborhood.ClearQueue();
         neighborhood.UpdateEntropy(startingPos);
-        SetCell(startingPos);
+        //SetCell(startingPos);
     }
 }

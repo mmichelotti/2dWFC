@@ -36,6 +36,24 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftShift"",
+                    ""type"": ""Button"",
+                    ""id"": ""358341de-e760-4cf1-93ae-ae0024f5d61a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LeftMouseButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""bb06765a-90f5-4968-a496-8fdd7e82dc1b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -47,6 +65,28 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""ResetGrid"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3a53820-0f69-43fd-ae51-bc3a1817eebb"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftShift"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c143cab-d706-4d54-96c6-beb1d97c0557"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftMouseButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -70,6 +110,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_ResetGrid = m_Player.FindAction("ResetGrid", throwIfNotFound: true);
+        m_Player_LeftShift = m_Player.FindAction("LeftShift", throwIfNotFound: true);
+        m_Player_LeftMouseButton = m_Player.FindAction("LeftMouseButton", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -137,11 +179,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_ResetGrid;
+    private readonly InputAction m_Player_LeftShift;
+    private readonly InputAction m_Player_LeftMouseButton;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
         public PlayerActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @ResetGrid => m_Wrapper.m_Player_ResetGrid;
+        public InputAction @LeftShift => m_Wrapper.m_Player_LeftShift;
+        public InputAction @LeftMouseButton => m_Wrapper.m_Player_LeftMouseButton;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -154,6 +200,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @ResetGrid.started += instance.OnResetGrid;
             @ResetGrid.performed += instance.OnResetGrid;
             @ResetGrid.canceled += instance.OnResetGrid;
+            @LeftShift.started += instance.OnLeftShift;
+            @LeftShift.performed += instance.OnLeftShift;
+            @LeftShift.canceled += instance.OnLeftShift;
+            @LeftMouseButton.started += instance.OnLeftMouseButton;
+            @LeftMouseButton.performed += instance.OnLeftMouseButton;
+            @LeftMouseButton.canceled += instance.OnLeftMouseButton;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -161,6 +213,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @ResetGrid.started -= instance.OnResetGrid;
             @ResetGrid.performed -= instance.OnResetGrid;
             @ResetGrid.canceled -= instance.OnResetGrid;
+            @LeftShift.started -= instance.OnLeftShift;
+            @LeftShift.performed -= instance.OnLeftShift;
+            @LeftShift.canceled -= instance.OnLeftShift;
+            @LeftMouseButton.started -= instance.OnLeftMouseButton;
+            @LeftMouseButton.performed -= instance.OnLeftMouseButton;
+            @LeftMouseButton.canceled -= instance.OnLeftMouseButton;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -190,5 +248,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     public interface IPlayerActions
     {
         void OnResetGrid(InputAction.CallbackContext context);
+        void OnLeftShift(InputAction.CallbackContext context);
+        void OnLeftMouseButton(InputAction.CallbackContext context);
     }
 }

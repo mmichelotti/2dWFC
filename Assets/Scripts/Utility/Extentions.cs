@@ -4,7 +4,7 @@ public static class Extensions
 {
     public static T SpawnInGrid<T>(this T prefab, Grid grid, Vector2Int pos, Transform parent = null) where T : MonoBehaviour, IInitializable, IPositionable<Vector2Int>
     {
-        T cell = UnityEngine.GameObject.Instantiate(prefab, parent);
+        T cell = GameObject.Instantiate(prefab, parent);
         cell.transform.position = grid.CoordinateToPosition(pos);
         cell.transform.localScale = (Vector2)grid.Size;
         cell.Coordinate = pos;
