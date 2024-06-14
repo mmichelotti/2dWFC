@@ -7,15 +7,14 @@ using UnityEngine;
 public class Cell : Point, IQuantizable<Tile> 
 {
     private CellSpawner spawner;
-    [SerializeField] private TileType tileType;
-    [SerializeField] private List<Tile> allTiles = new();
+    [SerializeField] private TileSet tileSet;
     public QuantumState<Tile> State { get; set; }
     public override bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
     public void InitializeState()
     {
         spawner = GetComponent<CellSpawner>();
         State = new();
-        foreach (var tile in allTiles) State.Add(tile.AllConfigurations);
+        State.Add(tileSet.AllConfigurations);
     }
     public void ResetState()
     {
@@ -41,6 +40,6 @@ public class Cell : Point, IQuantizable<Tile>
     public void Debug()
     {
         UnityEngine.Debug.Log($"{State.Entropy} entropy at {Coordinate}");
-        foreach (var tile in State.Superposition) tile.Debug();
+        foreach (var tile in State.Superposition) UnityEngine.Debug.Log(tile);
     }
 }

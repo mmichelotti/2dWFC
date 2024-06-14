@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2323590711849152487}
   - component: {fileID: 7016451721453456117}
   m_Layer: 0
-  m_Name: RoadCell
+  m_Name: TemplateCell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -101,13 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230b1fdd84a84024686b716c6a6c34ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allTiles:
-  - {fileID: 11400000, guid: 82c6fc274c4252840b597aeb5b351112, type: 2}
-  - {fileID: 11400000, guid: a59945238bfdd0f45a1295fd21c74f87, type: 2}
-  - {fileID: 11400000, guid: 1b387e93c62d65e43bf09b6807c94b05, type: 2}
-  - {fileID: 11400000, guid: fa44aae7a3c24c143b3bdd3367fbf573, type: 2}
-  - {fileID: 11400000, guid: b0352375d1a255d4c93a2ea896601d9f, type: 2}
-  - {fileID: 11400000, guid: cfc76fcee9fe55345b61c45fec8c4348, type: 2}
+  tileSet: {fileID: 11400000, guid: 3bf0ad9470d1d8646be294a2788299ef, type: 2}
 --- !u!114 &7016451721453456117
 MonoBehaviour:
   m_ObjectHideFlags: 0
