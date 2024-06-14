@@ -26,6 +26,13 @@ public class Grid : MonoBehaviour
         return exclude;
     }
     public Vector3 CoordinateToPosition(Vector2Int pos) => new(GetHalfPoint(Size.x,pos.x) + LocalPosition.x, GetHalfPoint(Size.y, pos.y) + LocalPosition.y);
+
+    public Vector2Int ToGridCoordinate(Vector3 wsPos)
+    {
+        int x = Mathf.FloorToInt((wsPos.x + Size.x / 2) / Size.x) + Length / 2;
+        int y = Mathf.FloorToInt((wsPos.y + Size.y / 2) / Size.y) + Length / 2;
+        return new(x, y);
+    }
     private float GetHalfPoint(float tileDimension, int gridIndex) => tileDimension * (gridIndex - Length / 2);
     public bool IsWithinGrid(Vector2Int pos) => pos.x >= 0 && pos.y >= 0 && pos.x < Length && pos.y < Length;
     #endregion
