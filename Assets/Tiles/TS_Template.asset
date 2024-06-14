@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tiles:
   - <Name>k__BackingField: 0Ways
-    <Sprite>k__BackingField: {fileID: 21300000, guid: d3b84d2f0ee31e243914f1c8e1c7d9ac, type: 3}
+    <Sprite>k__BackingField: {fileID: 21300000, guid: 6c62db4c69f62fb40b75bea6ed60f10c, type: 3}
     <Directions>k__BackingField: 0
   - <Name>k__BackingField: 1Way
     <Sprite>k__BackingField: {fileID: 21300000, guid: 7240fd41d12c5714bb49b83f54adeb64, type: 3}

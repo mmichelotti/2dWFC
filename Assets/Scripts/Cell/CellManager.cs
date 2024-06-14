@@ -11,7 +11,7 @@ public class CellManager : Manager
     [SerializeField, ConditionalHide("debugCell",true)] private CellDebugger debuggerCell;
     [SerializeField] private Directions startingPoint;
     private Grid grid;
-    private readonly Dictionary<Vector2Int, Cell> cellAtPosition = new();
+    public Dictionary<Vector2Int, Cell> cellAtPosition { get; private set; } = new();
     private CellNeighborhood neighborhood;
 
     private void Start()

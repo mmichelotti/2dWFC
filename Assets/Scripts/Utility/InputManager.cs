@@ -12,7 +12,7 @@ public class InputManager : Manager
     }
     private void Start()
     {
-        gridManager = GameManager.Instance.GridManager;
+        gridManager = GameManager.Instance.CellManager;
     }
     private void OnEnable()
     {
