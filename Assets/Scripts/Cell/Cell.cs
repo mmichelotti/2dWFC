@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 [RequireComponent(typeof(CellSpawner))]
-public class Cell : Point, Initializable ,IQuantizable<Tile>
+public class Cell : Point, IInitializable, IQuantizable<Tile>
 {
     private CellSpawner spawner;
     [SerializeField] private TileSet tileSet;

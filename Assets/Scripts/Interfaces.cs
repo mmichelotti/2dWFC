@@ -2,7 +2,7 @@ public interface IPositionable<T>
 {
     public T Coordinate { get; set; }
 }
-public interface Initializable
+public interface IInitializable
 {
     public abstract void Init();
 }

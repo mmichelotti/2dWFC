@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 public static class Extensions
 {
-    public static T SpawnInGrid<T>(this T prefab, Grid grid, Vector2Int pos, Transform parent = null) where T : MonoBehaviour, Initializable, IPositionable<Vector2Int>
+    public static T SpawnInGrid<T>(this T prefab, Grid grid, Vector2Int pos, Transform parent = null) where T : MonoBehaviour, IInitializable, IPositionable<Vector2Int>
     {
         T cell = UnityEngine.GameObject.Instantiate(prefab, parent);
         cell.transform.position = grid.CoordinateToPosition(pos);
