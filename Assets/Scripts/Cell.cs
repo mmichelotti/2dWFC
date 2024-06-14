@@ -13,8 +13,7 @@ public class Cell : Point, IQuantizable<Tile>
     public void InitializeState()
     {
         spawner = GetComponent<CellSpawner>();
-        State = new();
-        State.Add(tileSet.AllConfigurations);
+        State = new(tileSet.AllConfigurations);
     }
     public void ResetState()
     {

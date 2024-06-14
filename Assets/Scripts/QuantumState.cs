@@ -3,7 +3,7 @@ using System.Linq;
 using System;
 public record QuantumState<T>
 {
-    public List<T> Superposition { get; private set; } = new();
+    public List<T> Superposition { get; private set; }
     public T Collapsed => IsEntangled ? Superposition.First() : Collapse();
     public int Density => Superposition.Count;
     public bool IsEntangled => Entropy == 0;
@@ -16,9 +16,8 @@ public record QuantumState<T>
             return Density == 0 ? 0 : entropy;
         }
     }
-    public QuantumState() { }
-    public QuantumState(IEnumerable<T> initialState) => Superposition = new List<T>(initialState);
-
+    public QuantumState() => Superposition = new();
+    public QuantumState(IEnumerable<T> list) => Superposition = new List<T>(list);
     public void Add(T obj) => Superposition.Add(obj);
     public void Add(IEnumerable<T> list) => Superposition.AddRange(list);
     public void Update(IEnumerable<T> tiles) => Superposition = new List<T>(tiles);
