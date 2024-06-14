@@ -268,7 +268,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 80
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -293,7 +293,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -5, y: -5, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -439,6 +439,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1242971867}
   - component: {fileID: 1242971868}
+  - component: {fileID: 1242971870}
   - component: {fileID: 1242971869}
   m_Layer: 0
   m_Name: Grid
@@ -478,7 +479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0c4207167433c4d820cc88a3978b55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  prefab: {fileID: 2323590711849152487, guid: 6ffa2419c64127f4fa8dde99a58fe4f2, type: 3}
+  defaultCell: {fileID: 7339139158400433473, guid: 6ffa2419c64127f4fa8dde99a58fe4f2, type: 3}
+  debuggerCell: {fileID: 466498902299680486, guid: 3807a8c5090d22247a5aec00af9c31a2, type: 3}
   startingPoint: 0
 --- !u!114 &1242971869
 MonoBehaviour:
@@ -494,6 +496,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Length>k__BackingField: 16
   <Size>k__BackingField: {x: 10, y: 10}
+--- !u!114 &1242971870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1242971865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa2f57a20967074580f9645e7d3e808, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 1242971869}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

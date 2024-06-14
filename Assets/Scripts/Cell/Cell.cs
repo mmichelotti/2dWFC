@@ -1,15 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
+using TMPro;
 
 [RequireComponent(typeof(CellSpawner))]
-public class Cell : Point, IQuantizable<Tile> 
+public class Cell : Point, Initializable ,IQuantizable<Tile>
 {
     private CellSpawner spawner;
     [SerializeField] private TileSet tileSet;
     public QuantumState<Tile> State { get; set; }
     public override bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
+    public void Init() => InitializeState();
     public void InitializeState()
     {
         spawner = GetComponent<CellSpawner>();

@@ -2,6 +2,10 @@ public interface IPositionable<T>
 {
     public T Coordinate { get; set; }
 }
+public interface Initializable
+{
+    public abstract void Init();
+}
 public interface IDirectionable
 {
     public Directions Directions { get; set; }

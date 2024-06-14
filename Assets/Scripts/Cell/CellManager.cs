@@ -6,7 +6,8 @@ using System;
 [RequireComponent(typeof(Grid))]
 public class CellManager : Manager
 {
-    [SerializeField] private Cell prefab;
+    [SerializeField] private Cell defaultCell;
+    [SerializeField] private CellDebugger debuggerCell;
     [SerializeField] private Directions startingPoint;
 
     private Grid grid;
@@ -38,14 +39,10 @@ public class CellManager : Manager
 
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
-        Cell cell = Instantiate(prefab, parent);
-        cell.InitializeState();
-        cell.transform.position = grid.CoordinateToPosition(pos);
-        cell.transform.localScale = (Vector2)grid.Size;
-        cell.Coordinate = pos;
-        cellAtPosition.Add(pos, cell);
+        var defCell = defaultCell.SpawnInGrid(grid, pos, parent);
+        var debCell = debuggerCell.SpawnInGrid(grid, pos, parent);
+        cellAtPosition.Add(pos, defCell);
     }
-
     private void InitializeCells()
     {
         GameObject group = new("Cells");
