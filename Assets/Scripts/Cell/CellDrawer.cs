@@ -32,16 +32,16 @@ public class CellDrawer : MonoBehaviour
             {
                 if (InputManager.IsLeftShiftPressed)
                 {
-                    if (cell.State.IsEntangled) CellManager.RemoveCell(gridCoordinate);
+                    if (cell.State.HasCollapsed) CellManager.RemoveCell(gridCoordinate);
                 }
                 else
                 {
-                    if (!cell.State.IsEntangled) CellManager.SetCell(gridCoordinate);
+                    if (!cell.State.HasCollapsed) CellManager.SetCell(gridCoordinate);
                 }
             }
 
 
-            if (cell.State.IsEntangled)
+            if (cell.State.HasCollapsed)
             {
                 Debug.Log($"I'm entangled at {gridCoordinate}");
                 cell.Debug();

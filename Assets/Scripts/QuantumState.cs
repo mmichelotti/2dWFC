@@ -4,9 +4,9 @@ using System;
 public record QuantumState<T>
 {
     public List<T> Superposition { get; private set; }
-    public T Collapsed => IsEntangled ? Superposition.First() : Collapse();
+    public T Collapsed => HasCollapsed ? Superposition.First() : Collapse();
     public int Density => Superposition.Count;
-    public bool IsEntangled => Entropy == 0;
+    public bool HasCollapsed { get; private set; }
     public float Entropy
     {
         get
@@ -23,6 +23,7 @@ public record QuantumState<T>
     public void Update(IEnumerable<T> tiles) => Superposition = new List<T>(tiles);
     public T Collapse()
     {
+        HasCollapsed = true;
         Superposition = Superposition.OrderBy(_ => Guid.NewGuid()).Take(1).ToList();
         return Superposition.First();
     }

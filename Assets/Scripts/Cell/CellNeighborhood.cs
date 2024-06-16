@@ -22,7 +22,7 @@ public class CellNeighborhood
             while (entropyQueue.Count > 0)
             {
                 var lowestEntropyPos = entropyQueue.Dequeue();
-                if (!initialCells[lowestEntropyPos].State.IsEntangled)
+                if (!initialCells[lowestEntropyPos].State.HasCollapsed)
                 {
                     return lowestEntropyPos;
                 }
@@ -38,7 +38,7 @@ public class CellNeighborhood
         {
             if (initialCells.TryGetValue(pos + off, out Cell adjacent))
             {
-                if (adjacent.State.IsEntangled == areEntangled) neighbours.Add(adjacent);
+                if (adjacent.State.HasCollapsed == areEntangled) neighbours.Add(adjacent);
             }
         }
         return neighbours;
