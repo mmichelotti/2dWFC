@@ -11,6 +11,8 @@ public class CellDrawer : MonoBehaviour
 
     private CellVisualizer cellVisualizer;
 
+    private Dictionary<Vector2Int, bool> isDrawn = new();
+
     private void Awake()
     {
         cellVisualizer = GetComponent<CellVisualizer>();
