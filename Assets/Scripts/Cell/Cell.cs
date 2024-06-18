@@ -8,6 +8,7 @@ public class Cell : Point, IInitializable, IQuantizable<Tile>
 {
     private CellSpawner spawner;
     [SerializeField] private TileSet tileSet;
+    [SerializeField] private ParticleSystem ps;
     public QuantumState<Tile> State { get; set; }
     public override bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
     public void Init() => InitializeState();
@@ -35,6 +36,8 @@ public class Cell : Point, IInitializable, IQuantizable<Tile>
     public void CollapseState()
     {
         State.Collapse();
+        ps.gameObject.SetActive(true);
+        ps.Play();
         Directions = State.Collapsed.Directions;
         spawner.Draw(State.Collapsed);
     }

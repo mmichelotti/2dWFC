@@ -16,8 +16,8 @@ public record QuantumState<T>
             return Density == 0 ? 0 : entropy;
         }
     }
-    public QuantumState() => Superposition = new();
-    public QuantumState(IEnumerable<T> list) => Superposition = new List<T>(list);
+    public QuantumState() => (Superposition, HasCollapsed) = (new(), false);
+    public QuantumState(IEnumerable<T> list) => (Superposition, HasCollapsed) = (new List<T>(list),false);
     public void Add(T obj) => Superposition.Add(obj);
     public void Add(IEnumerable<T> list) => Superposition.AddRange(list);
     public void Update(IEnumerable<T> tiles) => Superposition = new List<T>(tiles);

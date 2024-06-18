@@ -12,8 +12,8 @@ public class CellManager : Manager
 
     //to fix this double dictionary
     public Dictionary<Vector2Int, Cell> cellAtPosition { get; private set; } = new();
-    public Dictionary<Vector2Int, CellDebugger> debuggerAtPosition { get; private set; } = new();
-    private HashSet<Cell> counter = new HashSet<Cell>();
+    private readonly Dictionary<Vector2Int, CellDebugger> debuggerAtPosition = new();
+    private readonly HashSet<Cell> counter = new();
 
 
     private CellNeighborhood neighborhood;
@@ -41,7 +41,6 @@ public class CellManager : Manager
 
         Cell currentCell = cellAtPosition[pos];
         currentCell.DirectionsRequired = RequiredDirections(pos);
-        Debug.LogError(RequiredDirections(pos));
         currentCell.UpdateState();
         currentCell.CollapseState();
         currentCell.Debug();
@@ -56,12 +55,20 @@ public class CellManager : Manager
         Cell currentCell = cellAtPosition[pos];
         currentCell.ResetState();
         currentCell.DirectionsRequired = RequiredDirections(pos);
-        Debug.LogError(currentCell.DirectionsRequired);
         currentCell.UpdateState();
-        counter.Remove(currentCell);
 
+        // Ensure neighbors' states are updated
+        foreach (var neighbor in neighborhood.Get(pos, false).Values)
+        {
+            neighbor.UpdateState();
+            neighborhood.UpdateEntropy(neighbor.Coordinate);
+        }
+
+        counter.Remove(currentCell);
         UpdateText();
     }
+
+
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
         if (debugCell)
@@ -73,6 +80,7 @@ public class CellManager : Manager
 
         cellAtPosition.Add(pos, defCell);
     }
+
     private void InitializeCells()
     {
         GameObject group = new("Cells");

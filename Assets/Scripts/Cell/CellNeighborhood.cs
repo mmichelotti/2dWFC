@@ -5,14 +5,12 @@ using UnityEngine;
 public class CellNeighborhood
 {
     private readonly Dictionary<Vector2Int, Cell> initialCells;
-    private readonly Dictionary<(Vector2Int, Vector2Int), Directions> directionCache;
     private PriorityQueue<Vector2Int> entropyQueue;
 
     public CellNeighborhood(Dictionary<Vector2Int, Cell> initialCells)
     {
         this.initialCells = initialCells;
         entropyQueue = new();
-        directionCache = new();
     }
 
     public Vector2Int LowestEntropy
@@ -54,15 +52,14 @@ public class CellNeighborhood
 
     public void UpdateState(Vector2Int pos)
     {
-        foreach (var neighborCell in Get(pos, false).Values)
+        foreach (var (dir,cell) in Get(pos, false))
         {
-            Directions dir = GetDirection(pos, neighborCell.Coordinate);
             DirectionsRequired required = new(dir.GetOpposite());
 
             if (!initialCells[pos].HasDirection(dir)) required.Flip();
 
-            neighborCell.DirectionsRequired = required;
-            neighborCell.UpdateState();
+            cell.DirectionsRequired = required;
+            cell.UpdateState();
         }
         UpdateEntropy(pos);
     }
@@ -80,17 +77,6 @@ public class CellNeighborhood
         return certainNeighbours;
     }
 
-
-    private Directions GetDirection(Vector2Int from, Vector2Int to)
-    {
-        if (!directionCache.TryGetValue((from, to), out var direction))
-        {
-            direction = from.GetDirectionTo(to);
-            directionCache[(from, to)] = direction;
-        }
-        return direction;
-    }
-
     public DirectionsRequired GetDirectionsRequired(Vector2Int pos)
     {
         DirectionsRequired dirRequired = new();
@@ -102,4 +88,5 @@ public class CellNeighborhood
         return dirRequired;
     }
     public void ClearQueue() => entropyQueue = new PriorityQueue<Vector2Int>();
+
 }
