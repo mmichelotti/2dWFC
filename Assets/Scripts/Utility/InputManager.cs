@@ -4,14 +4,13 @@ using UnityEngine.InputSystem;
 public class InputManager : Manager
 {
     private InputActions inputActions;
-    private CellManager gridManager;
+    private CellManager cellManager;
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
 
     private void Awake()
     {
         inputActions = new();
-        inputActions.Player.ResetGrid.performed += OnPress_R;
         inputActions.Player.LeftShift.performed += ctx => IsLeftShiftPressed = true;
         inputActions.Player.LeftShift.canceled += ctx => IsLeftShiftPressed = false;
         inputActions.Player.LeftMouseButton.performed += ctx => IsLeftMouseButtonPressed = true;
@@ -20,7 +19,7 @@ public class InputManager : Manager
 
     private void Start()
     {
-        gridManager = GameManager.Instance.CellManager;
+        cellManager = GameManager.Instance.CellManager;
     }
 
     private void OnEnable()
@@ -31,11 +30,6 @@ public class InputManager : Manager
     private void OnDisable()
     {
         inputActions.Disable();
-    }
-
-    private void OnPress_R(InputAction.CallbackContext context)
-    {
-        gridManager.ResetCells();
     }
 
     public Vector2Int GetMouseGridCoordinate(Grid grid)

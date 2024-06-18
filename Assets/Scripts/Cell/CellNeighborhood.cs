@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class CellNeighborhood
 {
@@ -66,6 +67,20 @@ public class CellNeighborhood
         }
         UpdateEntropy(pos);
     }
+    public List<Cell> CollapseCertain(Vector2Int pos)
+    {
+        List<Cell> certainNeighbours = new();
+        foreach (var neighbourCell in Get(pos, false))
+        {
+            if (neighbourCell.State.Entropy == 0 && !neighbourCell.State.HasCollapsed) 
+            {
+                neighbourCell.CollapseState();
+                certainNeighbours.Add(neighbourCell);
+            }
+        }
+        return certainNeighbours;
+    }
+
 
     private Directions GetDirection(Vector2Int from, Vector2Int to)
     {

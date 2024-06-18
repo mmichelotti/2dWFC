@@ -6,13 +6,13 @@
             "id": "040efaa3-6e0e-4515-b331-8800db10b473",
             "actions": [
                 {
-                    "name": "ResetGrid",
+                    "name": "Autofill",
                     "type": "Button",
                     "id": "12f73ebd-5be5-4a53-b580-916f551a3f03",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "LeftShift",
@@ -31,6 +31,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Shuffle",
+                    "type": "Button",
+                    "id": "a2e96c11-be73-401c-931e-9ae171623a2e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -41,7 +50,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ResetGrid",
+                    "action": "Autofill",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -64,6 +73,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LeftMouseButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9202b3fd-15e6-4ae4-9de4-7735bfb629e1",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Shuffle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

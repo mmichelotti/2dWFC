@@ -8,4 +8,5 @@ public class CellDebugger : MonoBehaviour, IInitializable, IPositionable<Vector2
     public void Init() => tmpText.text = Coordinate.ToString();
 
     public void Set(string text) => tmpText.text = text;
+    public void Set(float n) => tmpText.text = n != 0 ? n.ToString("F2") : string.Empty; 
 }

@@ -29,13 +29,13 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""id"": ""040efaa3-6e0e-4515-b331-8800db10b473"",
             ""actions"": [
                 {
-                    ""name"": ""ResetGrid"",
+                    ""name"": ""Autofill"",
                     ""type"": ""Button"",
                     ""id"": ""12f73ebd-5be5-4a53-b580-916f551a3f03"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""LeftShift"",
@@ -54,6 +54,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Shuffle"",
+                    ""type"": ""Button"",
+                    ""id"": ""a2e96c11-be73-401c-931e-9ae171623a2e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -64,7 +73,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""ResetGrid"",
+                    ""action"": ""Autofill"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -89,6 +98,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""action"": ""LeftMouseButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9202b3fd-15e6-4ae4-9de4-7735bfb629e1"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Shuffle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -109,9 +129,10 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_ResetGrid = m_Player.FindAction("ResetGrid", throwIfNotFound: true);
+        m_Player_Autofill = m_Player.FindAction("Autofill", throwIfNotFound: true);
         m_Player_LeftShift = m_Player.FindAction("LeftShift", throwIfNotFound: true);
         m_Player_LeftMouseButton = m_Player.FindAction("LeftMouseButton", throwIfNotFound: true);
+        m_Player_Shuffle = m_Player.FindAction("Shuffle", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -178,16 +199,18 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_ResetGrid;
+    private readonly InputAction m_Player_Autofill;
     private readonly InputAction m_Player_LeftShift;
     private readonly InputAction m_Player_LeftMouseButton;
+    private readonly InputAction m_Player_Shuffle;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
         public PlayerActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @ResetGrid => m_Wrapper.m_Player_ResetGrid;
+        public InputAction @Autofill => m_Wrapper.m_Player_Autofill;
         public InputAction @LeftShift => m_Wrapper.m_Player_LeftShift;
         public InputAction @LeftMouseButton => m_Wrapper.m_Player_LeftMouseButton;
+        public InputAction @Shuffle => m_Wrapper.m_Player_Shuffle;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -197,28 +220,34 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @ResetGrid.started += instance.OnResetGrid;
-            @ResetGrid.performed += instance.OnResetGrid;
-            @ResetGrid.canceled += instance.OnResetGrid;
+            @Autofill.started += instance.OnAutofill;
+            @Autofill.performed += instance.OnAutofill;
+            @Autofill.canceled += instance.OnAutofill;
             @LeftShift.started += instance.OnLeftShift;
             @LeftShift.performed += instance.OnLeftShift;
             @LeftShift.canceled += instance.OnLeftShift;
             @LeftMouseButton.started += instance.OnLeftMouseButton;
             @LeftMouseButton.performed += instance.OnLeftMouseButton;
             @LeftMouseButton.canceled += instance.OnLeftMouseButton;
+            @Shuffle.started += instance.OnShuffle;
+            @Shuffle.performed += instance.OnShuffle;
+            @Shuffle.canceled += instance.OnShuffle;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @ResetGrid.started -= instance.OnResetGrid;
-            @ResetGrid.performed -= instance.OnResetGrid;
-            @ResetGrid.canceled -= instance.OnResetGrid;
+            @Autofill.started -= instance.OnAutofill;
+            @Autofill.performed -= instance.OnAutofill;
+            @Autofill.canceled -= instance.OnAutofill;
             @LeftShift.started -= instance.OnLeftShift;
             @LeftShift.performed -= instance.OnLeftShift;
             @LeftShift.canceled -= instance.OnLeftShift;
             @LeftMouseButton.started -= instance.OnLeftMouseButton;
             @LeftMouseButton.performed -= instance.OnLeftMouseButton;
             @LeftMouseButton.canceled -= instance.OnLeftMouseButton;
+            @Shuffle.started -= instance.OnShuffle;
+            @Shuffle.performed -= instance.OnShuffle;
+            @Shuffle.canceled -= instance.OnShuffle;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -247,8 +276,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnResetGrid(InputAction.CallbackContext context);
+        void OnAutofill(InputAction.CallbackContext context);
         void OnLeftShift(InputAction.CallbackContext context);
         void OnLeftMouseButton(InputAction.CallbackContext context);
+        void OnShuffle(InputAction.CallbackContext context);
     }
 }

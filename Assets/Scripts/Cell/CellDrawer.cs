@@ -24,7 +24,7 @@ public class CellDrawer : MonoBehaviour
 
         if (CellManager.cellAtPosition.TryGetValue(gridCoordinate, out Cell cell))
         {
-
+            Cursor.visible = false;
             cellVisualizer.SetPosition(grid.CoordinateToPosition(gridCoordinate));
             cellVisualizer.SetColor(InputManager.IsLeftShiftPressed);
 
@@ -49,6 +49,7 @@ public class CellDrawer : MonoBehaviour
         }
         else
         {
+            Cursor.visible = true;
             cellVisualizer.ClearColor();
         }
     }
