@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class CellNeighborhood
 {
@@ -32,14 +31,14 @@ public class CellNeighborhood
         }
     }
 
-    public List<Cell> Get(Vector2Int pos, bool areEntangled)
+    public Dictionary<Directions,Cell> Get(Vector2Int pos, bool haveCollapsed)
     {
-        List<Cell> neighbours = new();
-        foreach (var off in DirectionUtility.OrientationOf.Values)
+        Dictionary<Directions, Cell> neighbours = new();
+        foreach (var (dir,off) in DirectionUtility.OrientationOf)
         {
             if (initialCells.TryGetValue(pos + off, out Cell adjacent))
             {
-                if (adjacent.State.HasCollapsed == areEntangled) neighbours.Add(adjacent);
+                if (adjacent.State.HasCollapsed == haveCollapsed) neighbours.Add(dir, adjacent);
             }
         }
         return neighbours;
@@ -47,7 +46,7 @@ public class CellNeighborhood
 
     public void UpdateEntropy(Vector2Int pos)
     {
-        foreach (var neighbor in Get(pos, false))
+        foreach (var neighbor in Get(pos, false).Values)
         {
             entropyQueue.Enqueue(neighbor.Coordinate, neighbor.State.Entropy);
         }
@@ -55,7 +54,7 @@ public class CellNeighborhood
 
     public void UpdateState(Vector2Int pos)
     {
-        foreach (var neighborCell in Get(pos, false))
+        foreach (var neighborCell in Get(pos, false).Values)
         {
             Directions dir = GetDirection(pos, neighborCell.Coordinate);
             DirectionsRequired required = new(dir.GetOpposite());
@@ -70,7 +69,7 @@ public class CellNeighborhood
     public List<Cell> CollapseCertain(Vector2Int pos)
     {
         List<Cell> certainNeighbours = new();
-        foreach (var neighbourCell in Get(pos, false))
+        foreach (var neighbourCell in Get(pos, false).Values)
         {
             if (neighbourCell.State.Entropy == 0 && !neighbourCell.State.HasCollapsed) 
             {
@@ -95,12 +94,9 @@ public class CellNeighborhood
     public DirectionsRequired GetDirectionsRequired(Vector2Int pos)
     {
         DirectionsRequired dirRequired = new();
-
-        List<Cell> entangledNeighbours = Get(pos, true);
-        foreach (var cell in entangledNeighbours)
+        foreach (var (dir,cell) in Get(pos, true))
         {
-            Directions dir = cell.Directions.GetOpposite();
-            if (cell.HasDirection(dir)) dirRequired.Required |= dir;
+            if(cell.Directions.GetOpposite().HasFlag(dir)) dirRequired.Required |= dir;
             else dirRequired.Excluded |= dir;
         }
         return dirRequired;

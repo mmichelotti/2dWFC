@@ -13,12 +13,19 @@ public enum Directions
     Left = 0b1000,
     All = ~None
 }
+
+
+//0001
+//0010
+//0100
+//1000
+//
 public enum Shift
 {
     Right,
     Left
 }
-public struct DirectionsRequired
+public struct DirectionsRequired : IFormattable
 {
     public Directions Required { get; set; }
     public Directions Excluded { get; set; }
@@ -30,8 +37,10 @@ public struct DirectionsRequired
     //since it is a struct and not a class?ù
     //i feel like this is wrong, this is supposed to be a Class if i want to handle the data like that
     public void Flip() => (Required, Excluded) = (Excluded, Required);
-    public DirectionsRequired Exclude(Directions dir) => new(Required, dir);
-    public DirectionsRequired Include(Directions dir) => new(dir, Excluded);
+    public DirectionsRequired Exclude(Directions dir) => new(Required, Excluded | dir);
+    public DirectionsRequired Include(Directions dir) => new(dir | Required, Excluded);
+
+    public string ToString(string str, IFormatProvider format) => $"Required: {Required.ToStringCustom()}, Excluded {Excluded.ToStringCustom()}";
 
 }
 

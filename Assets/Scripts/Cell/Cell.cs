@@ -35,6 +35,7 @@ public class Cell : Point, IInitializable, IQuantizable<Tile>
     public void CollapseState()
     {
         State.Collapse();
+        Directions = State.Collapsed.Directions;
         spawner.Draw(State.Collapsed);
     }
     public void Debug()
