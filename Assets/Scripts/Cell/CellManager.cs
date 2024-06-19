@@ -60,6 +60,8 @@ public class CellManager : Manager
         // Ensure neighbors' states are updated
         foreach (var neighbor in neighborhood.Get(pos, false).Values)
         {
+            neighbor.ResetState();
+            neighbor.DirectionsRequired = RequiredDirections(neighbor.Coordinate);
             neighbor.UpdateState();
             neighborhood.UpdateEntropy(neighbor.Coordinate);
         }
