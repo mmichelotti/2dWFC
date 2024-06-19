@@ -22,7 +22,7 @@ public record QuantumState<T> where T : IProbable
     public void Add(T obj) => Superposition.Add(obj);
     public void Add(IEnumerable<T> list) => Superposition.AddRange(list);
     public void Update(IEnumerable<T> tiles) => Superposition = new List<T>(tiles);
-
+    
     public T Collapse()
     {
         HasCollapsed = true;

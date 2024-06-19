@@ -4,9 +4,9 @@ using UnityEngine;
 
 public enum RotationOption
 {
-    Default,
-    OneStep,
-    All
+    Default = 1,
+    OneStep = 2,
+    All = 4
 }
 
 [Serializable]
@@ -43,11 +43,27 @@ public struct Tile : IDirectionable, IFormattable, IProbable
             List<Tile> allDirections = new();
             Tile toRotate = new(this);
 
-            for (int i = 0; i < (int)PossibleRotations; i++)
+            switch (PossibleRotations)
             {
-                allDirections.Add(new(toRotate));
-                toRotate.Rotate();
+                case RotationOption.Default:
+                    allDirections.Add(new(toRotate));
+                    break;
+
+                case RotationOption.OneStep:
+                    allDirections.Add(new(toRotate));
+                    toRotate.Rotate();
+                    allDirections.Add(new(toRotate));
+                    break;
+
+                case RotationOption.All:
+                    for (int i = 0; i < 4; i++)
+                    {
+                        allDirections.Add(new(toRotate));
+                        toRotate.Rotate();
+                    }
+                    break;
             }
+
             calculatingConfigurations.Remove(this);
             return allDirections;
         }
