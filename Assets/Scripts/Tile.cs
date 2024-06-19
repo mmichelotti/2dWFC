@@ -4,9 +4,9 @@ using UnityEngine;
 
 public enum RotationOption
 {
-    None,
+    Default,
     OneStep,
-    Full
+    All
 }
 
 [Serializable]
@@ -17,16 +17,16 @@ public struct Tile : IDirectionable, IFormattable, IProbable
     [field: SerializeField, Range(0, 1)] public float Probability { get; set; }
     [field: SerializeField] public Directions Directions { get; set; }
     public Vector3 Rotation { get; set; }
-    [field: SerializeField] public RotationOption RotationOption { get; set; }
+    [field: SerializeField] public RotationOption PossibleRotations { get; set; }
 
-    public Tile(Tile tile) => (Name, Sprite, Directions, Rotation, RotationOption, Probability) = (tile.Name, tile.Sprite, tile.Directions, tile.Rotation, tile.RotationOption, tile.Probability);
+    public Tile(Tile tile) => (Name, Sprite, Directions, Rotation, PossibleRotations, Probability) = (tile.Name, tile.Sprite, tile.Directions, tile.Rotation, tile.PossibleRotations, tile.Probability);
     public Tile(string name, Sprite sprite, Directions directions, Vector3 rotation, RotationOption rotationOption)
     {
         Name = name;
         Sprite = sprite;
         Directions = directions;
         Rotation = rotation;
-        RotationOption = rotationOption;
+        PossibleRotations = rotationOption;
         Probability = 0.5f;
     }
 
@@ -43,27 +43,11 @@ public struct Tile : IDirectionable, IFormattable, IProbable
             List<Tile> allDirections = new();
             Tile toRotate = new(this);
 
-            switch (RotationOption)
+            for (int i = 0; i < (int)PossibleRotations; i++)
             {
-                case RotationOption.None:
-                    allDirections.Add(new(toRotate));
-                    break;
-
-                case RotationOption.OneStep:
-                    allDirections.Add(new(toRotate));
-                    toRotate.Rotate();
-                    allDirections.Add(new(toRotate));
-                    break;
-
-                case RotationOption.Full:
-                    for (int i = 0; i < 4; i++)
-                    {
-                        allDirections.Add(new(toRotate));
-                        toRotate.Rotate();
-                    }
-                    break;
+                allDirections.Add(new(toRotate));
+                toRotate.Rotate();
             }
-
             calculatingConfigurations.Remove(this);
             return allDirections;
         }

@@ -7,8 +7,7 @@ public class TileSet : ScriptableObject
 {
     [field: SerializeField] public List<Tile> Tiles;
 
-    [SerializeField]
-    private List<Tile> allConfigurations;
+    [SerializeField, HideInInspector] private List<Tile> allConfigurations;
 
     public List<Tile> AllConfigurations
     {
