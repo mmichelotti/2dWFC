@@ -5,4 +5,5 @@ public abstract class Point : MonoBehaviour, IPositionable<Vector2Int>, IDirecti
     public DirectionsRequired DirectionsRequired { get; set; } = new();
     public Directions Directions { get; set; }
     public abstract bool HasDirection(Directions dir);
+    public void Constrain(DirectionsRequired dr) => DirectionsRequired = dr;
 }

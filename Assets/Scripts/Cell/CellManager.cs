@@ -36,9 +36,10 @@ public class CellManager : Manager
         Directions outOfBounds = grid.Boundaries(pos);
         return required.Exclude(outOfBounds);
     }
+
+
     public void SetCell(Vector2Int pos)
     {
-
         Cell currentCell = cellAtPosition[pos];
         currentCell.DirectionsRequired = RequiredDirections(pos);
         currentCell.UpdateState();
@@ -53,18 +54,9 @@ public class CellManager : Manager
     public void RemoveCell(Vector2Int pos)
     {
         Cell currentCell = cellAtPosition[pos];
-        currentCell.ResetState();
-        currentCell.DirectionsRequired = RequiredDirections(pos);
-        currentCell.UpdateState();
 
-        // Ensure neighbors' states are updated
-        foreach (var neighbor in neighborhood.Get(pos, false).Values)
-        {
-            neighbor.ResetState();
-            neighbor.DirectionsRequired = RequiredDirections(neighbor.Coordinate);
-            neighbor.UpdateState();
-            neighborhood.UpdateEntropy(neighbor.Coordinate);
-        }
+        ResetCell(currentCell);
+        foreach (var neighbor in neighborhood.Get(pos, false).Values) ResetCell(neighbor);
 
         counter.Remove(currentCell);
         UpdateText();
@@ -100,6 +92,12 @@ public class CellManager : Manager
             SetCell(nextPos);
             nextPos = neighborhood.LowestEntropy;
         }    
+    }
+    private void ResetCell(Cell cell)
+    {
+        cell.ResetState();
+        cell.Constrain(RequiredDirections(cell.Coordinate));
+        cell.UpdateState();
     }
     public void ResetCells()
     {
