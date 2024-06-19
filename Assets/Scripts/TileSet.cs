@@ -1,13 +1,12 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using System.Linq;
 
 [CreateAssetMenu(fileName = "TileSet", menuName = "ScriptableObjects/TileSet", order = 1)]
 public class TileSet : ScriptableObject
 {
     [field: SerializeField] public List<Tile> Tiles;
 
-    // This will store the pre-initialized configurations
     [SerializeField]
     private List<Tile> allConfigurations;
 
@@ -17,7 +16,6 @@ public class TileSet : ScriptableObject
         {
             if (allConfigurations == null || allConfigurations.Count == 0)
             {
-                Debug.LogError("non ero configurato");
                 GenerateAllConfigurations();
             }
             return allConfigurations;
@@ -31,5 +29,25 @@ public class TileSet : ScriptableObject
         {
             allConfigurations.AddRange(tile.AllConfigurations);
         }
+    }
+
+    public Tile PickTile()
+    {
+        float totalProbability = Tiles.Sum(tile => tile.Probability);
+        float randomPoint = UnityEngine.Random.value * totalProbability;
+
+        foreach (Tile tile in Tiles)
+        {
+            if (randomPoint < tile.Probability)
+            {
+                return tile;
+            }
+            else
+            {
+                randomPoint -= tile.Probability;
+            }
+        }
+
+        return Tiles[0]; // Fallback in case of rounding errors
     }
 }

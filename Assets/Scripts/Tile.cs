@@ -10,17 +10,26 @@ public enum RotationOption
 }
 
 [Serializable]
-public struct Tile : IDirectionable, IFormattable
+public struct Tile : IDirectionable, IFormattable, IProbable
 {
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public Sprite Sprite { get; private set; }
+    [field: SerializeField, Range(0, 1)] public float Probability { get; set; }
     [field: SerializeField] public Directions Directions { get; set; }
     public Vector3 Rotation { get; set; }
-
-    // New field to control the rotation option
     [field: SerializeField] public RotationOption RotationOption { get; set; }
 
-    public Tile(Tile tile) => (Name, Sprite, Directions, Rotation, RotationOption) = (tile.Name, tile.Sprite, tile.Directions, tile.Rotation, tile.RotationOption);
+    public Tile(Tile tile) => (Name, Sprite, Directions, Rotation, RotationOption, Probability) = (tile.Name, tile.Sprite, tile.Directions, tile.Rotation, tile.RotationOption, tile.Probability);
+    public Tile(string name, Sprite sprite, Directions directions, Vector3 rotation, RotationOption rotationOption)
+    {
+        Name = name;
+        Sprite = sprite;
+        Directions = directions;
+        Rotation = rotation;
+        RotationOption = rotationOption;
+        Probability = 0.5f;
+    }
+
 
     private readonly static HashSet<Tile> calculatingConfigurations = new();
     public List<Tile> AllConfigurations

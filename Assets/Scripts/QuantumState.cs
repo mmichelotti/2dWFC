@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-public record QuantumState<T>
+
+public record QuantumState<T> where T : IProbable
 {
     public List<T> Superposition { get; private set; }
     public T Collapsed => HasCollapsed ? Superposition.First() : Collapse();
@@ -17,15 +18,35 @@ public record QuantumState<T>
         }
     }
     public QuantumState() => (Superposition, HasCollapsed) = (new(), false);
-    public QuantumState(IEnumerable<T> list) => (Superposition, HasCollapsed) = (new List<T>(list),false);
+    public QuantumState(IEnumerable<T> list) => (Superposition, HasCollapsed) = (new List<T>(list), false);
     public void Add(T obj) => Superposition.Add(obj);
     public void Add(IEnumerable<T> list) => Superposition.AddRange(list);
     public void Update(IEnumerable<T> tiles) => Superposition = new List<T>(tiles);
+
     public T Collapse()
     {
         HasCollapsed = true;
-        Superposition = Superposition.OrderBy(_ => Guid.NewGuid()).Take(1).ToList();
+        Superposition = WeightedRandomTile();
         return Superposition.First();
     }
 
+    private List<T> WeightedRandomTile()
+    {
+        float totalProbability = Superposition.Sum(tile => tile.Probability);
+        float randomPoint = UnityEngine.Random.value * totalProbability;
+
+        foreach (T tile in Superposition)
+        {
+            if (randomPoint < tile.Probability)
+            {
+                return new List<T> { tile };
+            }
+            else
+            {
+                randomPoint -= tile.Probability;
+            }
+        }
+
+        return new List<T> { Superposition.First() }; // Fallback in case of rounding errors
+    }
 }
