@@ -333,8 +333,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1242971868}
-        m_TargetAssemblyTypeName: CellManager, Assembly-CSharp
-        m_MethodName: AutoFill
+        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
+        m_MethodName: FillGrid
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -466,8 +466,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1242971868}
-        m_TargetAssemblyTypeName: CellManager, Assembly-CSharp
-        m_MethodName: ResetCells
+        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
+        m_MethodName: ClearGrid
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -478,8 +478,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1242971868}
-        m_TargetAssemblyTypeName: CellManager, Assembly-CSharp
-        m_MethodName: AutoFill
+        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
+        m_MethodName: FillGrid
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1071,8 +1071,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1242971868}
-        m_TargetAssemblyTypeName: CellManager, Assembly-CSharp
-        m_MethodName: ResetCells
+        m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
+        m_MethodName: ClearGrid
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1169,9 +1169,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f93ac6e39c4d1d1429ebe67a3eb8944b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugCell: 1
-  defaultCell: {fileID: 7339139158400433473, guid: 6ffa2419c64127f4fa8dde99a58fe4f2, type: 3}
-  debuggerCell: {fileID: 466498902299680486, guid: 3807a8c5090d22247a5aec00af9c31a2, type: 3}
+  cellBehaviourPF: {fileID: 7339139158400433473, guid: 6ffa2419c64127f4fa8dde99a58fe4f2, type: 3}
+  cellDebuggerPF: {fileID: 466498902299680486, guid: 3807a8c5090d22247a5aec00af9c31a2, type: 3}
 --- !u!114 &1242971869
 MonoBehaviour:
   m_ObjectHideFlags: 0

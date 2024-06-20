@@ -22,7 +22,7 @@ public class CellDrawer : MonoBehaviour
     {
         Vector2Int gridCoordinate = InputManager.GetMouseGridCoordinate(grid);
 
-        if (CellManager.cellAtPosition.TryGetValue(gridCoordinate, out Cell cell))
+        if (CellManager.cellsBehaviour.TryGetValue(gridCoordinate, out CellBehaviour cell))
         {
             Cursor.visible = false;
             cellVisualizer.SetPosition(grid.CoordinateToPosition(gridCoordinate));
@@ -32,19 +32,12 @@ public class CellDrawer : MonoBehaviour
             {
                 if (InputManager.IsLeftShiftPressed)
                 {
-                    if (cell.State.HasCollapsed) CellManager.RemoveCell(gridCoordinate);
+                    CellManager.RemoveCell(gridCoordinate);
                 }
                 else
                 {
-                    if (!cell.State.HasCollapsed) CellManager.SetCell(gridCoordinate);
+                    CellManager.SetCell(gridCoordinate);
                 }
-            }
-
-
-            if (cell.State.HasCollapsed)
-            {
-                Debug.Log($"I'm entangled at {gridCoordinate}");
-                cell.Debug();
             }
         }
         else
