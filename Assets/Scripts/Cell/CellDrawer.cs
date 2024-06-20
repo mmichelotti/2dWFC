@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CellVisualizer))]
 public class CellDrawer : MonoBehaviour
 {
-    private CellManager CellManager => GameManager.Instance.CellManager;
+    private GridManager CellManager => GameManager.Instance.GridManager;
     private InputManager InputManager => GameManager.Instance.InputManager;
 
     [SerializeField] private Grid grid;

@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class InputManager : Manager
 {
     private InputActions inputActions;
-    private CellManager cellManager;
+    private GridManager cellManager;
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
 
@@ -19,7 +19,7 @@ public class InputManager : Manager
 
     private void Start()
     {
-        cellManager = GameManager.Instance.CellManager;
+        cellManager = GameManager.Instance.GridManager;
     }
 
     private void OnEnable()
