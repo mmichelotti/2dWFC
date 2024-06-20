@@ -2,6 +2,17 @@
 using UnityEngine;
 using System;
 using System.Linq;
+public struct DirectionsRequired : IFormattable
+{
+    public Directions Required { get; set; }
+    public Directions Excluded { get; set; }
+    public DirectionsRequired(Directions onlyPositive) => (Required, Excluded) = (onlyPositive, default);
+    public DirectionsRequired(Directions required, Directions excluded) => (Required, Excluded) = (required, excluded);
+    public void Flip() => (Required, Excluded) = (Excluded, Required);
+    public DirectionsRequired Exclude(Directions dir) => new(Required, Excluded | dir);
+    public string ToString(string str, IFormatProvider format) => $"Required: {Required.ToStringCustom()}, Excluded {Excluded.ToStringCustom()}";
+}
+
 
 [Flags]
 public enum Directions 
@@ -15,33 +26,10 @@ public enum Directions
 }
 
 
-//0001
-//0010
-//0100
-//1000
-//
 public enum Shift
 {
     Right,
     Left
-}
-public struct DirectionsRequired : IFormattable
-{
-    public Directions Required { get; set; }
-    public Directions Excluded { get; set; }
-
-    public DirectionsRequired(Directions onlyPositive) => (Required, Excluded) = (onlyPositive, default);
-    public DirectionsRequired(Directions required, Directions excluded) => (Required, Excluded) = (required, excluded);
-
-    //is it correct to assign data to immutable objects
-    //since it is a struct and not a class?ù
-    //i feel like this is wrong, this is supposed to be a Class if i want to handle the data like that
-    public void Flip() => (Required, Excluded) = (Excluded, Required);
-    public DirectionsRequired Exclude(Directions dir) => new(Required, Excluded | dir);
-    public DirectionsRequired Include(Directions dir) => new(dir | Required, Excluded);
-
-    public string ToString(string str, IFormatProvider format) => $"Required: {Required.ToStringCustom()}, Excluded {Excluded.ToStringCustom()}";
-
 }
 
 public static class DirectionUtility
@@ -54,13 +42,6 @@ public static class DirectionUtility
         { Directions.Left,  Vector2Int.left }
     };
 
-    #region operators
-    public static Directions Plus(this Directions dir, Directions toAdd) => dir | toAdd;
-    public static Directions PlusEqual(this ref Directions dir, Directions toAdd) => dir |= toAdd;
-    public static Directions Minus(this Directions dir, Directions toRemove) => dir & ~toRemove;
-    public static Directions MinusEqual(this ref Directions dir, Directions toRemove) => dir &= ~toRemove;
-    #endregion
-
     public static Vector2 DirectionToMatrix(this Directions dir) => ((Vector2)dir.GetCompositeOffset() / 2f) + new Vector2(.5f, .5f);
 
     public static Directions GetOpposite(this Directions dir) => (Directions)((int)dir >> 2 | ((int)dir & 0b0011) << 2);
@@ -70,11 +51,11 @@ public static class DirectionUtility
     public static Vector2Int GetCompositeOffset(this Directions compositeDir)
     {
         Vector2Int result = Vector2Int.zero;
-        int bitshifter = 0;
+        byte bitshifter = 0;
         foreach (var (dir, offset) in OrientationOf)
         {
             //bitwise operation returns 1 if compositeDir has it, 0 if it doesnt
-            result += ((int)(compositeDir & dir) >> bitshifter) * offset;
+            result += ((byte)(compositeDir & dir) >> bitshifter) * offset;
             bitshifter++;
         }
         return result;

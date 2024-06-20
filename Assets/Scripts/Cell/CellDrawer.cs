@@ -18,6 +18,7 @@ public class CellDrawer : MonoBehaviour
         cellVisualizer = GetComponent<CellVisualizer>();
     }
 
+
     void Update()
     {
         Vector2Int gridCoordinate = InputManager.GetMouseGridCoordinate(grid);

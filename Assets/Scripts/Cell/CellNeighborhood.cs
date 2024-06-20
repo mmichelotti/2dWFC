@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CellNeighborhood
 {
+
     private readonly Dictionary<Vector2Int, CellBehaviour> initialCells;
     private PriorityQueue<Vector2Int> entropyQueue;
 
@@ -51,13 +52,19 @@ public class CellNeighborhood
         }
     }
 
+
+    public void ResetState(Vector2Int pos, DirectionsRequired dr)
+    {
+        foreach (var neighbor in Get(pos, false).Values) neighbor.ReobserveState(dr);
+    }
     public void UpdateState(Vector2Int pos)
     {
         foreach (var (dir,cell) in Get(pos, false))
         {
             DirectionsRequired required = new(dir.GetOpposite());
 
-            if (!initialCells[pos].HasDirection(dir)) required.Flip();
+            if (!initialCells[pos].HasDirection(dir))
+                (required.Required, required.Excluded) = (required.Excluded, required.Required);
 
             cell.DirectionsRequired = required;
             cell.UpdateState();
@@ -82,7 +89,7 @@ public class CellNeighborhood
         DirectionsRequired dirRequired = new();
         foreach (var (dir,cell) in Get(pos, true))
         {
-            if(cell.Directions.GetOpposite().HasFlag(dir)) dirRequired.Required |= dir;
+            if(cell.State.Collapsed.Directions.GetOpposite().HasFlag(dir)) dirRequired.Required |= dir;
             else dirRequired.Excluded |= dir;
         }
         return dirRequired;

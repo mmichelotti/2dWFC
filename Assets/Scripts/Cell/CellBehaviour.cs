@@ -17,12 +17,17 @@ public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
         spawner = GetComponent<CellSpawner>();
         State = new(tileSet.AllConfigurations);
     }
+    public void ReobserveState(DirectionsRequired dr)
+    {
+        ResetState();
+        Constrain(dr);
+        UpdateState();
+    }
     public void ResetState()
     {
         InitializeState();
         spawner.Cancel();
         DirectionsRequired = default;
-        Directions = default;
     }
     public void UpdateState()
     {
@@ -38,12 +43,6 @@ public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
         State.Collapse();
         ps.gameObject.SetActive(true);
         ps.Play();
-        Directions = State.Collapsed.Directions;
         spawner.Draw(State.Collapsed);
-    }
-    public void Debug()
-    {
-        UnityEngine.Debug.Log($"{State.Entropy} entropy at {Coordinate}");
-        foreach (var tile in State.Superposition) UnityEngine.Debug.Log(tile);
     }
 }

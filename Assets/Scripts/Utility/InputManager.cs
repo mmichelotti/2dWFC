@@ -7,7 +7,6 @@ public class InputManager : Manager
     private GridManager cellManager;
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
-
     private void Awake()
     {
         inputActions = new();
@@ -31,9 +30,11 @@ public class InputManager : Manager
     {
         inputActions.Disable();
     }
-
+    
+    
     public Vector2Int GetMouseGridCoordinate(Grid grid)
     {
+        Debug.Log(grid);
         Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         Plane plane = new(Vector3.forward, grid.transform.position);
 

@@ -12,4 +12,5 @@ public class GameManager : MonoBehaviour
         InputManager = this.GetManager<InputManager>();
         GridManager = this.GetManager<GridManager>();
     }
+
 }

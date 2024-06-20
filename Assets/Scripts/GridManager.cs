@@ -2,12 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 [RequireComponent(typeof(Grid))]
 public class GridManager : Manager
 {
     //grid manager should just talk to a cell handler, not to specific cell behaviours
     [SerializeField] private CellBehaviour cellBehaviourPF;
     [SerializeField] private CellDebugger cellDebuggerPF;
+    //cell visualizer
+    //cell drawer
+    
     public Dictionary<Vector2Int, CellBehaviour> cellsBehaviour { get; private set; } = new();
     private readonly Dictionary<Vector2Int, CellDebugger> cellsDebugger = new();
 
@@ -25,13 +29,14 @@ public class GridManager : Manager
     private void UpdateText()
     {
         foreach (var (pos, cell) in cellsDebugger) cell.SetText(cellsBehaviour[pos].State.Entropy);   
+
     }
 
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
-        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);
-        Directions outOfBounds = Grid.Boundaries(pos);
-        return required.Exclude(outOfBounds);
+        //Exclude grid boundaries
+        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);    
+        return new(required.Required, required.Excluded | Grid.Boundaries(pos));  
     }
 
     public void SetCell(Vector2Int pos, Painting mode)
@@ -45,8 +50,6 @@ public class GridManager : Manager
             default: throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
     }
-
-
 
     private void SpawnCell(Vector2Int pos)
     {
@@ -72,8 +75,8 @@ public class GridManager : Manager
         CellBehaviour currentCell = cellsBehaviour[pos];
         if (currentCell.State.HasCollapsed)
         {
-            ResetCell(currentCell);
-            foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) ResetCell(neighbor);
+            currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
+            foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
             cellNeighborhood.UpdateEntropy(pos);
 
             collapsedCells--;
@@ -111,12 +114,6 @@ public class GridManager : Manager
             nextPos = cellNeighborhood.LowestEntropy;
             internalCounter++;
         }
-    }
-    private void ResetCell(CellBehaviour cell)
-    {
-        cell.ResetState();
-        cell.Constrain(RequiredDirections(cell.Coordinate));
-        cell.UpdateState();
     }
     public void ClearGrid()
     {
