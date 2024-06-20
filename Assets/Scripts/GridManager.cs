@@ -14,9 +14,7 @@ public class GridManager : Manager
     public Dictionary<Vector2Int, Cell> cellAtPosition { get; private set; } = new();
     private readonly Dictionary<Vector2Int, CellDebugger> debuggerAtPosition = new();
 
-
-    private readonly HashSet<Cell> counter = new();
-
+    private int collapsedCells;
 
     private CellNeighborhood neighborhood;
 
@@ -48,10 +46,10 @@ public class GridManager : Manager
         currentCell.CollapseState();
         currentCell.Debug();
         neighborhood.UpdateState(pos);
-        counter.Add(currentCell);
-        foreach (var neighbour in neighborhood.CollapseCertain(pos)) counter.Add(neighbour);
 
-        UpdateText();
+        collapsedCells++;
+        foreach (var neighbour in neighborhood.CollapseCertain(pos)) collapsedCells++;
+            UpdateText();
     }
 
     public void RemoveCell(Vector2Int pos)
@@ -60,9 +58,9 @@ public class GridManager : Manager
 
         ResetCell(currentCell);
         foreach (var neighbor in neighborhood.Get(pos, false).Values) ResetCell(neighbor);
+        neighborhood.UpdateEntropy(pos);
 
-        counter.Remove(currentCell);
-
+        collapsedCells--;
         UpdateText();
     }
 
@@ -75,7 +73,7 @@ public class GridManager : Manager
             debuggerAtPosition.Add(pos, debCell);
         }
         var defCell = defaultCell.SpawnInGrid(Grid, pos, parent);
-
+        collapsedCells++;
         cellAtPosition.Add(pos, defCell);
     }
 
@@ -91,11 +89,13 @@ public class GridManager : Manager
     public void AutoFill()
     {
         Vector2Int nextPos = neighborhood.LowestEntropy;
-        while (counter.Count < cellAtPosition.Count)
+        int internalCounter = 0;
+        while (collapsedCells < cellAtPosition.Count)
         {
             SetCell(nextPos);
             nextPos = neighborhood.LowestEntropy;
-        }    
+            internalCounter++;
+        }
     }
     private void ResetCell(Cell cell)
     {
@@ -107,7 +107,7 @@ public class GridManager : Manager
     {
         foreach (var cell in cellAtPosition.Values) cell.ResetState();
         neighborhood.ClearQueue();
-        counter.Clear();
+        collapsedCells = 0;
         UpdateText();
     }
 }

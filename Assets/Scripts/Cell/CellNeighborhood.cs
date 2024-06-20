@@ -53,6 +53,7 @@ public class CellNeighborhood
 
     public void UpdateState(Vector2Int pos)
     {
+
         foreach (var (dir,cell) in Get(pos, false))
         {
             DirectionsRequired required = new(dir.GetOpposite());
