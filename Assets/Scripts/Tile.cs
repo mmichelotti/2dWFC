@@ -43,25 +43,10 @@ public struct Tile : IDirectionable, IFormattable, IProbable
             List<Tile> allDirections = new();
             Tile toRotate = new(this);
 
-            switch (PossibleRotations)
+            for (int i = 0; i < (int)PossibleRotations; i++)
             {
-                case RotationOption.Default:
-                    allDirections.Add(new(toRotate));
-                    break;
-
-                case RotationOption.OneStep:
-                    allDirections.Add(new(toRotate));
-                    toRotate.Rotate();
-                    allDirections.Add(new(toRotate));
-                    break;
-
-                case RotationOption.All:
-                    for (int i = 0; i < 4; i++)
-                    {
-                        allDirections.Add(new(toRotate));
-                        toRotate.Rotate();
-                    }
-                    break;
+                allDirections.Add(new(toRotate));
+                toRotate.Rotate();
             }
 
             calculatingConfigurations.Remove(this);

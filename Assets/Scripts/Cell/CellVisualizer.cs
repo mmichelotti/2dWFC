@@ -26,11 +26,6 @@ public class CellVisualizer : MonoBehaviour
         spriteRenderer.color = colors[mode];
     }
 
-    public void SetColor(bool isErasing)
-    {
-        spriteRenderer.color = isErasing ? colors[Painting.Erasing] : colors[Painting.Drawing];
-    }
-
     public void ClearColor() => spriteRenderer.color = colors[default];
     public void SetPosition(Vector3 position)
     {

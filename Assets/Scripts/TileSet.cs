@@ -11,10 +11,7 @@ public class TileSet : ScriptableObject
         get
         {
             List<Tile> allConfigurations = new();
-            foreach (Tile tile in Tiles)
-            {
-                allConfigurations.AddRange(tile.AllConfigurations);
-            }
+            foreach (Tile tile in Tiles) allConfigurations.AddRange(tile.AllConfigurations);
             return allConfigurations;
         }
     }

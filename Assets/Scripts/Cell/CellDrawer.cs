@@ -26,19 +26,10 @@ public class CellDrawer : MonoBehaviour
         {
             Cursor.visible = false;
             cellVisualizer.SetPosition(grid.CoordinateToPosition(gridCoordinate));
-            cellVisualizer.SetColor(InputManager.IsLeftShiftPressed);
 
-            if (InputManager.IsLeftMouseButtonPressed)
-            {
-                if (InputManager.IsLeftShiftPressed)
-                {
-                    CellManager.RemoveCell(gridCoordinate);
-                }
-                else
-                {
-                    CellManager.SetCell(gridCoordinate);
-                }
-            }
+            Painting current = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
+            cellVisualizer.SetColor(current);
+            if (InputManager.IsLeftMouseButtonPressed) CellManager.SetCell(gridCoordinate, current);
         }
         else
         {

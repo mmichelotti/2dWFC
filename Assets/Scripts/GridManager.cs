@@ -34,8 +34,21 @@ public class GridManager : Manager
         return required.Exclude(outOfBounds);
     }
 
+    public void SetCell(Vector2Int pos, Painting mode)
+    {
+        switch (mode)
+        {
+            case Painting.Drawing: SpawnCell(pos);
+                break;
+            case Painting.Erasing: RemoveCell(pos);
+                break;
+            default: throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+        }
+    }
 
-    public void SetCell(Vector2Int pos)
+
+
+    private void SpawnCell(Vector2Int pos)
     {
         CellBehaviour currentCell = cellsBehaviour[pos];
         if (!currentCell.State.HasCollapsed)
@@ -54,7 +67,7 @@ public class GridManager : Manager
 
     }
 
-    public void RemoveCell(Vector2Int pos)
+    private void RemoveCell(Vector2Int pos)
     {
         CellBehaviour currentCell = cellsBehaviour[pos];
         if (currentCell.State.HasCollapsed)
@@ -94,7 +107,7 @@ public class GridManager : Manager
         int internalCounter = 0;
         while (collapsedCells < cellsBehaviour.Count)
         {
-            SetCell(nextPos);
+            SpawnCell(nextPos);
             nextPos = cellNeighborhood.LowestEntropy;
             internalCounter++;
         }
