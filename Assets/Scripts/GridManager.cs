@@ -1,22 +1,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.Linq;
 
 [RequireComponent(typeof(Grid))]
 public class GridManager : Manager
 {
-    //grid manager should just talk to a cell handler, not to specific cell behaviours
-    [SerializeField] private CellBehaviour cellBehaviourPF;
-    [SerializeField] private CellDebugger cellDebuggerPF;
+    [SerializeField]
+    Cell cellPrefab;
+
+    //grid manager should just talk to a cell handler, not to specific cell behaviors
+    [SerializeField]
+    private CellBehaviour cellBehaviourPF;
+
+    [SerializeField]
+    private CellDebugger cellDebuggerPF;
+
     //cell visualizer
     //cell drawer
-    
-    public Dictionary<Vector2Int, CellBehaviour> cellsBehaviour { get; private set; } = new();
-    private readonly Dictionary<Vector2Int, CellDebugger> cellsDebugger = new();
+
+    public Dictionary<Vector2Int, Cell> Cells { get; } = new();
+
+    // public Dictionary<Vector2Int, CellBehaviour> cellsBehaviour { get; private set; } = new();
+    // private readonly Dictionary<Vector2Int, CellDebugger> cellsDebugger = new();
 
     private CellNeighborhood cellNeighborhood;
-    private int collapsedCells;
+    protected int spawnedCells;
     public Grid Grid { get; private set; }
 
     private void Start()
@@ -26,73 +35,67 @@ public class GridManager : Manager
         ClearGrid();
     }
 
-    private void UpdateText()
-    {
-        foreach (var (pos, cell) in cellsDebugger) cell.SetText(cellsBehaviour[pos].State.Entropy);   
-
-    }
-
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
         //Exclude grid boundaries
-        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);    
-        return new(required.Required, required.Excluded | Grid.Boundaries(pos));  
+        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);
+        return new(required.Required, required.Excluded | Grid.Boundaries(pos));
     }
 
     public void SetCell(Vector2Int pos, Painting mode)
     {
         switch (mode)
         {
-            case Painting.Drawing: SpawnCell(pos);
+            case Painting.Drawing:
+                CollapseCell(pos);
                 break;
-            case Painting.Erasing: RemoveCell(pos);
+            case Painting.Erasing:
+                RemoveCell(pos);
                 break;
-            default: throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
+            default:
+                throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
     }
 
-    private void SpawnCell(Vector2Int pos)
+    protected void CollapseCell(Vector2Int pos)
     {
-        CellBehaviour currentCell = cellsBehaviour[pos];
-        if (!currentCell.State.HasCollapsed)
-        {
-            currentCell.Constrain(RequiredDirections(pos));
-            currentCell.UpdateState();
-            currentCell.CollapseState();
+        var currentCell = Cells[pos].GetComponent<CellBehaviour>();
 
-            cellNeighborhood.UpdateState(pos);
-            cellNeighborhood.UpdateEntropy(pos);
+        if (currentCell.State.HasCollapsed)
+            return;
 
-            foreach (var neighbour in cellNeighborhood.CollapseCertain(pos)) collapsedCells++;
-            collapsedCells++;
-            UpdateText();
-        }
+        currentCell.Collapse(RequiredDirections(pos));
+        spawnedCells++;
 
+        // Check if collapse also neighbors
+        cellNeighborhood.UpdateState(pos);
+        cellNeighborhood.UpdateEntropy(pos);
+        spawnedCells += cellNeighborhood.CollapseCertain(pos).Count;
     }
 
     private void RemoveCell(Vector2Int pos)
     {
-        CellBehaviour currentCell = cellsBehaviour[pos];
+        var currentCell = Cells[pos].GetComponent<CellBehaviour>();
         if (currentCell.State.HasCollapsed)
         {
             currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
-            foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+            foreach (var neighbor in cellNeighborhood.Get(pos, false).Values)
+                neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
             cellNeighborhood.UpdateEntropy(pos);
 
-            collapsedCells--;
-            UpdateText();
+            spawnedCells--;
         }
     }
 
-
-    private void InitializeCell(Vector2Int pos, Transform parent)
+    private void InitializeCell(Vector2Int position, Transform parent)
     {
+        // var currentCellBehaviour = cellDebuggerPF.SpawnInGrid(Grid, pos, parent);
+        // var currentCellDebugger = cellBehaviourPF.SpawnInGrid(Grid, pos, parent);
 
-        var currentCellBehaviour = cellDebuggerPF.SpawnInGrid(Grid, pos, parent);
-        var currentCellDebugger = cellBehaviourPF.SpawnInGrid(Grid, pos, parent);
-        cellsDebugger.Add(pos, currentCellBehaviour);
-        cellsBehaviour.Add(pos, currentCellDebugger);
-        collapsedCells++;
+        var currentCell = Instantiate(cellPrefab, parent);
+        currentCell.Coordinate = position;
+        Cells.Add(position, currentCell);
+        spawnedCells++;
     }
 
     private void InitializeCells()
@@ -101,25 +104,37 @@ public class GridManager : Manager
         group.transform.parent = transform;
         Action<Vector2Int> action = pos => InitializeCell(pos, group.transform);
         action.MatrixLoop(Grid.Length);
-        cellNeighborhood = new(cellsBehaviour);
+        // cellNeighborhood = new(Cells);
     }
 
     public void FillGrid()
     {
-        Vector2Int nextPos = cellNeighborhood.LowestEntropy;
+        Vector2Int nextPos = FindLowestEntropy().Key;
         int internalCounter = 0;
-        while (collapsedCells < cellsBehaviour.Count)
+        while (spawnedCells < Cells.Count)
         {
-            SpawnCell(nextPos);
-            nextPos = cellNeighborhood.LowestEntropy;
+            CollapseCell(nextPos);
+            nextPos = FindLowestEntropy().Key;
             internalCounter++;
         }
     }
+
     public void ClearGrid()
     {
-        foreach (var cell in cellsBehaviour.Values) cell.ResetState();
+        foreach (var cell in Cells.Values)
+            cell.GetComponent<CellBehaviour>().ResetState();
         cellNeighborhood.ClearQueue();
-        collapsedCells = 0;
-        UpdateText();
+        spawnedCells = 0;
     }
+
+    /// <summary>
+    ///! Very bad code. An urge arises to use PriorityQueue to save the day.
+    /// </summary>
+    /// <returns></returns>
+    KeyValuePair<Vector2Int, Cell> FindLowestEntropy() =>
+        // TODO MAKE IT MORE PERFORMANT
+        //! Very bad
+        Cells
+            .OrderBy((cellInfo) => cellInfo.Value.GetComponent<CellBehaviour>().State.Entropy)
+            .First();
 }
