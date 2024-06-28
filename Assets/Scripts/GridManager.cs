@@ -114,15 +114,4 @@ public class GridManager : Manager
         cellNeighborhood.ClearQueue();
         spawnedCells = 0;
     }
-
-    /// <summary>
-    ///! Very bad code. An urge arises to use PriorityQueue to save the day.
-    /// </summary>
-    /// <returns></returns>
-    KeyValuePair<Vector2Int, Cell> FindLowestEntropy() =>
-        // TODO MAKE IT MORE PERFORMANT
-        //! Very bad
-        Cells
-            .OrderBy((cellInfo) => cellInfo.Value.GetComponent<CellBehaviour>().State.Entropy)
-            .First();
 }
