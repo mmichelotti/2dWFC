@@ -16,7 +16,7 @@ public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
     private TileSet tileSet;
 
     [SerializeField]
-    private ParticleSystem particleSystem;
+    private ParticleSystem particles;
 
     public QuantumState<Tile> State
     {
@@ -70,8 +70,8 @@ public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
     {
         State.Collapse();
         OnStateCollapsed.Invoke();
-        particleSystem.gameObject.SetActive(true);
-        particleSystem.Play();
+        particles.gameObject.SetActive(true);
+        particles.Play();
         spawner.Draw(State.Collapsed);
     }
 

@@ -7,7 +7,8 @@ public class CellDrawer : MonoBehaviour
     private GridManager CellManager => GameManager.Instance.GridManager;
     private InputManager InputManager => GameManager.Instance.InputManager;
 
-    [SerializeField] private Grid grid;
+    [SerializeField]
+    private Grid grid;
 
     private CellVisualizer cellVisualizer;
 
@@ -18,19 +19,21 @@ public class CellDrawer : MonoBehaviour
         cellVisualizer = GetComponent<CellVisualizer>();
     }
 
-
     void Update()
     {
         Vector2Int gridCoordinate = InputManager.GetMouseGridCoordinate(grid);
 
-        if (CellManager.cellsBehaviour.TryGetValue(gridCoordinate, out CellBehaviour cell))
+        if (CellManager.Cells.TryGetValue(gridCoordinate, out var cell))
         {
             Cursor.visible = false;
             cellVisualizer.SetPosition(grid.CoordinateToPosition(gridCoordinate));
 
-            Painting current = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
+            Painting current = InputManager.IsLeftShiftPressed
+                ? Painting.Erasing
+                : Painting.Drawing;
             cellVisualizer.SetColor(current);
-            if (InputManager.IsLeftMouseButtonPressed) CellManager.SetCell(gridCoordinate, current);
+            if (InputManager.IsLeftMouseButtonPressed)
+                CellManager.SetCell(gridCoordinate, current);
         }
         else
         {

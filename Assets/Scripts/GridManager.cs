@@ -107,18 +107,6 @@ public class GridManager : Manager
         // cellNeighborhood = new(Cells);
     }
 
-    public void FillGrid()
-    {
-        Vector2Int nextPos = FindLowestEntropy().Key;
-        int internalCounter = 0;
-        while (spawnedCells < Cells.Count)
-        {
-            CollapseCell(nextPos);
-            nextPos = FindLowestEntropy().Key;
-            internalCounter++;
-        }
-    }
-
     public void ClearGrid()
     {
         foreach (var cell in Cells.Values)
