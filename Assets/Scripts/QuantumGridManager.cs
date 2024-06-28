@@ -7,14 +7,8 @@ public class QuantumGridManager : GridManager
 {
     public void FillGrid()
     {
-        Vector2Int nextPos = FindLowestEntropy().Key;
-        int internalCounter = 0;
-        while (spawnedCells < Cells.Count)
-        {
-            CollapseCell(nextPos);
-            nextPos = FindLowestEntropy().Key;
-            internalCounter++;
-        }
+        while (collapsedCells < Cells.Count)
+            CollapseCell(FindLowestEntropy().Key);
     }
 
     /// <summary>

@@ -9,23 +9,13 @@ public class GridManager : Manager
     [SerializeField]
     Cell cellPrefab;
 
-    //grid manager should just talk to a cell handler, not to specific cell behaviors
-    [SerializeField]
-    private CellBehaviour cellBehaviourPF;
-
-    [SerializeField]
-    private CellDebugger cellDebuggerPF;
-
-    //cell visualizer
-    //cell drawer
-
     public Dictionary<Vector2Int, Cell> Cells { get; } = new();
 
     // public Dictionary<Vector2Int, CellBehaviour> cellsBehaviour { get; private set; } = new();
     // private readonly Dictionary<Vector2Int, CellDebugger> cellsDebugger = new();
 
     private CellNeighborhood cellNeighborhood;
-    protected int spawnedCells;
+    protected int collapsedCells;
     public Grid Grid { get; private set; }
 
     private void Start()
@@ -65,12 +55,12 @@ public class GridManager : Manager
             return;
 
         currentCell.Collapse(RequiredDirections(pos));
-        spawnedCells++;
+        collapsedCells++;
 
         // Check if collapse also neighbors
         cellNeighborhood.UpdateState(pos);
         cellNeighborhood.UpdateEntropy(pos);
-        spawnedCells += cellNeighborhood.CollapseCertain(pos).Count;
+        collapsedCells += cellNeighborhood.CollapseCertain(pos).Count;
     }
 
     private void RemoveCell(Vector2Int pos)
@@ -83,7 +73,7 @@ public class GridManager : Manager
                 neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
             cellNeighborhood.UpdateEntropy(pos);
 
-            spawnedCells--;
+            collapsedCells--;
         }
     }
 
@@ -95,7 +85,7 @@ public class GridManager : Manager
         var currentCell = Instantiate(cellPrefab, parent);
         currentCell.Coordinate = position;
         Cells.Add(position, currentCell);
-        spawnedCells++;
+        collapsedCells++;
     }
 
     private void InitializeCells()
@@ -112,6 +102,6 @@ public class GridManager : Manager
         foreach (var cell in Cells.Values)
             cell.GetComponent<CellBehaviour>().ResetState();
         cellNeighborhood.ClearQueue();
-        spawnedCells = 0;
+        collapsedCells = 0;
     }
 }
