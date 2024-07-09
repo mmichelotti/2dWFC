@@ -1,17 +1,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using TMPro;
 
 [RequireComponent(typeof(CellSpawner))]
-public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
+public class CellBehaviour : Point, IQuantizable<Tile>
 {
+    public UnityEvent OnStateCollapsed = new();
+    public UnityEvent OnStateUpdated = new();
+
     private CellSpawner spawner;
     [SerializeField] private TileSet tileSet;
     [SerializeField] private ParticleSystem ps;
     public QuantumState<Tile> State { get; set; }
     public override bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
-    public void Init() => InitializeState();
+
+    private void Start()
+    {
+        InitializeState();
+    }
     public void InitializeState()
     {
         spawner = GetComponent<CellSpawner>();
@@ -37,6 +45,7 @@ public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
             .ToList();
 
         State.Update(newState);
+        OnStateUpdated.Invoke();
     }
     public void CollapseState()
     {
@@ -44,5 +53,6 @@ public class CellBehaviour : Point, IInitializable, IQuantizable<Tile>
         ps.gameObject.SetActive(true);
         ps.Play();
         spawner.Draw(State.Collapsed);
+        OnStateCollapsed.Invoke();
     }
 }

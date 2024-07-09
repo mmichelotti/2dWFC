@@ -84,14 +84,22 @@ public class GridManager : Manager
         }
     }
 
-
+    public static T SpawnInGrid<T>(T prefab, Grid grid, Vector2Int pos, Transform parent = null) where T : MonoBehaviour, IPositionable<Vector2Int>
+    {
+        T cell = GameObject.Instantiate(prefab, parent);
+        cell.transform.position = grid.CoordinateToPosition(pos);
+        cell.transform.localScale = (Vector2)grid.Size;
+        cell.Coordinate = pos;
+        return cell;
+    }
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
+        var currentCellDebugger = SpawnInGrid(cellDebuggerPF, Grid, pos, parent);
+        cellsDebugger.Add(pos, currentCellDebugger);
 
-        var currentCellBehaviour = cellDebuggerPF.SpawnInGrid(Grid, pos, parent);
-        var currentCellDebugger = cellBehaviourPF.SpawnInGrid(Grid, pos, parent);
-        cellsDebugger.Add(pos, currentCellBehaviour);
-        cellsBehaviour.Add(pos, currentCellDebugger);
+        var currentCellBehaviour = SpawnInGrid(cellBehaviourPF, Grid, pos, parent);
+        cellsBehaviour.Add(pos, currentCellBehaviour);
+
         collapsedCells++;
     }
 
