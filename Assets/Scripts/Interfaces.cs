@@ -1,3 +1,5 @@
+using UnityEngine.Events;
+
 public interface IPositionable<T> { public T Coordinate { get; set; } }
 public interface IRequirable { public DirectionsRequired DirectionsRequired { get; set; } }
 public interface IDebuggable { public abstract void Debug(); }
@@ -12,6 +14,7 @@ public interface IDirectionable
 public interface IQuantizable<T> where T : IProbable
 {
     public abstract QuantumState<T> State { get; set; }
+
     public abstract void InitializeState();
     public abstract void ResetState();
     public abstract void UpdateState();

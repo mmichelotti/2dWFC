@@ -7,8 +7,9 @@ using TMPro;
 [RequireComponent(typeof(CellSpawner))]
 public class CellBehaviour : Point, IQuantizable<Tile>
 {
-    public UnityEvent OnStateCollapsed = new();
-    public UnityEvent OnStateUpdated = new();
+    public UnityEvent OnStateInitialized { get; } = new();
+    public UnityEvent OnStateCollapsed { get; } = new();
+    public UnityEvent OnStateUpdated { get; } = new();
 
     private CellSpawner spawner;
     [SerializeField] private TileSet tileSet;
@@ -24,6 +25,7 @@ public class CellBehaviour : Point, IQuantizable<Tile>
     {
         spawner = GetComponent<CellSpawner>();
         State = new(tileSet.AllConfigurations);
+        OnStateInitialized.Invoke();
     }
     public void ReobserveState(DirectionsRequired dr)
     {

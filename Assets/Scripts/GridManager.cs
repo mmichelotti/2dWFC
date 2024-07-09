@@ -80,7 +80,6 @@ public class GridManager : Manager
             cellNeighborhood.UpdateEntropy(pos);
 
             collapsedCells--;
-            UpdateText();
         }
     }
 
@@ -96,9 +95,9 @@ public class GridManager : Manager
     {
         var currentCellDebugger = SpawnInGrid(cellDebuggerPF, Grid, pos, parent);
         cellsDebugger.Add(pos, currentCellDebugger);
-
         var currentCellBehaviour = SpawnInGrid(cellBehaviourPF, Grid, pos, parent);
         cellsBehaviour.Add(pos, currentCellBehaviour);
+        currentCellDebugger.SubscribeToCell(currentCellBehaviour);
 
         collapsedCells++;
     }
@@ -128,6 +127,5 @@ public class GridManager : Manager
         foreach (var cell in cellsBehaviour.Values) cell.ResetState();
         cellNeighborhood.ClearQueue();
         collapsedCells = 0;
-        UpdateText();
     }
 }
