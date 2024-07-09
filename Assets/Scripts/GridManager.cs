@@ -82,23 +82,27 @@ public class GridManager : Manager
             collapsedCells--;
         }
     }
-
-    public static T SpawnInGrid<T>(T prefab, Grid grid, Vector2Int pos, Transform parent = null) where T : MonoBehaviour, IPositionable<Vector2Int>
-    {
-        T cell = GameObject.Instantiate(prefab, parent);
-        cell.transform.position = grid.CoordinateToPosition(pos);
-        cell.transform.localScale = (Vector2)grid.Size;
-        cell.Coordinate = pos;
-        return cell;
-    }
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
-        var currentCellDebugger = SpawnInGrid(cellDebuggerPF, Grid, pos, parent);
-        cellsDebugger.Add(pos, currentCellDebugger);
-        var currentCellBehaviour = SpawnInGrid(cellBehaviourPF, Grid, pos, parent);
-        cellsBehaviour.Add(pos, currentCellBehaviour);
-        currentCellDebugger.SubscribeToCell(currentCellBehaviour);
 
+        var currentCellDebugger = Instantiate(cellDebuggerPF, parent);
+        currentCellDebugger.transform.position = Grid.CoordinateToPosition(pos);
+        currentCellDebugger.transform.localScale = (Vector2)Grid.Size;
+        cellsDebugger.Add(pos, currentCellDebugger);
+
+
+
+
+
+
+        var currentCellBehaviour = Instantiate(cellBehaviourPF, parent);
+        currentCellBehaviour.transform.position = Grid.CoordinateToPosition(pos);
+        currentCellBehaviour.transform.localScale = (Vector2)Grid.Size;
+        currentCellBehaviour.Coordinate = pos;
+        cellsBehaviour.Add(pos, currentCellBehaviour);
+
+
+        currentCellDebugger.SubscribeToCell(currentCellBehaviour);
         collapsedCells++;
     }
 
