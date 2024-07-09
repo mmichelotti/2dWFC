@@ -51,7 +51,8 @@ public class GridManager : Manager
         cellNeighborhood.UpdateState(pos);
         cellNeighborhood.UpdateEntropy(pos);
 
-        collapsedCells += (from neighbour in cellNeighborhood.CollapseCertain(pos)
+        collapsedCells += (from neighbour 
+                           in cellNeighborhood.CollapseCertain(pos)
                            select neighbour).Count() + 1;
 
     }
@@ -72,7 +73,7 @@ public class GridManager : Manager
     {
         var currentCell = Instantiate(quantumCell, parent);
         currentCell.transform.position = Grid.CoordinateToPosition(pos);
-        currentCell.transform.localScale = (Vector2)Grid.Size;
+        currentCell.transform.localScale = new Vector2(Grid.Area, Grid.Area);
         currentCell.Coordinate = pos;
         currentCell.InitializeState();
         Cells.Add(pos, currentCell);

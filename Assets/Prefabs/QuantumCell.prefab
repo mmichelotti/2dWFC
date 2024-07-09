@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 7339139158400433473}
   - component: {fileID: 6375910507315676117}
   - component: {fileID: 1546182898125748810}
-  - component: {fileID: 2611579139247076499}
   - component: {fileID: 3295937404782422286}
   m_Layer: 0
   m_Name: QuantumCell
@@ -134,19 +133,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vfxPrefab: {fileID: 1163677575482123879, guid: d7bdc846d52cc6c4981eab949c87402d, type: 3}
---- !u!114 &2611579139247076499
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4812070154539782890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9b3f89737bc91d4eb306d103bb79fb1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tileSet: {fileID: 11400000, guid: bf2a8abc2ee10344c981f9f2209afeec, type: 2}
 --- !u!114 &3295937404782422286
 MonoBehaviour:
   m_ObjectHideFlags: 0

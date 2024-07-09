@@ -5,7 +5,7 @@ public class Grid : MonoBehaviour
 {
     #region properties
     [field: SerializeField] public int Length { get; set; }
-    [field: SerializeField] public Vector2Int Size { get; set; }
+    [field: SerializeField] public int Area { get; set; }
     public Vector2Int RandomCoordinate => Extensions.RandomVector(Length);
     private Vector2 LocalPosition => transform.localPosition;
     #endregion
@@ -25,12 +25,12 @@ public class Grid : MonoBehaviour
         }
         return exclude;
     }
-    public Vector3 CoordinateToPosition(Vector2Int pos) => new(GetHalfPoint(Size.x,pos.x) + LocalPosition.x, GetHalfPoint(Size.y, pos.y) + LocalPosition.y);
+    public Vector3 CoordinateToPosition(Vector2Int pos) => new(GetHalfPoint(Area,pos.x) + LocalPosition.x, GetHalfPoint(Area, pos.y) + LocalPosition.y);
 
     public Vector2Int ToGridCoordinate(Vector3 wsPos)
     {
-        int x = Mathf.FloorToInt((wsPos.x + Size.x / 2) / Size.x) + Length / 2;
-        int y = Mathf.FloorToInt((wsPos.y + Size.y / 2) / Size.y) + Length / 2;
+        int x = Mathf.FloorToInt((wsPos.x + Area / 2) / Area) + Length / 2;
+        int y = Mathf.FloorToInt((wsPos.y + Area / 2) / Area) + Length / 2;
         return new(x, y);
     }
     private float GetHalfPoint(float tileDimension, int gridIndex) => tileDimension * (gridIndex - Length / 2);
@@ -41,7 +41,7 @@ public class Grid : MonoBehaviour
     private void DrawLine(Vector2Int pos)
     {
         Vector3 wsPos = CoordinateToPosition(pos);
-        Gizmos.DrawWireCube(wsPos, new Vector3(Size.x, Size.y, 0));
+        Gizmos.DrawWireCube(wsPos, new Vector3(Area, Area, 0));
     }
     private void OnDrawGizmos()
     {

@@ -20,7 +20,7 @@ MonoBehaviour:
     <PossibleRotations>k__BackingField: 1
   - <Name>k__BackingField: Tree
     <Sprite>k__BackingField: {fileID: -1821114363, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
-    <Probability>k__BackingField: 0
+    <Probability>k__BackingField: 0.146
     <Directions>k__BackingField: 0
     <PossibleRotations>k__BackingField: 4
   - <Name>k__BackingField: 1 Way
