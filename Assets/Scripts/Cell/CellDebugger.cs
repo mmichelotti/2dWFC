@@ -6,6 +6,7 @@ public class CellDebugger : MonoBehaviour
     [SerializeField] private TMP_Text tmpText;
     public void SubscribeToCell(CellBehaviour cell)
     {
+        cell.OnStateCollapsed.AddListener(() => SetText(cell.State.Entropy));
         cell.OnStateUpdated.AddListener(() => SetText(cell.State.Entropy));
         cell.OnStateInitialized.AddListener(() => SetText(cell.Coordinate));
     }

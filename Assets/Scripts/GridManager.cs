@@ -26,12 +26,6 @@ public class GridManager : Manager
         ClearGrid();
     }
 
-    private void UpdateText()
-    {
-        foreach (var (pos, cell) in cellsDebugger) cell.SetText(cellsBehaviour[pos].State.Entropy);   
-
-    }
-
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
         //Exclude grid boundaries
@@ -64,8 +58,8 @@ public class GridManager : Manager
             cellNeighborhood.UpdateEntropy(pos);
 
             foreach (var neighbour in cellNeighborhood.CollapseCertain(pos)) collapsedCells++;
+
             collapsedCells++;
-            UpdateText();
         }
 
     }
@@ -90,17 +84,11 @@ public class GridManager : Manager
         currentCellDebugger.transform.localScale = (Vector2)Grid.Size;
         cellsDebugger.Add(pos, currentCellDebugger);
 
-
-
-
-
-
         var currentCellBehaviour = Instantiate(cellBehaviourPF, parent);
         currentCellBehaviour.transform.position = Grid.CoordinateToPosition(pos);
         currentCellBehaviour.transform.localScale = (Vector2)Grid.Size;
         currentCellBehaviour.Coordinate = pos;
         cellsBehaviour.Add(pos, currentCellBehaviour);
-
 
         currentCellDebugger.SubscribeToCell(currentCellBehaviour);
         collapsedCells++;
