@@ -23,7 +23,7 @@ public class CellDrawer : MonoBehaviour
     {
         Vector2Int gridCoordinate = InputManager.GetMouseGridCoordinate(grid);
 
-        if (CellManager.cellsBehaviour.TryGetValue(gridCoordinate, out CellBehaviour cell))
+        if (CellManager.Cells.TryGetValue(gridCoordinate, out QuantumCell cell))
         {
             Cursor.visible = false;
             cellVisualizer.SetPosition(grid.CoordinateToPosition(gridCoordinate));

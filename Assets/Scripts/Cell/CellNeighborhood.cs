@@ -6,10 +6,10 @@ using UnityEngine;
 public class CellNeighborhood
 {
 
-    private readonly Dictionary<Vector2Int, CellBehaviour> initialCells;
+    private readonly Dictionary<Vector2Int, QuantumCell> initialCells;
     private PriorityQueue<Vector2Int> entropyQueue;
 
-    public CellNeighborhood(Dictionary<Vector2Int, CellBehaviour> initialCells)
+    public CellNeighborhood(Dictionary<Vector2Int, QuantumCell> initialCells)
     {
         this.initialCells = initialCells;
         entropyQueue = new();
@@ -31,12 +31,12 @@ public class CellNeighborhood
         }
     }
 
-    public Dictionary<Directions,CellBehaviour> Get(Vector2Int pos, bool haveCollapsed)
+    public Dictionary<Directions,QuantumCell> Get(Vector2Int pos, bool haveCollapsed)
     {
-        Dictionary<Directions, CellBehaviour> neighbours = new();
+        Dictionary<Directions, QuantumCell> neighbours = new();
         foreach (var (dir,off) in DirectionUtility.OrientationOf)
         {
-            if (initialCells.TryGetValue(pos + off, out CellBehaviour adjacent))
+            if (initialCells.TryGetValue(pos + off, out QuantumCell adjacent))
             {
                 if (adjacent.State.HasCollapsed == haveCollapsed) neighbours.Add(dir, adjacent);
             }
@@ -70,9 +70,9 @@ public class CellNeighborhood
             cell.UpdateState();
         }
     }
-    public List<CellBehaviour> CollapseCertain(Vector2Int pos)
+    public List<QuantumCell> CollapseCertain(Vector2Int pos)
     {
-        List<CellBehaviour> certainNeighbours = new();
+        List<QuantumCell> certainNeighbours = new();
         foreach (var neighbourCell in Get(pos, false).Values)
         {
             if (neighbourCell.State.Entropy == 0 && !neighbourCell.State.HasCollapsed) 

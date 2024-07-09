@@ -1,12 +1,17 @@
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(QuantumCell),typeof(SpriteRenderer))]
 public class CellSpawner : MonoBehaviour 
 {
     private SpriteRenderer spriteRenderer;
-    private void Awake()
+    private QuantumCell quantumCell;
+
+    private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        quantumCell = GetComponent<QuantumCell>();
+        quantumCell.OnCollapseState.AddListener(() => Draw(quantumCell.State.Collapsed));
+        quantumCell.OnResetState.AddListener(() => Cancel());
     }
     public void Cancel()
     {

@@ -15,8 +15,15 @@ public interface IQuantizable<T> where T : IProbable
 {
     public abstract QuantumState<T> State { get; set; }
 
+    public UnityEvent OnInitializeState { get; }
     public abstract void InitializeState();
-    public abstract void ResetState();
+
+    public UnityEvent OnCollapseState { get; }
+    public abstract void CollapseState();
+
+    public UnityEvent OnUpdateState { get; }
     public abstract void UpdateState();
-    public virtual void CollapseState() => State.Collapse();
+
+    public UnityEvent OnResetState { get; }
+    public abstract void ResetState();
 }

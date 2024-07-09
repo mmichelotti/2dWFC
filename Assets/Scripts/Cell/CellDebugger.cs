@@ -1,16 +1,22 @@
 using UnityEngine;
 using TMPro;
 
+[RequireComponent(typeof(QuantumCell))]
 public class CellDebugger : MonoBehaviour
 {
-    [SerializeField] private TMP_Text tmpText;
-    public void SubscribeToCell(CellBehaviour cell)
+    [SerializeField] private TMP_Text cellTextPrefab;
+    private TMP_Text cellText;
+    private QuantumCell cell;
+
+    public void Start()
     {
-        cell.OnStateCollapsed.AddListener(() => SetText(cell.State.Entropy));
-        cell.OnStateUpdated.AddListener(() => SetText(cell.State.Entropy));
-        cell.OnStateInitialized.AddListener(() => SetText(cell.Coordinate));
+        cellText = Instantiate(cellTextPrefab, transform);
+        cell = GetComponent<QuantumCell>();
+        cell.OnCollapseState.AddListener(() => SetText(cell.State.Entropy));
+        cell.OnUpdateState.AddListener(() => SetText(cell.State.Entropy));
+        cell.OnInitializeState.AddListener(() => SetText(cell.Coordinate));
     }
 
-    public void SetText(float n) => tmpText.text = n != 0 ? n.ToString("F2") : string.Empty;
-    public void SetText(Vector2Int n) => tmpText.text = n.ToString();
+    public void SetText(float n) => cellText.text = n != 0 ? n.ToString("F2") : string.Empty;
+    public void SetText(Vector2Int n) => cellText.text = n.ToString();
 }

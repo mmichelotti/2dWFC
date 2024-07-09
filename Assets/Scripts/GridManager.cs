@@ -1,23 +1,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using Unity.VisualScripting;
+using System.Linq;
 
 [RequireComponent(typeof(Grid))]
 public class GridManager : Manager
 {
-    //grid manager should just talk to a cell handler, not to specific cell behaviours
-    [SerializeField] private CellBehaviour cellBehaviourPF;
-    [SerializeField] private CellDebugger cellDebuggerPF;
-    //cell visualizer
-    //cell drawer
-    
-    public Dictionary<Vector2Int, CellBehaviour> cellsBehaviour { get; private set; } = new();
-    private readonly Dictionary<Vector2Int, CellDebugger> cellsDebugger = new();
-
-    private CellNeighborhood cellNeighborhood;
-    private int collapsedCells;
     public Grid Grid { get; private set; }
+    [SerializeField] private QuantumCell quantumCell; 
+    public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
+    private CellNeighborhood cellNeighborhood;
+
+    private int collapsedCells;
 
     private void Start()
     {
@@ -28,7 +23,6 @@ public class GridManager : Manager
 
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
-        //Exclude grid boundaries
         DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);    
         return new(required.Required, required.Excluded | Grid.Boundaries(pos));  
     }
@@ -47,50 +41,42 @@ public class GridManager : Manager
 
     private void SpawnCell(Vector2Int pos)
     {
-        CellBehaviour currentCell = cellsBehaviour[pos];
-        if (!currentCell.State.HasCollapsed)
-        {
-            currentCell.Constrain(RequiredDirections(pos));
-            currentCell.UpdateState();
-            currentCell.CollapseState();
+        QuantumCell currentCell = Cells[pos];
+        if (currentCell.State.HasCollapsed) return;
 
-            cellNeighborhood.UpdateState(pos);
-            cellNeighborhood.UpdateEntropy(pos);
+        currentCell.Constrain(RequiredDirections(pos));
+        currentCell.UpdateState();
+        currentCell.CollapseState();
 
-            foreach (var neighbour in cellNeighborhood.CollapseCertain(pos)) collapsedCells++;
+        cellNeighborhood.UpdateState(pos);
+        cellNeighborhood.UpdateEntropy(pos);
 
-            collapsedCells++;
-        }
+        collapsedCells += (from neighbour in cellNeighborhood.CollapseCertain(pos)
+                           select neighbour).Count() + 1;
 
     }
 
     private void RemoveCell(Vector2Int pos)
     {
-        CellBehaviour currentCell = cellsBehaviour[pos];
-        if (currentCell.State.HasCollapsed)
-        {
-            currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
-            foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
-            cellNeighborhood.UpdateEntropy(pos);
+        QuantumCell currentCell = Cells[pos];
+        if (!currentCell.State.HasCollapsed) return;
 
-            collapsedCells--;
-        }
+        currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
+        foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+        cellNeighborhood.UpdateEntropy(pos);
+
+        collapsedCells--;
+
     }
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
+        var currentCell = Instantiate(quantumCell, parent);
+        currentCell.transform.position = Grid.CoordinateToPosition(pos);
+        currentCell.transform.localScale = (Vector2)Grid.Size;
+        currentCell.Coordinate = pos;
+        currentCell.InitializeState();
+        Cells.Add(pos, currentCell);
 
-        var currentCellDebugger = Instantiate(cellDebuggerPF, parent);
-        currentCellDebugger.transform.position = Grid.CoordinateToPosition(pos);
-        currentCellDebugger.transform.localScale = (Vector2)Grid.Size;
-        cellsDebugger.Add(pos, currentCellDebugger);
-
-        var currentCellBehaviour = Instantiate(cellBehaviourPF, parent);
-        currentCellBehaviour.transform.position = Grid.CoordinateToPosition(pos);
-        currentCellBehaviour.transform.localScale = (Vector2)Grid.Size;
-        currentCellBehaviour.Coordinate = pos;
-        cellsBehaviour.Add(pos, currentCellBehaviour);
-
-        currentCellDebugger.SubscribeToCell(currentCellBehaviour);
         collapsedCells++;
     }
 
@@ -100,14 +86,14 @@ public class GridManager : Manager
         group.transform.parent = transform;
         Action<Vector2Int> action = pos => InitializeCell(pos, group.transform);
         action.MatrixLoop(Grid.Length);
-        cellNeighborhood = new(cellsBehaviour);
+        cellNeighborhood = new(Cells);
     }
 
     public void FillGrid()
     {
         Vector2Int nextPos = cellNeighborhood.LowestEntropy;
         int internalCounter = 0;
-        while (collapsedCells < cellsBehaviour.Count)
+        while (collapsedCells < Cells.Count)
         {
             SpawnCell(nextPos);
             nextPos = cellNeighborhood.LowestEntropy;
@@ -116,7 +102,7 @@ public class GridManager : Manager
     }
     public void ClearGrid()
     {
-        foreach (var cell in cellsBehaviour.Values) cell.ResetState();
+        foreach (var cell in Cells.Values) cell.ResetState();
         cellNeighborhood.ClearQueue();
         collapsedCells = 0;
     }

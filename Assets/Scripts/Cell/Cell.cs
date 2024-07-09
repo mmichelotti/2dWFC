@@ -1,5 +1,5 @@
 using UnityEngine;
-public abstract class Point : MonoBehaviour, IPositionable<Vector2Int>, IRequirable
+public abstract class Cell : MonoBehaviour, IPositionable<Vector2Int>, IRequirable
 {
     public Vector2Int Coordinate { get; set; }
     public DirectionsRequired DirectionsRequired { get; set; } = new();
