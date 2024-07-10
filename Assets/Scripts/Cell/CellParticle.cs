@@ -9,7 +9,7 @@ public class CellParticle : MonoBehaviour
     {
         vfxPrefab.gameObject.SetActive(false);
         vfx = Instantiate(vfxPrefab, transform);
-        GetComponent<QuantumCell>().OnCollapseState.AddListener(() => Play());
+        GetComponent<QuantumCell>().OnCollapseState.AddListener(state => Play());
     }
     private void Play()
     {

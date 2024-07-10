@@ -2,30 +2,31 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static UnityEngine.CullingGroup;
 
 public class QuantumCell : Cell, IQuantizable<Tile>
 {
-    public UnityEvent OnInitializeState { get; } = new();
-    public UnityEvent OnCollapseState { get; } = new();
-    public UnityEvent OnUpdateState { get; } = new();
-    public UnityEvent OnResetState { get; } = new();
+    public UnityEvent<QuantumCell> OnInitializeState { get; } = new();
+    public UnityEvent<QuantumState<Tile>> OnCollapseState { get; } = new();
+    public UnityEvent<QuantumState<Tile>> OnUpdateState { get; } = new();
+    public UnityEvent<QuantumState<Tile>> OnResetState { get; } = new();
 
 
     [SerializeField] private TileSet tileSet;
-    public QuantumState<Tile> State { get; set; }
-    public bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
 
-    private void Start() => InitializeState();
+    public QuantumState<Tile> State { get; set; }
+
+    void Start() => InitializeState();
     public void InitializeState()
     {
         State = new(tileSet.AllConfigurations);
-        OnInitializeState.Invoke();
+        OnInitializeState.Invoke(this);
     }
     public void ResetState()
     {
         InitializeState();
         DirectionsRequired = default;
-        OnResetState.Invoke();
+        OnResetState.Invoke(State);
     }
     public void UpdateState()
     {
@@ -35,12 +36,12 @@ public class QuantumCell : Cell, IQuantizable<Tile>
             .ToList();
 
         State.Update(newState);
-        OnUpdateState.Invoke();
+        OnUpdateState.Invoke(State);
     }
     public void CollapseState()
     {
         State.Collapse();
-        OnCollapseState.Invoke();
+        OnCollapseState.Invoke(State);
     }
     public void ReobserveState(DirectionsRequired dr)
     {

@@ -63,7 +63,7 @@ public class CellNeighborhood
         {
             DirectionsRequired required = new(dir.GetOpposite());
 
-            if (!initialCells[pos].HasDirection(dir))
+            if (!initialCells[pos].State.Collapsed.HasDirection(dir))
                 (required.Required, required.Excluded) = (required.Excluded, required.Required);
 
             cell.DirectionsRequired = required;

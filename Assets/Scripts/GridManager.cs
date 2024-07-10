@@ -64,6 +64,7 @@ public class GridManager : Manager
 
         currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
         foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+
         cellNeighborhood.UpdateEntropy(pos);
 
         collapsedCells--;
@@ -72,8 +73,6 @@ public class GridManager : Manager
     private void InitializeCell(Vector2Int pos, Transform parent)
     {
         var currentCell = Instantiate(quantumCell, parent);
-        currentCell.transform.position = Grid.CoordinateToPosition(pos);
-        currentCell.transform.localScale = new Vector2(Grid.Area, Grid.Area);
         currentCell.Coordinate = pos;
         Cells.Add(pos, currentCell);
 
@@ -91,13 +90,14 @@ public class GridManager : Manager
 
     public void FillGrid()
     {
-        Vector2Int nextPos = cellNeighborhood.LowestEntropy;
-        int internalCounter = 0;
-        while (collapsedCells < Cells.Count)
+        HashSet<Vector2Int> processedCells = new();
+        Vector2Int currentPos = cellNeighborhood.LowestEntropy;
+
+        while (!processedCells.Contains(currentPos))
         {
-            SpawnCell(nextPos);
-            nextPos = cellNeighborhood.LowestEntropy;
-            internalCounter++;
+            SpawnCell(currentPos);
+            processedCells.Add(currentPos);
+            currentPos = cellNeighborhood.LowestEntropy;
         }
     }
     public void ClearGrid()
