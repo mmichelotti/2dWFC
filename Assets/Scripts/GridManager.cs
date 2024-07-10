@@ -75,7 +75,6 @@ public class GridManager : Manager
         currentCell.transform.position = Grid.CoordinateToPosition(pos);
         currentCell.transform.localScale = new Vector2(Grid.Area, Grid.Area);
         currentCell.Coordinate = pos;
-        currentCell.InitializeState();
         Cells.Add(pos, currentCell);
 
         collapsedCells++;

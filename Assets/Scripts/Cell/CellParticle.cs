@@ -5,7 +5,7 @@ public class CellParticle : MonoBehaviour
 {
     [SerializeField] private ParticleSystem vfxPrefab;
     private ParticleSystem vfx;
-    private void Start()
+    private void Awake()
     {
         vfxPrefab.gameObject.SetActive(false);
         vfx = Instantiate(vfxPrefab, transform);

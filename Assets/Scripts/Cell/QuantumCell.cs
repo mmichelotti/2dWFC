@@ -13,7 +13,9 @@ public class QuantumCell : Cell, IQuantizable<Tile>
 
     [SerializeField] private TileSet tileSet;
     public QuantumState<Tile> State { get; set; }
-    public override bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
+    public bool HasDirection(Directions dir) => State.Collapsed.HasDirection(dir);
+
+    private void Start() => InitializeState();
     public void InitializeState()
     {
         State = new(tileSet.AllConfigurations);

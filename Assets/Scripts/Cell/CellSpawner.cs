@@ -6,7 +6,7 @@ public class CellSpawner : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private QuantumCell quantumCell;
 
-    private void Start()
+    private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         quantumCell = GetComponent<QuantumCell>();

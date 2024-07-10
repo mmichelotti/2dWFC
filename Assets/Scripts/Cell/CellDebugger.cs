@@ -8,7 +8,7 @@ public class CellDebugger : MonoBehaviour
     private TMP_Text cellText;
     private QuantumCell cell;
 
-    public void Start()
+    public void Awake()
     {
         cellText = Instantiate(cellTextPrefab, transform);
         cell = GetComponent<QuantumCell>();
@@ -19,4 +19,5 @@ public class CellDebugger : MonoBehaviour
 
     public void SetText(float n) => cellText.text = n != 0 ? n.ToString("F2") : string.Empty;
     public void SetText(Vector2Int n) => cellText.text = n.ToString();
+
 }
