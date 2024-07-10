@@ -75,7 +75,7 @@ public class CellNeighborhood
         List<QuantumCell> certainNeighbours = new();
         foreach (var neighbourCell in Get(pos, false).Values)
         {
-            if (neighbourCell.State.Entropy == 0 && !neighbourCell.State.HasCollapsed) 
+            if (neighbourCell.State.Entropy == 0) 
             {
                 neighbourCell.CollapseState();
                 certainNeighbours.Add(neighbourCell);
@@ -95,6 +95,6 @@ public class CellNeighborhood
         return dirRequired;
     }
 
-    public void ClearQueue() => entropyQueue = new PriorityQueue<Vector2Int>();
+    public void ClearQueue() => entropyQueue.Clear();
 
 }

@@ -49,4 +49,9 @@ public class PriorityQueue<T>
         if (elements.Count == 0) throw new InvalidOperationException("The priority queue is empty");
         return elements[0].item;
     }
+    public void Clear()
+    {
+        elements.Clear();
+    }
+
 }

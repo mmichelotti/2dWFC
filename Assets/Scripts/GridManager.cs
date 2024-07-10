@@ -12,8 +12,6 @@ public class GridManager : Manager
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
     private CellNeighborhood cellNeighborhood;
 
-    private int collapsedCells;
-
     private void Start()
     {
         Grid = GetComponent<Grid>();
@@ -41,20 +39,10 @@ public class GridManager : Manager
 
     private void SpawnCell(Vector2Int pos)
     {
-        QuantumCell currentCell = Cells[pos];
-        if (currentCell.State.HasCollapsed) return;
-
-        currentCell.Constrain(RequiredDirections(pos));
-        currentCell.UpdateState();
-        currentCell.CollapseState();
-
+        Cells[pos].Constrain(RequiredDirections(pos));
+        Cells[pos].CollapseState();
         cellNeighborhood.UpdateState(pos);
         cellNeighborhood.UpdateEntropy(pos);
-
-        collapsedCells += (from neighbour 
-                           in cellNeighborhood.CollapseCertain(pos)
-                           select neighbour).Count() + 1;
-
     }
 
     private void RemoveCell(Vector2Int pos)
@@ -66,27 +54,20 @@ public class GridManager : Manager
         foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
 
         cellNeighborhood.UpdateEntropy(pos);
-
-        collapsedCells--;
-
-    }
-    private void InitializeCell(Vector2Int pos, Transform parent)
-    {
-        var currentCell = Instantiate(quantumCell, parent);
-        currentCell.Coordinate = pos;
-        Cells.Add(pos, currentCell);
-
-        collapsedCells++;
     }
 
     private void InitializeCells()
     {
         GameObject group = new("Cells");
         group.transform.parent = transform;
-        Action<Vector2Int> action = pos => InitializeCell(pos, group.transform);
-        action.MatrixLoop(Grid.Length);
+        Action<Vector2Int> initializeCell = pos =>
+        {
+            Cells.Add(pos, quantumCell.Spawn(pos, group.transform) as QuantumCell);
+        };
+        initializeCell.MatrixLoop(Grid.Length);
         cellNeighborhood = new(Cells);
     }
+
 
     public void FillGrid()
     {
@@ -104,6 +85,5 @@ public class GridManager : Manager
     {
         foreach (var cell in Cells.Values) cell.ResetState();
         cellNeighborhood.ClearQueue();
-        collapsedCells = 0;
     }
 }
