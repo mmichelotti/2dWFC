@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CellNeighborhood
 {
-
     private readonly Dictionary<Vector2Int, QuantumCell> initialCells;
     private PriorityQueue<Vector2Int> entropyQueue;
 

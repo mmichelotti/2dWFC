@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using Unity.VisualScripting;
-using System.Linq;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Grid))]
 public class GridManager : Manager

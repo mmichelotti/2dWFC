@@ -11,8 +11,6 @@ public class CellDrawer : MonoBehaviour
 
     private CellVisualizer cellVisualizer;
 
-    private Dictionary<Vector2Int, bool> isDrawn = new();
-
     private void Awake()
     {
         cellVisualizer = GetComponent<CellVisualizer>();
@@ -31,6 +29,24 @@ public class CellDrawer : MonoBehaviour
             Painting current = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
             cellVisualizer.SetColor(current);
             if (InputManager.IsLeftMouseButtonPressed) CellManager.SetCell(gridCoordinate, current);
+        }
+        else
+        {
+            Cursor.visible = true;
+            cellVisualizer.ClearColor();
+        }
+    }
+
+    public void Test()
+    {
+        Ray cameraToMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(cameraToMouse, out RaycastHit hit))
+        {
+            Vector2Int pos = hit.collider.GetComponentInParent<QuantumCell>().Coordinate;
+            Cursor.visible = false;
+            Painting current = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
+            cellVisualizer.SetColor(current);
+            if (InputManager.IsLeftMouseButtonPressed) CellManager.SetCell(pos, current);
         }
         else
         {

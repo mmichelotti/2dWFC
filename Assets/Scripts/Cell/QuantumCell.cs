@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
-using static UnityEngine.CullingGroup;
 
 public class QuantumCell : Cell, IQuantizable<Tile>
 {
@@ -29,7 +28,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     public void ResetState()
     {
         InitializeState();
-        DirectionsRequired = default;
+        Constrain(default);
         OnResetState.Invoke(State);
     }
     public void UpdateState()

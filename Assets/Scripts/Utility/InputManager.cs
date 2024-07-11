@@ -30,8 +30,7 @@ public class InputManager : Manager
     {
         inputActions.Disable();
     }
-    
-    
+   
     public Vector2Int GetMouseGridCoordinate(Grid grid)
     {
         Debug.Log(grid);
