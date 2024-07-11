@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class InputManager : Manager
 {
     private InputActions inputActions;
-    private GridManager cellManager;
+    private GridPainter cellManager;
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
     private void Awake()

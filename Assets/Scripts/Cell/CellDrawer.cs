@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(CellVisualizer))]
 public class CellDrawer : MonoBehaviour
 {
-    private GridManager CellManager => GameManager.Instance.GridManager;
+    private GridPainter CellManager => GameManager.Instance.GridManager;
     private InputManager InputManager => GameManager.Instance.InputManager;
 
     [SerializeField] private Grid grid;
@@ -29,24 +29,6 @@ public class CellDrawer : MonoBehaviour
             Painting current = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
             cellVisualizer.SetColor(current);
             if (InputManager.IsLeftMouseButtonPressed) CellManager.SetCell(gridCoordinate, current);
-        }
-        else
-        {
-            Cursor.visible = true;
-            cellVisualizer.ClearColor();
-        }
-    }
-
-    public void Test()
-    {
-        Ray cameraToMouse = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(cameraToMouse, out RaycastHit hit))
-        {
-            Vector2Int pos = hit.collider.GetComponentInParent<QuantumCell>().Coordinate;
-            Cursor.visible = false;
-            Painting current = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
-            cellVisualizer.SetColor(current);
-            if (InputManager.IsLeftMouseButtonPressed) CellManager.SetCell(pos, current);
         }
         else
         {

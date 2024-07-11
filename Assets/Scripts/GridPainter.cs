@@ -1,13 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(Grid))]
-public class GridManager : Manager
+public class GridPainter : Manager
 {
     public Grid Grid { get; private set; }
-    [SerializeField] private QuantumCell quantumCell; 
+    [SerializeField] private QuantumCell quantumCell;
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
     private CellNeighborhood cellNeighborhood;
 
@@ -20,17 +19,19 @@ public class GridManager : Manager
 
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
-        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);    
-        return new(required.Required, required.Excluded | Grid.Boundaries(pos));  
+        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);
+        return new(required.Required, required.Excluded | Grid.Boundaries(pos));
     }
 
     public void SetCell(Vector2Int pos, Painting mode)
     {
         switch (mode)
         {
-            case Painting.Drawing: SpawnCell(pos);
+            case Painting.Drawing:
+                SpawnCell(pos);
                 break;
-            case Painting.Erasing: RemoveCell(pos);
+            case Painting.Erasing:
+                RemoveCell(pos);
                 break;
             default: throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
         }
