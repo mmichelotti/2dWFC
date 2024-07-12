@@ -1,24 +1,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(QuantumCell))]
-public class CellHighlighter : MonoBehaviour
+public class CellHighigther : CellPainter
 {
-    [SerializeField] private SpriteRenderer cellHighlighterPrefab;
     private SpriteRenderer cellHighlighter;
+
     private readonly IReadOnlyDictionary<Painting, Color> colors = new Dictionary<Painting, Color>()
     {
-        { Painting.None,    Color.clear },
-        { Painting.Drawing, new(0.62f, 1f, 0f, .25f)},
-        { Painting.Erasing, new(1.0f, 0.334f, 0f, .25f)},
+        { Painting.Clear, Color.clear },
+        { Painting.Drawing, new Color(0.62f, 1f, 0f, .25f) },
+        { Painting.Erasing, new Color(1.0f, 0.334f, 0f, .25f) },
     };
-    private void Start()
+
+    protected void Start()
     {
-        cellHighlighter = Instantiate(cellHighlighterPrefab,transform);
-        cellHighlighter.color = colors[default];
+        base.Start();
+        cellHighlighter = CreateCellHighlighter();
+        WhileOnHover.AddListener(color => SetColor(color));
+        OnUnhover.AddListener(color => SetColor(color));
+        SetColor(Painting.Clear);
     }
-    public void SetColor(Painting mode)
+
+    private SpriteRenderer CreateCellHighlighter()
     {
-        cellHighlighter.color = colors[mode];
+        GameObject highlighterObject = new GameObject("CellHighlighter");
+        highlighterObject.transform.SetParent(transform, false);
+
+        RectTransform rectTransform = highlighterObject.AddComponent<RectTransform>();
+        rectTransform.sizeDelta = new Vector2(1, 1);  // Adjust size as needed
+
+        SpriteRenderer sr = highlighterObject.AddComponent<SpriteRenderer>();
+        sr.sprite = CreateWhiteSprite();
+        sr.sortingLayerName = "Highlight";
+        return sr;
     }
+
+    private Sprite CreateWhiteSprite()
+    {
+        Texture2D texture = new(1, 1);
+        texture.SetPixel(0, 0, Color.white);
+        texture.Apply();
+        Rect rect = new (0, 0, 1, 1);
+        return Sprite.Create(texture, rect, new Vector2(0.5f, 0.5f), 1);
+    }
+
+    private void SetColor(Painting mode) => cellHighlighter.color = colors[mode];
 }

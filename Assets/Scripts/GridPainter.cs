@@ -23,21 +23,7 @@ public class GridPainter : Manager
         return new(required.Required, required.Excluded | Grid.Boundaries(pos));
     }
 
-    public void SetCell(Vector2Int pos, Painting mode)
-    {
-        switch (mode)
-        {
-            case Painting.Drawing:
-                SpawnCell(pos);
-                break;
-            case Painting.Erasing:
-                RemoveCell(pos);
-                break;
-            default: throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
-        }
-    }
-
-    private void SpawnCell(Vector2Int pos)
+    public void SpawnCell(Vector2Int pos)
     {
         Cells[pos].Constrain(RequiredDirections(pos));
         Cells[pos].CollapseState();
@@ -45,7 +31,7 @@ public class GridPainter : Manager
         cellNeighborhood.UpdateEntropy(pos);
     }
 
-    private void RemoveCell(Vector2Int pos)
+    public void RemoveCell(Vector2Int pos)
     {
         QuantumCell currentCell = Cells[pos];
         if (!currentCell.State.HasCollapsed) return;

@@ -1,10 +1,12 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class InputManager : Manager
 {
     private InputActions inputActions;
-    private GridPainter cellManager;
+    public UnityEvent OnLeftShiftEnter = new();
+    public UnityEvent OnLeftShiftExit = new();
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
     private void Awake()
@@ -14,36 +16,9 @@ public class InputManager : Manager
         inputActions.Player.LeftShift.canceled += ctx => IsLeftShiftPressed = false;
         inputActions.Player.LeftMouseButton.performed += ctx => IsLeftMouseButtonPressed = true;
         inputActions.Player.LeftMouseButton.canceled += ctx => IsLeftMouseButtonPressed = false;
+        inputActions.Player.LeftShift.performed += ctx => OnLeftShiftEnter.Invoke();
+        inputActions.Player.LeftShift.canceled += ctx => OnLeftShiftExit.Invoke();
     }
-
-    private void Start()
-    {
-        cellManager = GameManager.Instance.GridManager;
-    }
-
-    private void OnEnable()
-    {
-        inputActions.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputActions.Disable();
-    }
-   
-    public Vector2Int GetMouseGridCoordinate(Grid grid)
-    {
-        Debug.Log(grid);
-        Ray ray = Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
-        Plane plane = new(Vector3.forward, grid.transform.position);
-
-        if (plane.Raycast(ray, out float enter))
-        {
-            Vector3 hitPoint = ray.GetPoint(enter);
-            Vector3 localPosition = grid.transform.InverseTransformPoint(hitPoint);
-            Vector2Int pos = grid.ToGridCoordinate(localPosition);
-            return pos;
-        }
-        return -Vector2Int.one;
-    }
+    private void OnEnable() => inputActions.Enable();
+    private void OnDisable() => inputActions.Disable();
 }
