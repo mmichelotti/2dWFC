@@ -1,26 +1,27 @@
 using UnityEngine;
 
-[RequireComponent(typeof(QuantumCell),typeof(SpriteRenderer))]
-public class CellSpawner : MonoBehaviour 
+public class CellSpawner
 {
-    private SpriteRenderer spriteRenderer;
     private QuantumCell quantumCell;
+    private SpriteRenderer spriteRenderer;
 
-    private void Awake()
+    public CellSpawner(QuantumCell cell)
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        quantumCell = GetComponent<QuantumCell>();
-        quantumCell.OnCollapseState.AddListener(state => Draw(state.Collapsed));
-        quantumCell.OnResetState.AddListener(state => Cancel());
+        quantumCell = cell;
+        spriteRenderer = cell.gameObject.GetComponent<SpriteRenderer>();
+        quantumCell.OnCollapseState.AddListener(state => Set(state.Collapsed));
+        quantumCell.OnResetState.AddListener(state => Reset());
     }
-    private void Cancel()
+
+    private void Reset()
     {
-        transform.rotation = default;
-        spriteRenderer.sprite = default;
+        quantumCell.transform.rotation = Quaternion.identity;
+        spriteRenderer.sprite = null;
     }
-    private void Draw(Tile tile)
+
+    private void Set(Tile tile)
     {
         spriteRenderer.sprite = tile.Sprite;
-        transform.Rotate(tile.Rotation);
+        quantumCell.transform.Rotate(tile.Rotation);
     }
 }

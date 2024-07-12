@@ -3,6 +3,8 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+
+[RequireComponent(typeof(SpriteRenderer))]
 public class QuantumCell : Cell, IQuantizable<Tile>
 {
     public UnityEvent<QuantumCell> OnInitializeState { get; } = new();
@@ -18,6 +20,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     private void Start()
     {
         InitializeState();
+        new CellSpawner(this);
     }
 
     public void InitializeState()
