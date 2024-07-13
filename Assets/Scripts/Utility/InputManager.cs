@@ -5,8 +5,8 @@ using UnityEngine.Events;
 public class InputManager : Manager
 {
     private InputActions inputActions;
-    public UnityEvent OnLeftShiftEnter = new();
-    public UnityEvent OnLeftShiftExit = new();
+    public UnityEvent OnLeftShiftEnter { get; } = new();
+    public UnityEvent OnLeftShiftExit { get; } = new();
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
     private void Awake()

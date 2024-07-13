@@ -48,7 +48,7 @@ public class GridPainter : Manager
         group.transform.parent = transform;
         Action<Vector2Int> initializeCell = pos =>
         {
-            Cells.Add(pos, quantumCell.Spawn(pos, group.transform) as QuantumCell);
+            Cells.Add(pos, quantumCell.Initialize(pos, Grid, group.transform) as QuantumCell);
         };
         initializeCell.MatrixLoop(Grid.Length);
         cellNeighborhood = new(Cells);

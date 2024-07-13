@@ -249,12 +249,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6eb300cbaec324badd108ca2625e5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnLeftShiftEnter:
-    m_PersistentCalls:
-      m_Calls: []
-  OnLeftShiftExit:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,7 +441,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1242971867}
   - {fileID: 336154840}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -493,7 +486,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 958954082}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -700,6 +693,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1620810253}
   - {fileID: 619394802}
+  - {fileID: 1242971867}
   - {fileID: 958954082}
   - {fileID: 103590831}
   - {fileID: 932652279}
