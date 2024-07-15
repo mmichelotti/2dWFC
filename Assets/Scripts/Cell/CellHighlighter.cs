@@ -3,39 +3,40 @@ using UnityEngine;
 
 public class CellHighigther : CellPainter
 {
+    [SerializeField] private Color drawColor = Color.white;
+    [SerializeField] private Color eraseColor = new(.4f, 0f, 1f, 1f);
     private SpriteRenderer cellHighlighter;
 
-    private readonly IReadOnlyDictionary<Painting, Color> colors = new Dictionary<Painting, Color>()
+    private Dictionary<Painting, Color> colors = new()
     {
-        { Painting.Clear, Color.clear },
-        { Painting.Drawing, new Color(0.62f, 1f, 0f, .25f) },
-        { Painting.Erasing, new Color(1.0f, 0.334f, 0f, .25f) },
+        { Painting.Clear, Color.clear }
     };
 
     protected void Start()
     {
         base.Start();
-        cellHighlighter = CreateCellHighlighter();
+        colors.Add(Painting.Drawing, new(drawColor.r, drawColor.g, drawColor.b, .25f));
+        colors.Add(Painting.Erasing, new(eraseColor.r, eraseColor.g, eraseColor.b, .25f));
+        cellHighlighter = CreatePreafab().GetComponent<SpriteRenderer>();
         WhileOnHover.AddListener(color => SetColor(color));
         OnUnhover.AddListener(color => SetColor(color));
         SetColor(Painting.Clear);
     }
 
-    private SpriteRenderer CreateCellHighlighter()
+    private GameObject CreatePreafab()
     {
-        GameObject highlighterObject = new GameObject("CellHighlighter");
-        highlighterObject.transform.SetParent(transform, false);
+        GameObject prefab = new ("CellHighlighter");
+        prefab.transform.SetParent(transform, false);
 
-        RectTransform rectTransform = highlighterObject.AddComponent<RectTransform>();
-        rectTransform.sizeDelta = new Vector2(1, 1);  // Adjust size as needed
+        prefab.AddComponent<RectTransform>();
 
-        SpriteRenderer sr = highlighterObject.AddComponent<SpriteRenderer>();
+        SpriteRenderer sr = prefab.AddComponent<SpriteRenderer>();
         sr.sprite = CreateWhiteSprite();
         sr.sortingLayerName = "Highlight";
-        return sr;
+        return prefab;
     }
 
-    private Sprite CreateWhiteSprite()
+    private static Sprite CreateWhiteSprite()
     {
         Texture2D texture = new(1, 1);
         texture.SetPixel(0, 0, Color.white);

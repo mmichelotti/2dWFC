@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 7339139158400433473}
   - component: {fileID: 4179874245206730063}
   - component: {fileID: -3108501364899760869}
-  - component: {fileID: 1546182898125748810}
   - component: {fileID: 3295937404782422286}
+  - component: {fileID: 1546182898125748810}
   - component: {fileID: -8152295965733051350}
   m_Layer: 0
   m_Name: Cell_Road
@@ -134,6 +134,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3a35bcb8780aa141b0404d1f5914a0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawColor: {r: 1, g: 1, b: 1, a: 1}
+  eraseColor: {r: 0.4, g: 0, b: 1, a: 1}
+--- !u!114 &3295937404782422286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4812070154539782890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7bc3b5cbf92f4c4786fe104858948b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  size: 2
+  color: {r: 0, g: 0.8, b: 0.7, a: 1}
 --- !u!114 &1546182898125748810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,19 +163,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vfxPrefab: {fileID: 1163677575482123879, guid: d7bdc846d52cc6c4981eab949c87402d, type: 3}
---- !u!114 &3295937404782422286
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4812070154539782890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7bc3b5cbf92f4c4786fe104858948b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cellTextPrefab: {fileID: 5687885513242815422, guid: 3807a8c5090d22247a5aec00af9c31a2, type: 3}
 --- !u!65 &-8152295965733051350
 BoxCollider:
   m_ObjectHideFlags: 0
