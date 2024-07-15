@@ -52,6 +52,16 @@ public static class Extensions
             }
         }
     }
+    public static void MatrixLoop(this Action<Vector2Int> action, Vector2Int size)
+    {
+        for (int x = 0; x < size.x; x++)
+        {
+            for (int y = 0; y < size.y; y++)
+            {
+                action(new Vector2Int(x, y));
+            }
+        }
+    }
     public static int PositiveRandom(int max) => UnityEngine.Random.Range(0, max);
     public static Vector2Int RandomVector(Vector2Int min, Vector2Int max) => new
         (UnityEngine.Random.Range(min.x, max.x),

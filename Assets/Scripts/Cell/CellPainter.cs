@@ -13,9 +13,9 @@ public enum Painting
 public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private InputManager InputManager => GameManager.Instance.InputManager;
-    private GridPainter GridPainter => GameManager.Instance.GridManager;
 
-    private Vector2Int coordinate;
+    private Vector2Int cellCoordinate;
+    private CellGrid cellGrid;
     private bool isHovered;
 
     public UnityEvent<Painting> OnUnhover { get; } = new();
@@ -23,7 +23,9 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     protected void Start()
     {
-        coordinate = GetComponentInParent<QuantumCell>().Coordinate;
+        QuantumCell cell = GetComponentInParent<QuantumCell>();
+        cellCoordinate = cell.Coordinate;
+        cellGrid = cell.CellGrid;
     }
 
     private void Update()
@@ -34,15 +36,15 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
             WhileOnHover.Invoke(currentPainting);
             if (InputManager.IsLeftMouseButtonPressed)
             {
-                if (GridPainter.Cells.TryGetValue(coordinate, out QuantumCell cell))
+                if (cellGrid.Cells.TryGetValue(cellCoordinate, out QuantumCell cell))
                 {
                     switch (currentPainting)
                     {
                         case Painting.Drawing:
-                            GridPainter.SpawnCell(coordinate);
+                            cellGrid.SpawnCell(cellCoordinate);
                             break;
                         case Painting.Erasing:
-                            GridPainter.RemoveCell(coordinate);
+                            cellGrid.RemoveCell(cellCoordinate);
                             break;
                     }
                 }

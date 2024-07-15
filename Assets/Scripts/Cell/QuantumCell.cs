@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -22,6 +23,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
         InitializeState();
         new CellSpawner(this);
     }
+
 
     public void InitializeState()
     {

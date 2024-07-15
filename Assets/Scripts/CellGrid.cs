@@ -3,7 +3,7 @@ using UnityEngine;
 using System;
 
 [RequireComponent(typeof(Grid))]
-public class GridPainter : Manager
+public class CellGrid : Manager
 {
     public Grid Grid { get; private set; }
     [SerializeField] private QuantumCell quantumCell;
@@ -48,9 +48,10 @@ public class GridPainter : Manager
         group.transform.parent = transform;
         Action<Vector2Int> initializeCell = pos =>
         {
-            Cells.Add(pos, quantumCell.Initialize(pos, Grid, group.transform) as QuantumCell);
+            QuantumCell cell = Cell.Create(quantumCell, pos, this, group.transform) as QuantumCell;
+            Cells.Add(pos, cell);
         };
-        initializeCell.MatrixLoop(Grid.Length);
+        initializeCell.MatrixLoop(Grid.Size);
         cellNeighborhood = new(Cells);
     }
 

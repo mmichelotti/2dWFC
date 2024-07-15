@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(GridPainter))]
+[CustomEditor(typeof(CellGrid))]
 public class GridManagerEditor : Editor
 {
     public override void OnInspectorGUI()
@@ -10,7 +10,7 @@ public class GridManagerEditor : Editor
         DrawDefaultInspector();
 
         // Get the GridManager script instance
-        GridPainter gridManager = (GridPainter)target;
+        CellGrid gridManager = (CellGrid)target;
 
         // Add a space for better readability
         EditorGUILayout.Space();
