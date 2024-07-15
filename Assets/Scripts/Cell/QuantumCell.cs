@@ -8,7 +8,7 @@ using UnityEngine.Events;
 [RequireComponent(typeof(SpriteRenderer))]
 public class QuantumCell : Cell, IQuantizable<Tile>
 {
-    public UnityEvent<QuantumCell> OnInitializeState { get; } = new();
+    public UnityEvent<QuantumState<Tile>> OnInitializeState { get; } = new();
     public UnityEvent<QuantumState<Tile>> OnCollapseState { get; } = new();
     public UnityEvent<QuantumState<Tile>> OnUpdateState { get; } = new();
     public UnityEvent<QuantumState<Tile>> OnResetState { get; } = new();
@@ -28,7 +28,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     public void InitializeState()
     {
         State = new(tileSet.AllConfigurations);
-        OnInitializeState.Invoke(this);
+        OnInitializeState.Invoke(State);
     }
     public void ResetState()
     {

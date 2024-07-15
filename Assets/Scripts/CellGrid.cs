@@ -8,7 +8,7 @@ public class CellGrid : Manager
     public Grid Grid { get; private set; }
     [SerializeField] private QuantumCell quantumCell;
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
-    private CellNeighborhood cellNeighborhood;
+    private QuantumGrid quantumGrid;
 
     private void Start()
     {
@@ -19,7 +19,7 @@ public class CellGrid : Manager
 
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
-        DirectionsRequired required = cellNeighborhood.GetDirectionsRequired(pos);
+        DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
         return new(required.Required, required.Excluded | Grid.Boundaries(pos));
     }
 
@@ -27,8 +27,8 @@ public class CellGrid : Manager
     {
         Cells[pos].Constrain(RequiredDirections(pos));
         Cells[pos].CollapseState();
-        cellNeighborhood.UpdateState(pos);
-        cellNeighborhood.UpdateEntropy(pos);
+        quantumGrid.UpdateState(pos);
+        quantumGrid.UpdateEntropy(pos);
     }
 
     public void RemoveCell(Vector2Int pos)
@@ -37,9 +37,9 @@ public class CellGrid : Manager
         if (!currentCell.State.HasCollapsed) return;
 
         currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
-        foreach (var neighbor in cellNeighborhood.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+        foreach (var neighbor in quantumGrid.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
 
-        cellNeighborhood.UpdateEntropy(pos);
+        quantumGrid.UpdateEntropy(pos);
     }
 
     private void InitializeCells()
@@ -52,25 +52,25 @@ public class CellGrid : Manager
             Cells.Add(pos, cell);
         };
         initializeCell.MatrixLoop(Grid.Size);
-        cellNeighborhood = new(Cells);
+        quantumGrid = new(Cells);
     }
 
 
     public void FillGrid()
     {
         HashSet<Vector2Int> processedCells = new();
-        Vector2Int currentPos = cellNeighborhood.LowestEntropy;
+        Vector2Int currentPos = quantumGrid.LowestEntropy;
 
         while (!processedCells.Contains(currentPos))
         {
             SpawnCell(currentPos);
             processedCells.Add(currentPos);
-            currentPos = cellNeighborhood.LowestEntropy;
+            currentPos = quantumGrid.LowestEntropy;
         }
     }
     public void ClearGrid()
     {
         foreach (var cell in Cells.Values) cell.ResetState();
-        cellNeighborhood.ClearQueue();
+        quantumGrid.ClearQueue();
     }
 }

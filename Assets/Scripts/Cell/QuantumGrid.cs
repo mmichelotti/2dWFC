@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class CellNeighborhood
+public class QuantumGrid
 {
     private readonly Dictionary<Vector2Int, QuantumCell> initialCells;
     private PriorityQueue<Vector2Int> entropyQueue;
 
-    public CellNeighborhood(Dictionary<Vector2Int, QuantumCell> initialCells)
+    public QuantumGrid(Dictionary<Vector2Int, QuantumCell> initialCells)
     {
         this.initialCells = initialCells;
         entropyQueue = new();

@@ -14,13 +14,12 @@ public class CellDebugger : MonoBehaviour
         cellText = CreatePrefab().GetComponent<TextMeshPro>();
 
         QuantumCell quantumCell = GetComponent<QuantumCell>();
-        quantumCell.OnInitializeState.AddListener(cell => SetText(cell.Coordinate));
+        quantumCell.OnInitializeState.AddListener(state => SetText(state.Entropy));
         quantumCell.OnCollapseState.AddListener(state => SetText(state.Entropy));
         quantumCell.OnUpdateState.AddListener(state => SetText(state.Entropy));
     }
 
     public void SetText(float n) => cellText.text = n != 0 ? n.ToString("F2") : string.Empty;
-    public void SetText(Vector2Int n) => cellText.text = n.ToString();
 
     private GameObject CreatePrefab()
     {
