@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 public abstract class Cell : MonoBehaviour, IPositionable<Vector2Int>, IRequirable
 {
     public Vector2Int Coordinate { get; set; }
