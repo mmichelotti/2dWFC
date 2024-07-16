@@ -3,17 +3,19 @@ using UnityEngine;
 [RequireComponent(typeof(QuantumCell))]
 public class CellParticle : MonoBehaviour
 {
-    [SerializeField] private ParticleSystem vfxPrefab;
-    private ParticleSystem vfx;
+    private ParticleSystem Vfx;
     private void Awake()
     {
-        vfxPrefab.gameObject.SetActive(false);
-        vfx = Instantiate(vfxPrefab, transform);
         GetComponent<QuantumCell>().OnCollapseState.AddListener(state => Play());
+    }
+    public void Initialize(ParticleSystem vfx)
+    {
+        Vfx = Instantiate(vfx, transform);
+        Vfx.gameObject.SetActive(false);
     }
     private void Play()
     {
-        vfx.gameObject.SetActive(true);
-        vfx.Play();
+        Vfx.gameObject.SetActive(true);
+        Vfx.Play();
     }
 }

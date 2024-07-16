@@ -2,6 +2,20 @@ using System;
 using UnityEngine;
 public static class Extensions
 {
+    public static GameObject CreateCellPrefab(TileSet tileSet, ParticleSystem ps, Transform parent = null)
+    {
+        GameObject cellPrefab = new("Cell");
+        QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
+        quantumCell.TileSet = tileSet;
+        CellParticle cellParticle = cellPrefab.AddComponent<CellParticle>();
+        cellParticle.Initialize(ps);
+        cellPrefab.AddComponent<CellPainter>();
+        cellPrefab.AddComponent<CellHighigther>();
+        cellPrefab.AddComponent<CellDebugger>();
+        cellPrefab.AddComponent<BoxCollider>();
+        cellPrefab.transform.parent = parent;
+        return cellPrefab;
+    }
     public static T MakeSingleton<T>(this T manager) where T : MonoBehaviour
     {
         T[] instances = UnityEngine.Object.FindObjectsByType<T>(FindObjectsSortMode.None);

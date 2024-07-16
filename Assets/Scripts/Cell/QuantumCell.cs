@@ -13,9 +13,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     public UnityEvent<QuantumState<Tile>> OnUpdateState { get; } = new();
     public UnityEvent<QuantumState<Tile>> OnResetState { get; } = new();
 
-
-    [SerializeField] private TileSet tileSet;
-
+    public TileSet TileSet { get; set; }
     public QuantumState<Tile> State { get; set; }
 
     private void Start()
@@ -27,7 +25,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
 
     public void InitializeState()
     {
-        State = new(tileSet.AllConfigurations);
+        State = new(TileSet.AllConfigurations);
         OnInitializeState.Invoke(State);
     }
     public void ResetState()
