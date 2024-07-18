@@ -24,6 +24,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "MiddleMouseButton",
+                    "type": "Button",
+                    "id": "530c95a3-9d13-4a7d-a036-af55ea5eea9c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "ScrollWheel",
                     "type": "Value",
                     "id": "0097ebf6-c05c-482e-9c6b-6111f2ba06b3",
@@ -53,6 +62,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LeftMouseButton",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "992dae8c-e15f-490b-addd-d2638d4c1fcf",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MiddleMouseButton",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

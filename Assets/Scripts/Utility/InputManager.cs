@@ -8,9 +8,13 @@ public class InputManager : Manager
     private InputActions inputActions;
     public UnityEvent OnLeftShiftEnter { get; } = new();
     public UnityEvent OnLeftShiftExit { get; } = new();
+    public UnityEvent OnLeftMouseButtonEnter { get; } = new();
+    public UnityEvent OnLeftMouseButtonExit { get; } = new();
+    public UnityEvent WhileLeftMouseButton { get; } = new();
     public UnityEvent<int> OnScrollWheel { get; } = new();
     public bool IsLeftShiftPressed { get; private set; }
     public bool IsLeftMouseButtonPressed { get; private set; }
+    public bool IsMiddleMouseButtonPressed { get; private set; }
     private void Awake()
     {
         inputActions = new();
@@ -26,13 +30,31 @@ public class InputManager : Manager
             OnLeftShiftExit.Invoke();
         };
 
-        inputActions.Player.LeftMouseButton.performed += ctx => IsLeftMouseButtonPressed = true;
-        inputActions.Player.LeftMouseButton.canceled += ctx => IsLeftMouseButtonPressed = false;
+        inputActions.Player.LeftMouseButton.performed += ctx =>
+        {
+            IsLeftMouseButtonPressed = true;
+            OnLeftMouseButtonEnter.Invoke();
+        };
+        inputActions.Player.LeftMouseButton.canceled += ctx =>
+        {
+            IsLeftMouseButtonPressed = false;
+            OnLeftMouseButtonExit.Invoke();
+        };
+
+        inputActions.Player.MiddleMouseButton.performed += ctx => IsMiddleMouseButtonPressed = true;
+        inputActions.Player.MiddleMouseButton.canceled += ctx => IsMiddleMouseButtonPressed = false;
 
         inputActions.Player.ScrollWheel.performed += ctx =>
         {
             OnScrollWheel.Invoke(Math.Sign(ctx.ReadValue<Vector2>().y));
         };
+    }
+    private void Update()
+    {
+        if (IsLeftMouseButtonPressed)
+        {
+            WhileLeftMouseButton.Invoke();
+        }
     }
     private void OnEnable() => inputActions.Enable();
     private void OnDisable() => inputActions.Disable();

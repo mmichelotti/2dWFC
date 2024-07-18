@@ -47,6 +47,15 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
+                    ""name"": ""MiddleMouseButton"",
+                    ""type"": ""Button"",
+                    ""id"": ""530c95a3-9d13-4a7d-a036-af55ea5eea9c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
                     ""name"": ""ScrollWheel"",
                     ""type"": ""Value"",
                     ""id"": ""0097ebf6-c05c-482e-9c6b-6111f2ba06b3"",
@@ -76,6 +85,17 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""LeftMouseButton"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""992dae8c-e15f-490b-addd-d2638d4c1fcf"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MiddleMouseButton"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -111,6 +131,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_LeftShift = m_Player.FindAction("LeftShift", throwIfNotFound: true);
         m_Player_LeftMouseButton = m_Player.FindAction("LeftMouseButton", throwIfNotFound: true);
+        m_Player_MiddleMouseButton = m_Player.FindAction("MiddleMouseButton", throwIfNotFound: true);
         m_Player_ScrollWheel = m_Player.FindAction("ScrollWheel", throwIfNotFound: true);
     }
 
@@ -180,6 +201,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_LeftShift;
     private readonly InputAction m_Player_LeftMouseButton;
+    private readonly InputAction m_Player_MiddleMouseButton;
     private readonly InputAction m_Player_ScrollWheel;
     public struct PlayerActions
     {
@@ -187,6 +209,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         public PlayerActions(@InputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @LeftShift => m_Wrapper.m_Player_LeftShift;
         public InputAction @LeftMouseButton => m_Wrapper.m_Player_LeftMouseButton;
+        public InputAction @MiddleMouseButton => m_Wrapper.m_Player_MiddleMouseButton;
         public InputAction @ScrollWheel => m_Wrapper.m_Player_ScrollWheel;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -203,6 +226,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @LeftMouseButton.started += instance.OnLeftMouseButton;
             @LeftMouseButton.performed += instance.OnLeftMouseButton;
             @LeftMouseButton.canceled += instance.OnLeftMouseButton;
+            @MiddleMouseButton.started += instance.OnMiddleMouseButton;
+            @MiddleMouseButton.performed += instance.OnMiddleMouseButton;
+            @MiddleMouseButton.canceled += instance.OnMiddleMouseButton;
             @ScrollWheel.started += instance.OnScrollWheel;
             @ScrollWheel.performed += instance.OnScrollWheel;
             @ScrollWheel.canceled += instance.OnScrollWheel;
@@ -216,6 +242,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             @LeftMouseButton.started -= instance.OnLeftMouseButton;
             @LeftMouseButton.performed -= instance.OnLeftMouseButton;
             @LeftMouseButton.canceled -= instance.OnLeftMouseButton;
+            @MiddleMouseButton.started -= instance.OnMiddleMouseButton;
+            @MiddleMouseButton.performed -= instance.OnMiddleMouseButton;
+            @MiddleMouseButton.canceled -= instance.OnMiddleMouseButton;
             @ScrollWheel.started -= instance.OnScrollWheel;
             @ScrollWheel.performed -= instance.OnScrollWheel;
             @ScrollWheel.canceled -= instance.OnScrollWheel;
@@ -249,6 +278,7 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     {
         void OnLeftShift(InputAction.CallbackContext context);
         void OnLeftMouseButton(InputAction.CallbackContext context);
+        void OnMiddleMouseButton(InputAction.CallbackContext context);
         void OnScrollWheel(InputAction.CallbackContext context);
     }
 }

@@ -11,13 +11,15 @@ public class CellSpawner
         quantumCell.OnCollapseState.AddListener(state => Set(state.Collapsed));
         quantumCell.OnResetState.AddListener(state => Reset());
 
-        quantumCell.GetComponent<CellPainter>().OnHover.AddListener(_ => Preview());
+        quantumCell.GetComponent<CellPainter>().OnIndexChange.AddListener(index => Preview(index));
         quantumCell.GetComponent<CellPainter>().OnUnhover.AddListener(_ => StopPreview());
     }
 
-    private void Preview()
+    private void Preview(int index)
     {
         if (quantumCell.State.HasCollapsed) return;
+        
+        Set(quantumCell.State.Superposition[index]);
     }
     private void StopPreview()
     {

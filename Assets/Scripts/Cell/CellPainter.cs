@@ -15,50 +15,53 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public UnityEvent<Painting> OnHover { get; } = new();
     public UnityEvent<Painting> OnUnhover { get; } = new();
     public UnityEvent<Painting> WhileOnHover { get; } = new();
+    public UnityEvent<int> OnIndexChange { get; } = new();
     public int CurrentIndex { get; private set; }
     private InputManager InputManager => GameManager.Instance.InputManager;
-    private UnityAction<int> scrollWheelListener; 
+    private UnityAction<int> scrollWheelListener;
+    private UnityAction leftClickListener;
     private QuantumCell cell;
     private bool isHovered;
-
+    private Painting currentPainting;
     protected void Start()
     {
         cell = GetComponentInParent<QuantumCell>();
-        scrollWheelListener = value => UpdateIndex(value); 
+        scrollWheelListener = value => UpdateIndex(value);
+        leftClickListener = () => SetCell();
     }
     private void UpdateIndex(int value)
     {
         CurrentIndex += value;
-        CurrentIndex = CurrentIndex % cell.State.Density;
+        CurrentIndex %= cell.State.Density;
         if (CurrentIndex < 0) CurrentIndex += cell.State.Density;
+        OnIndexChange.Invoke(CurrentIndex);
     }
     
     private void Update()
     { 
         if (isHovered)
         {
-            Debug.LogError($"coordinate {cell.Coordinate} have {CurrentIndex}");
-            var currentPainting = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
+            currentPainting = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
             WhileOnHover.Invoke(currentPainting);
-            if (InputManager.IsLeftMouseButtonPressed)
-            {
-                switch (currentPainting)
-                {
-                    case Painting.Drawing:
-                        cell.CellGrid.SpawnCell(cell.Coordinate);
-                        break;
-                    case Painting.Erasing:
-                        cell.CellGrid.RemoveCell(cell.Coordinate);
-                        break;
-                }
-            }
         }
     }
 
+    private void SetCell()
+    {
+        switch (currentPainting)
+        {
+            case Painting.Drawing:
+                cell.CellGrid.SpawnCell(cell.Coordinate);
+                break;
+            case Painting.Erasing:
+                cell.CellGrid.RemoveCell(cell.Coordinate);
+                break;
+        }
+    }
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
         InputManager.OnScrollWheel.AddListener(scrollWheelListener);
+        InputManager.WhileLeftMouseButton.AddListener(leftClickListener);
         OnHover.Invoke(Painting.Drawing);
         isHovered = true;
     }
@@ -66,8 +69,8 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public void OnPointerExit(PointerEventData eventData)
     {
         InputManager.OnScrollWheel.RemoveListener(scrollWheelListener);
+        InputManager.WhileLeftMouseButton.RemoveListener(leftClickListener);
         OnUnhover.Invoke(Painting.Clear);
         isHovered = false;
     }
-
 }
