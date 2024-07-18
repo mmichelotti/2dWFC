@@ -29,15 +29,6 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
             ""id"": ""040efaa3-6e0e-4515-b331-8800db10b473"",
             ""actions"": [
                 {
-                    ""name"": ""Autofill"",
-                    ""type"": ""Button"",
-                    ""id"": ""12f73ebd-5be5-4a53-b580-916f551a3f03"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": true
-                },
-                {
                     ""name"": ""LeftShift"",
                     ""type"": ""Button"",
                     ""id"": ""358341de-e760-4cf1-93ae-ae0024f5d61a"",
@@ -56,27 +47,16 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Shuffle"",
-                    ""type"": ""Button"",
-                    ""id"": ""a2e96c11-be73-401c-931e-9ae171623a2e"",
+                    ""name"": ""ScrollWheel"",
+                    ""type"": ""Value"",
+                    ""id"": ""0097ebf6-c05c-482e-9c6b-6111f2ba06b3"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": """",
-                    ""id"": ""57160590-4b19-4d7c-b4e1-5fcda303fc70"",
-                    ""path"": ""<Keyboard>/r"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Autofill"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
                 {
                     ""name"": """",
                     ""id"": ""b3a53820-0f69-43fd-ae51-bc3a1817eebb"",
@@ -101,12 +81,12 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""9202b3fd-15e6-4ae4-9de4-7735bfb629e1"",
-                    ""path"": ""<Keyboard>/s"",
+                    ""id"": ""e299732d-de11-4408-aa0e-4be4dca95af6"",
+                    ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Shuffle"",
+                    ""action"": ""ScrollWheel"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -129,10 +109,9 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Autofill = m_Player.FindAction("Autofill", throwIfNotFound: true);
         m_Player_LeftShift = m_Player.FindAction("LeftShift", throwIfNotFound: true);
         m_Player_LeftMouseButton = m_Player.FindAction("LeftMouseButton", throwIfNotFound: true);
-        m_Player_Shuffle = m_Player.FindAction("Shuffle", throwIfNotFound: true);
+        m_Player_ScrollWheel = m_Player.FindAction("ScrollWheel", throwIfNotFound: true);
     }
 
     ~@InputActions()
@@ -199,18 +178,16 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Autofill;
     private readonly InputAction m_Player_LeftShift;
     private readonly InputAction m_Player_LeftMouseButton;
-    private readonly InputAction m_Player_Shuffle;
+    private readonly InputAction m_Player_ScrollWheel;
     public struct PlayerActions
     {
         private @InputActions m_Wrapper;
         public PlayerActions(@InputActions wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Autofill => m_Wrapper.m_Player_Autofill;
         public InputAction @LeftShift => m_Wrapper.m_Player_LeftShift;
         public InputAction @LeftMouseButton => m_Wrapper.m_Player_LeftMouseButton;
-        public InputAction @Shuffle => m_Wrapper.m_Player_Shuffle;
+        public InputAction @ScrollWheel => m_Wrapper.m_Player_ScrollWheel;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -220,34 +197,28 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Autofill.started += instance.OnAutofill;
-            @Autofill.performed += instance.OnAutofill;
-            @Autofill.canceled += instance.OnAutofill;
             @LeftShift.started += instance.OnLeftShift;
             @LeftShift.performed += instance.OnLeftShift;
             @LeftShift.canceled += instance.OnLeftShift;
             @LeftMouseButton.started += instance.OnLeftMouseButton;
             @LeftMouseButton.performed += instance.OnLeftMouseButton;
             @LeftMouseButton.canceled += instance.OnLeftMouseButton;
-            @Shuffle.started += instance.OnShuffle;
-            @Shuffle.performed += instance.OnShuffle;
-            @Shuffle.canceled += instance.OnShuffle;
+            @ScrollWheel.started += instance.OnScrollWheel;
+            @ScrollWheel.performed += instance.OnScrollWheel;
+            @ScrollWheel.canceled += instance.OnScrollWheel;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @Autofill.started -= instance.OnAutofill;
-            @Autofill.performed -= instance.OnAutofill;
-            @Autofill.canceled -= instance.OnAutofill;
             @LeftShift.started -= instance.OnLeftShift;
             @LeftShift.performed -= instance.OnLeftShift;
             @LeftShift.canceled -= instance.OnLeftShift;
             @LeftMouseButton.started -= instance.OnLeftMouseButton;
             @LeftMouseButton.performed -= instance.OnLeftMouseButton;
             @LeftMouseButton.canceled -= instance.OnLeftMouseButton;
-            @Shuffle.started -= instance.OnShuffle;
-            @Shuffle.performed -= instance.OnShuffle;
-            @Shuffle.canceled -= instance.OnShuffle;
+            @ScrollWheel.started -= instance.OnScrollWheel;
+            @ScrollWheel.performed -= instance.OnScrollWheel;
+            @ScrollWheel.canceled -= instance.OnScrollWheel;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -276,9 +247,8 @@ public partial class @InputActions: IInputActionCollection2, IDisposable
     }
     public interface IPlayerActions
     {
-        void OnAutofill(InputAction.CallbackContext context);
         void OnLeftShift(InputAction.CallbackContext context);
         void OnLeftMouseButton(InputAction.CallbackContext context);
-        void OnShuffle(InputAction.CallbackContext context);
+        void OnScrollWheel(InputAction.CallbackContext context);
     }
 }

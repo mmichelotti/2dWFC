@@ -10,9 +10,8 @@ public static class Extensions
         CellParticle cellParticle = cellPrefab.AddComponent<CellParticle>();
         cellParticle.Initialize(ps);
         cellPrefab.AddComponent<CellPainter>();
-        cellPrefab.AddComponent<CellHighigther>();
+        cellPrefab.AddComponent<CellHighlighter>();
         cellPrefab.AddComponent<CellDebugger>();
-        cellPrefab.AddComponent<BoxCollider>();
         cellPrefab.transform.parent = parent;
         return cellPrefab;
     }

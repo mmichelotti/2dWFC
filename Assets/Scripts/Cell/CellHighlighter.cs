@@ -1,25 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CellHighigther : CellPainter
+[RequireComponent(typeof(CellPainter))]
+public class CellHighlighter : MonoBehaviour
 {
     [SerializeField] private Color drawColor = Color.white;
     [SerializeField] private Color eraseColor = new(.4f, 0f, 1f, 1f);
     private SpriteRenderer cellHighlighter;
-
+    private CellPainter cellPainter;
     private Dictionary<Painting, Color> colors = new()
     {
         { Painting.Clear, Color.clear }
     };
-
+    private void Awake()
+    {
+        cellPainter = GetComponent<CellPainter>();
+    }
     protected void Start()
     {
-        base.Start();
         colors.Add(Painting.Drawing, new(drawColor.r, drawColor.g, drawColor.b, .25f));
         colors.Add(Painting.Erasing, new(eraseColor.r, eraseColor.g, eraseColor.b, .25f));
         cellHighlighter = CreatePreafab().GetComponent<SpriteRenderer>();
-        WhileOnHover.AddListener(color => SetColor(color));
-        OnUnhover.AddListener(color => SetColor(color));
+        cellPainter.WhileOnHover.AddListener(color => SetColor(color));
+        cellPainter.OnUnhover.AddListener(color => SetColor(color));
         SetColor(Painting.Clear);
     }
 
@@ -46,4 +49,5 @@ public class CellHighigther : CellPainter
     }
 
     private void SetColor(Painting mode) => cellHighlighter.color = colors[mode];
+
 }
