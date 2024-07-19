@@ -28,7 +28,7 @@ public class CellGrid : Manager
 
     public void SpawnCell(Vector2Int pos)
     {
-        Cells[pos].Constrain(RequiredDirections(pos)); //constarin è inutile, serve solo il grid boundaries
+        Cells[pos].Constrain(RequiredDirections(pos));
         Cells[pos].CollapseState();
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
@@ -40,15 +40,7 @@ public class CellGrid : Manager
         Cells[pos].CollapseState(index);
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
-
-        // Manually update the neighbors if necessary
-        foreach (var neighbor in quantumGrid.Get(pos, false).Values)
-        {
-            neighbor.UpdateState();
-            quantumGrid.UpdateEntropy(neighbor.Coordinate);
-        }
     }
-
 
     public void RemoveCell(Vector2Int pos)
     {
