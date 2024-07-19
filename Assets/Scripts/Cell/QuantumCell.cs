@@ -22,7 +22,6 @@ public class QuantumCell : Cell, IQuantizable<Tile>
         new CellSpawner(this);
     }
 
-
     public void InitializeState()
     {
         State = new(TileSet.AllConfigurations);

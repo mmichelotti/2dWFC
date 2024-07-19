@@ -15,7 +15,6 @@ public class CellGrid : Manager
 
     private void Start()
     {
-        
         Grid = GetComponent<Grid>();
         InitializeCells();
         ClearGrid();
@@ -23,12 +22,16 @@ public class CellGrid : Manager
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
         DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
-        return new(required.Required, required.Excluded | Grid.Boundaries(pos));
+        return required.Exclude(Grid.Boundaries(pos));
     }
-
+    private DirectionsRequired ExcludeGrid(Vector2Int pos)
+    {
+        DirectionsRequired dr = new();
+        return dr.Exclude(Grid.Boundaries(pos));
+    }
     public void SpawnCell(Vector2Int pos)
     {
-        Cells[pos].Constrain(RequiredDirections(pos));
+        Cells[pos].Constrain(ExcludeGrid(pos));
         Cells[pos].CollapseState();
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
@@ -36,7 +39,7 @@ public class CellGrid : Manager
 
     public void SpawnCell(Vector2Int pos, int index)
     {
-        Cells[pos].Constrain(RequiredDirections(pos));
+        Cells[pos].Constrain(ExcludeGrid(pos));
         Cells[pos].CollapseState(index);
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
@@ -47,8 +50,8 @@ public class CellGrid : Manager
         QuantumCell currentCell = Cells[pos];
         if (!currentCell.State.HasCollapsed) return;
 
-        currentCell.ReobserveState(RequiredDirections(currentCell.Coordinate));
-        foreach (var neighbor in quantumGrid.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+        currentCell.ReobserveState(RequiredDirections(pos));
+        foreach (var (dir, neighbor) in quantumGrid.Get(pos, false)) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
 
         quantumGrid.UpdateEntropy(pos);
     }
@@ -62,12 +65,12 @@ public class CellGrid : Manager
         {
             QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
+            //quantumCell.ReobserveState(ExcludeGrid(pos));
             Cells.Add(pos, quantumCell);
         };
         initializeCell.MatrixLoop(Grid.Size);
         quantumGrid = new(Cells);
     }
-
 
     public void FillGrid()
     {
