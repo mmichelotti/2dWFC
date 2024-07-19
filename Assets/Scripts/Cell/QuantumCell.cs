@@ -58,4 +58,11 @@ public class QuantumCell : Cell, IQuantizable<Tile>
         State.Collapse();
         OnCollapseState.Invoke(State);
     }
+    public void CollapseState(int index)
+    {
+        if (State.HasCollapsed) return;
+        UpdateState();
+        State.Collapse(index);
+        OnCollapseState.Invoke(State);
+    }
 }

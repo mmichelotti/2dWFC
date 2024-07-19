@@ -18,7 +18,6 @@ public class CellSpawner
     private void Preview(int index)
     {
         if (quantumCell.State.HasCollapsed) return;
-        
         Set(quantumCell.State.Superposition[index]);
     }
     private void StopPreview()
@@ -35,6 +34,6 @@ public class CellSpawner
     private void Set(Tile tile)
     {
         spriteRenderer.sprite = tile.Sprite;
-        quantumCell.transform.Rotate(tile.Rotation);
+        quantumCell.transform.rotation = Quaternion.Euler(tile.Rotation);
     }
 }

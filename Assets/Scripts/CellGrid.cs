@@ -34,6 +34,22 @@ public class CellGrid : Manager
         quantumGrid.UpdateEntropy(pos);
     }
 
+    public void SpawnCell(Vector2Int pos, int index)
+    {
+        Cells[pos].Constrain(RequiredDirections(pos));
+        Cells[pos].CollapseState(index);
+        quantumGrid.UpdateState(pos);
+        quantumGrid.UpdateEntropy(pos);
+
+        // Manually update the neighbors if necessary
+        foreach (var neighbor in quantumGrid.Get(pos, false).Values)
+        {
+            neighbor.UpdateState();
+            quantumGrid.UpdateEntropy(neighbor.Coordinate);
+        }
+    }
+
+
     public void RemoveCell(Vector2Int pos)
     {
         QuantumCell currentCell = Cells[pos];

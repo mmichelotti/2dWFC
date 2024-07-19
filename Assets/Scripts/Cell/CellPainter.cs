@@ -20,20 +20,22 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private InputManager InputManager => GameManager.Instance.InputManager;
     private UnityAction<int> scrollWheelListener;
     private UnityAction leftClickListener;
-    private QuantumCell cell;
+    private UnityAction middleClickListener;
+    private QuantumCell quantumCell;
     private bool isHovered;
     private Painting currentPainting;
     protected void Start()
     {
-        cell = GetComponentInParent<QuantumCell>();
+        quantumCell = GetComponentInParent<QuantumCell>();
         scrollWheelListener = value => UpdateIndex(value);
         leftClickListener = () => SetCell();
+        middleClickListener = () => SetCell(CurrentIndex);
     }
     private void UpdateIndex(int value)
     {
         CurrentIndex += value;
-        CurrentIndex %= cell.State.Density;
-        if (CurrentIndex < 0) CurrentIndex += cell.State.Density;
+        CurrentIndex %= quantumCell.State.Density;
+        if (CurrentIndex < 0) CurrentIndex += quantumCell.State.Density;
         OnIndexChange.Invoke(CurrentIndex);
     }
     
@@ -51,17 +53,19 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         switch (currentPainting)
         {
             case Painting.Drawing:
-                cell.CellGrid.SpawnCell(cell.Coordinate);
+                quantumCell.CellGrid.SpawnCell(quantumCell.Coordinate);
                 break;
             case Painting.Erasing:
-                cell.CellGrid.RemoveCell(cell.Coordinate);
+                quantumCell.CellGrid.RemoveCell(quantumCell.Coordinate);
                 break;
         }
     }
+    private void SetCell(int index) => quantumCell.CellGrid.SpawnCell(quantumCell.Coordinate, index);
     public void OnPointerEnter(PointerEventData eventData)
     {
         InputManager.OnScrollWheel.AddListener(scrollWheelListener);
         InputManager.WhileLeftMouseButton.AddListener(leftClickListener);
+        InputManager.OnMiddleMouseButtonEnter.AddListener(middleClickListener); // Changed from OnMiddleMouseButtonEnter to WhileMiddleMouseButton
         OnHover.Invoke(Painting.Drawing);
         isHovered = true;
     }
@@ -70,7 +74,10 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     {
         InputManager.OnScrollWheel.RemoveListener(scrollWheelListener);
         InputManager.WhileLeftMouseButton.RemoveListener(leftClickListener);
+        InputManager.OnMiddleMouseButtonEnter.RemoveListener(middleClickListener); // Changed from OnMiddleMouseButtonExit to WhileMiddleMouseButton
         OnUnhover.Invoke(Painting.Clear);
+        CurrentIndex = 0;
         isHovered = false;
     }
+
 }

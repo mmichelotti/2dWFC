@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using System;
-
 public record QuantumState<T> where T : IProbable
 {
     public List<T> Superposition { get; private set; }
@@ -27,6 +25,13 @@ public record QuantumState<T> where T : IProbable
     {
         HasCollapsed = true;
         Superposition = WeightedRandomTile();
+        return Superposition.First();
+    }
+    public T Collapse(int index)
+    {
+        HasCollapsed = true;
+        if (!index.IsBetween(Density)) return Collapse();
+        Superposition = new List<T> { Superposition[index] };
         return Superposition.First();
     }
 
