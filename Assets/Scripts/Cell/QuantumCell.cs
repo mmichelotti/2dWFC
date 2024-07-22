@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -49,14 +48,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
         Constrain(dr);
         UpdateState();
     }
-    public void CollapseState()
-    {
-        if (State.HasCollapsed) return;
-        UpdateState();
-        State.Collapse();
-        OnCollapseState.Invoke(State);
-    }
-    public void CollapseState(int index)
+    public void CollapseState(int? index = null)
     {
         if (State.HasCollapsed) return;
         UpdateState();

@@ -27,11 +27,11 @@ public record QuantumState<T> where T : IProbable
         Superposition = WeightedRandomTile();
         return Superposition.First();
     }
-    public T Collapse(int index)
+    public T Collapse(int? index = null)
     {
         HasCollapsed = true;
         if (!index.IsBetween(Density)) return Collapse();
-        Superposition = new List<T> { Superposition[index] };
+        Superposition = new List<T> { Superposition[index.Value] };
         return Superposition.First();
     }
 

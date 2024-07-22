@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static Extensions;
-using static UnityEditor.PlayerSettings;
 
 [RequireComponent(typeof(Grid))]
 public class CellGrid : Manager
@@ -18,18 +17,8 @@ public class CellGrid : Manager
     {
         Grid = GetComponent<Grid>();
         InitializeGrid();
-        ConstrainGrid();
-        DebugGrid();
     }
-    private void Update()
-    {
-        DebugGrid();
-    }
-    private DirectionsRequired ExcludeGrid(Vector2Int pos)
-    {
-        DirectionsRequired dr = new();
-        return dr.Exclude(Grid.Boundaries(pos));
-    }
+
     private void InitializeGrid()
     {
         GameObject group = new("Cells");
@@ -40,43 +29,24 @@ public class CellGrid : Manager
             QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
+            quantumCell.ReobserveState(ExcludeGrid(pos));
             Cells.Add(pos, quantumCell);
         };
         initializeCell.MatrixLoop(Grid.Size);
         quantumGrid = new QuantumGrid(Cells);
     }
-
-    private void ConstrainGrid()
+    private DirectionsRequired ExcludeGrid(Vector2Int pos)
     {
-        foreach (var (pos, cell) in Cells)
-        {
-            var excludedDirections = ExcludeGrid(pos);
-            cell.ReobserveState(excludedDirections);
-        }
+        DirectionsRequired dr = new();
+        return dr.Exclude(Grid.Boundaries(pos));
     }
-    private void DebugGrid()
-    {
-        foreach (var (pos, cell) in Cells)
-        {
-            Debug.LogError($"{cell.Coordinate} coord, {cell.State.Density} dens");
-        }
-    }
-    
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
         DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
         return required.Exclude(Grid.Boundaries(pos));
     }
     
-    public void SpawnCell(Vector2Int pos)
-    {
-        Cells[pos].Constrain(ExcludeGrid(pos));
-        Cells[pos].CollapseState();
-        quantumGrid.UpdateState(pos);
-        quantumGrid.UpdateEntropy(pos);
-    }
-
-    public void SpawnCell(Vector2Int pos, int index)
+    public void SpawnCell(Vector2Int pos, int? index = null)
     {
         Cells[pos].Constrain(ExcludeGrid(pos));
         Cells[pos].CollapseState(index);
