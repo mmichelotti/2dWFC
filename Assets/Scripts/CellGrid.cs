@@ -83,7 +83,6 @@ public class CellGrid : Manager
         {
             var excludedDirections = ExcludeGrid(pos);
             cell.ReobserveState(excludedDirections);
-            Debug.LogError($"{cell.Coordinate} coord, {cell.State.Density} dens");
         }
     }
 
