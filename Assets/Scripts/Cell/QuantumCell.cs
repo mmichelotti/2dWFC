@@ -18,7 +18,6 @@ public class QuantumCell : Cell, IQuantizable<Tile>
 
     private void Start()
     {
-        InitializeState();
         new CellSpawner(this);
     }
 

@@ -14,7 +14,7 @@ public class CellGrid : Manager
 
     private QuantumGrid quantumGrid;
 
-    private void Start()
+    private void Awake()
     {
         Grid = GetComponent<Grid>();
         InitializeGrid();
@@ -25,16 +25,49 @@ public class CellGrid : Manager
     {
         DebugGrid();
     }
-    private DirectionsRequired RequiredDirections(Vector2Int pos)
-    {
-        DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
-        return required.Exclude(Grid.Boundaries(pos));
-    }
     private DirectionsRequired ExcludeGrid(Vector2Int pos)
     {
         DirectionsRequired dr = new();
         return dr.Exclude(Grid.Boundaries(pos));
     }
+    private void InitializeGrid()
+    {
+        GameObject group = new("Cells");
+        group.transform.parent = transform;
+
+        Action<Vector2Int> initializeCell = pos =>
+        {
+            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
+            quantumCell.Initialize(pos, this);
+            quantumCell.InitializeState();
+            Cells.Add(pos, quantumCell);
+        };
+        initializeCell.MatrixLoop(Grid.Size);
+        quantumGrid = new QuantumGrid(Cells);
+    }
+
+    private void ConstrainGrid()
+    {
+        foreach (var (pos, cell) in Cells)
+        {
+            var excludedDirections = ExcludeGrid(pos);
+            cell.ReobserveState(excludedDirections);
+        }
+    }
+    private void DebugGrid()
+    {
+        foreach (var (pos, cell) in Cells)
+        {
+            Debug.LogError($"{cell.Coordinate} coord, {cell.State.Density} dens");
+        }
+    }
+    
+    private DirectionsRequired RequiredDirections(Vector2Int pos)
+    {
+        DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
+        return required.Exclude(Grid.Boundaries(pos));
+    }
+    
     public void SpawnCell(Vector2Int pos)
     {
         Cells[pos].Constrain(ExcludeGrid(pos));
@@ -62,37 +95,6 @@ public class CellGrid : Manager
         quantumGrid.UpdateEntropy(pos);
     }
 
-    private void InitializeGrid()
-    {
-        GameObject group = new("Cells");
-        group.transform.parent = transform;
-
-        Action<Vector2Int> initializeCell = pos =>
-        {
-            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
-            quantumCell.Initialize(pos, this);
-            Cells.Add(pos, quantumCell);
-        };
-        initializeCell.MatrixLoop(Grid.Size);
-        quantumGrid = new QuantumGrid(Cells);
-    }
-
-    private void ConstrainGrid()
-    {
-        foreach (var (pos, cell) in Cells)
-        {
-            var excludedDirections = ExcludeGrid(pos);
-            cell.ReobserveState(excludedDirections);
-        }
-    }
-
-    private void DebugGrid()
-    {
-        foreach (var (pos, cell) in Cells)
-        {
-            Debug.LogError($"{cell.Coordinate} coord, {cell.State.Density} dens");
-        }
-    }
     public void FillGrid()
     {
         HashSet<Vector2Int> processedCells = new();
