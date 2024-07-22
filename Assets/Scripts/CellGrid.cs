@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static Extensions;
+using static UnityEditor.PlayerSettings;
 
 [RequireComponent(typeof(Grid))]
 public class CellGrid : Manager
@@ -16,8 +17,13 @@ public class CellGrid : Manager
     private void Start()
     {
         Grid = GetComponent<Grid>();
-        InitializeCells();
-        ClearGrid();
+        InitializeGrid();
+        ConstrainGrid();
+        DebugGrid();
+    }
+    private void Update()
+    {
+        DebugGrid();
     }
     private DirectionsRequired RequiredDirections(Vector2Int pos)
     {
@@ -51,12 +57,12 @@ public class CellGrid : Manager
         if (!currentCell.State.HasCollapsed) return;
 
         currentCell.ReobserveState(RequiredDirections(pos));
-        foreach (var (dir, neighbor) in quantumGrid.Get(pos, false)) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+        foreach (var neighbor in quantumGrid.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
 
         quantumGrid.UpdateEntropy(pos);
     }
 
-    private void InitializeCells()
+    private void InitializeGrid()
     {
         GameObject group = new("Cells");
         group.transform.parent = transform;
@@ -65,15 +71,29 @@ public class CellGrid : Manager
         {
             QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
-            DirectionsRequired dr = ExcludeGrid(pos);
-            Debug.LogError(dr);
             Cells.Add(pos, quantumCell);
         };
         initializeCell.MatrixLoop(Grid.Size);
         quantumGrid = new QuantumGrid(Cells);
     }
 
+    private void ConstrainGrid()
+    {
+        foreach (var (pos, cell) in Cells)
+        {
+            var excludedDirections = ExcludeGrid(pos);
+            cell.ReobserveState(excludedDirections);
+            Debug.LogError($"{cell.Coordinate} coord, {cell.State.Density} dens");
+        }
+    }
 
+    private void DebugGrid()
+    {
+        foreach (var (pos, cell) in Cells)
+        {
+            Debug.LogError($"{cell.Coordinate} coord, {cell.State.Density} dens");
+        }
+    }
     public void FillGrid()
     {
         HashSet<Vector2Int> processedCells = new();

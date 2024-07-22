@@ -51,7 +51,16 @@ public record QuantumState<T> where T : IProbable
                 randomPoint -= tile.Probability;
             }
         }
+        
+        return new List<T> { Superposition.First() };
+    }
 
-        return new List<T> { Superposition.First() }; // Fallback in case of rounding errors
+    public void Debug()
+    {
+        foreach (var item in Superposition)
+        {
+            UnityEngine.Debug.LogError($"Density{Density}");
+            UnityEngine.Debug.LogError(item);
+        }
     }
 }
