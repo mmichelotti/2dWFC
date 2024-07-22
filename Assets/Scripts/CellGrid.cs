@@ -60,17 +60,19 @@ public class CellGrid : Manager
     {
         GameObject group = new("Cells");
         group.transform.parent = transform;
-        
+
         Action<Vector2Int> initializeCell = pos =>
         {
             QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
-            //quantumCell.ReobserveState(ExcludeGrid(pos));
+            DirectionsRequired dr = ExcludeGrid(pos);
+            Debug.LogError(dr);
             Cells.Add(pos, quantumCell);
         };
         initializeCell.MatrixLoop(Grid.Size);
-        quantumGrid = new(Cells);
+        quantumGrid = new QuantumGrid(Cells);
     }
+
 
     public void FillGrid()
     {

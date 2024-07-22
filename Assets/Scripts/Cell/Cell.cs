@@ -12,5 +12,4 @@ public abstract class Cell : MonoBehaviour, IPositionable<Vector2Int>, IRequirab
         transform.position = cellGrid.Grid.CoordinateToPosition(pos);
         transform.localScale = new Vector2(cellGrid.Grid.Area, cellGrid.Grid.Area);
     }
-
 }
