@@ -1,7 +1,10 @@
 fileFormatVersion: 2
-guid: 31fdb2c9daae7493387a031eaffaa9a5
+guid: 7b8d4c6243dd29b4486c62e36edb817f
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -8200753879877213929
+    second: T_Road_Set 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -34,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 2048
+  spritePixelsToUnits: 512
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -67,7 +70,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -80,7 +83,7 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -97,104 +100,203 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: T_2ways_Set_0
+      name: T_Road_Set 1_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 2048
-        width: 2048
-        height: 2048
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d89029d6f5f9e4c5d93ee77956f77542
-      internalID: 2012973410
+      spriteID: 7112383bbc1113e80800000000000000
+      internalID: -8200753879877213929
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_2ways_Set_1
+      name: T_Road_Set 1_1
       rect:
         serializedVersion: 2
-        x: 2048
-        y: 2048
-        width: 2048
-        height: 2048
+        x: 512
+        y: 512
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 74f66f3576d52409abd6717b3aab1a70
-      internalID: -2135228195
+      spriteID: dd7a3d5f33225bd41b9753f008dd3192
+      internalID: 1908179991
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_2ways_Set_2
+      name: T_Road_Set 1_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa50035e27e78444d8f29176c45a4611
+      internalID: 152906421
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Road_Set 1_3
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 512
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15fad89fe25628446b67436e4aaca369
+      internalID: 303569289
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Road_Set 1_4
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 2048
-        height: 2048
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04e184daebef8446bb11674a76869172
-      internalID: -160720546
+      spriteID: 55665655d8f14a84aae0b297a5dfe6dd
+      internalID: 106731028
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: T_2ways_Set_3
+      name: T_Road_Set 1_5
       rect:
         serializedVersion: 2
-        x: 2048
+        x: 512
         y: 0
-        width: 2048
-        height: 2048
+        width: 512
+        height: 512
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 43dc3b0746b2340f2ad1e05f49eb0a80
-      internalID: -949488786
+      spriteID: b491d7f8e668bda4ba8df2c344917a16
+      internalID: 910716042
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Road_Set 1_6
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7241d08bd58ad746976b9cb2a36df77
+      internalID: -2068443970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: T_Road_Set 1_7
+      rect:
+        serializedVersion: 2
+        x: 1536
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1227bfbb2e773024f83f5f97919cb8f6
+      internalID: -1821114363
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
-    spriteID: 5e97eb03825dee720800000000000000
+    spriteID: d3df255a6f76f0e49889484eabed1233
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
-      T_2ways_Set_0: 2012973410
-      T_2ways_Set_1: -2135228195
-      T_2ways_Set_2: -160720546
-      T_2ways_Set_3: -949488786
+      T_Road_Set 1_0: -8200753879877213929
+      T_Road_Set 1_1: 1908179991
+      T_Road_Set 1_2: 152906421
+      T_Road_Set 1_3: 303569289
+      T_Road_Set 1_4: 106731028
+      T_Road_Set 1_5: 910716042
+      T_Road_Set 1_6: -2068443970
+      T_Road_Set 1_7: -1821114363
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

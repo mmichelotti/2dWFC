@@ -46,7 +46,6 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             currentPainting = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
             WhileOnHover.Invoke(currentPainting);
-            Debug.LogError($"{quantumCell.Coordinate} coord, {quantumCell.State.Density} dens");
         }
     }
 

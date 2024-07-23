@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Tiles:
   - <Name>k__BackingField: Concrete
-    <Sprite>k__BackingField: {fileID: 312662686, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: 303569289, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 0.27
     <Directions>k__BackingField: 0
     <PossibleRotations>k__BackingField: 1
@@ -24,32 +24,32 @@ MonoBehaviour:
     <Directions>k__BackingField: 0
     <PossibleRotations>k__BackingField: 4
   - <Name>k__BackingField: 1 Way
-    <Sprite>k__BackingField: {fileID: 1679844691, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: 1908179991, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 0.27
     <Directions>k__BackingField: 4
     <PossibleRotations>k__BackingField: 4
   - <Name>k__BackingField: '2 Ways '
-    <Sprite>k__BackingField: {fileID: 1665137422, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: 910716042, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 1
     <Directions>k__BackingField: 5
     <PossibleRotations>k__BackingField: 2
   - <Name>k__BackingField: 2 Ways Crossroad
-    <Sprite>k__BackingField: {fileID: -634965956688128523, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: -8200753879877213929, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 1
     <Directions>k__BackingField: 5
     <PossibleRotations>k__BackingField: 2
   - <Name>k__BackingField: 2 Ways Curved
-    <Sprite>k__BackingField: {fileID: 1092733319, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: 152906421, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 1
     <Directions>k__BackingField: 6
     <PossibleRotations>k__BackingField: 4
   - <Name>k__BackingField: 3 Ways
-    <Sprite>k__BackingField: {fileID: 1556843932, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: 106731028, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 1
     <Directions>k__BackingField: 13
     <PossibleRotations>k__BackingField: 4
   - <Name>k__BackingField: 4 Ways
-    <Sprite>k__BackingField: {fileID: -1099060562, guid: acb1b2d2acd415a47812c083925e1c26, type: 3}
+    <Sprite>k__BackingField: {fileID: -2068443970, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
     <Probability>k__BackingField: 1
     <Directions>k__BackingField: -1
     <PossibleRotations>k__BackingField: 4

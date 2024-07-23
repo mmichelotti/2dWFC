@@ -2,7 +2,6 @@ using System;
 using UnityEngine;
 public static class Extensions
 {
-
     public static bool IsBetween(this int value, int min, int max) => value >= min && value <= max;
     public static bool IsBetween(this int value, int max) => value >= 0 && value <= max;
     public static bool IsBetween(this int? value, int max) => (value >= 0 && value <= max) && value.HasValue;
