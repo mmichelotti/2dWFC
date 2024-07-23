@@ -20,16 +20,6 @@ public struct Tile : IDirectionable, IFormattable, IProbable
     [field: SerializeField] public RotationOption PossibleRotations { get; set; }
 
     public Tile(Tile tile) => (Name, Sprite, Directions, Rotation, PossibleRotations, Probability) = (tile.Name, tile.Sprite, tile.Directions, tile.Rotation, tile.PossibleRotations, tile.Probability);
-    public Tile(string name, Sprite sprite, Directions directions, Vector3 rotation, RotationOption rotationOption)
-    {
-        Name = name;
-        Sprite = sprite;
-        Directions = directions;
-        Rotation = rotation;
-        PossibleRotations = rotationOption;
-        Probability = 0.5f;
-    }
-
 
     private readonly static HashSet<Tile> calculatingConfigurations = new();
     public List<Tile> AllConfigurations
