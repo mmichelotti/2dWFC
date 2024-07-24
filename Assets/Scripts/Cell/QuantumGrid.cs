@@ -81,7 +81,7 @@ public class QuantumGrid
         }
         return certainNeighbours;
     }
-
+ 
     public DirectionsRequired GetDirectionsRequired(Vector2Int pos)
     {
         DirectionsRequired dirRequired = new();

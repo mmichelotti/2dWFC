@@ -31,6 +31,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
         Constrain(default);
         OnResetState.Invoke(State);
     }
+    
     public void UpdateState()
     {
         List<Tile> newState = State.Superposition
