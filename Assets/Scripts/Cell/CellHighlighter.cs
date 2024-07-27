@@ -4,8 +4,9 @@ using UnityEngine;
 [RequireComponent(typeof(CellPainter))]
 public class CellHighlighter : MonoBehaviour
 {
-    [SerializeField] private Color drawColor = Color.white;
-    [SerializeField] private Color eraseColor = new(.4f, 0f, 1f, 1f);
+    public Color DrawColor { get; set; } = Color.white;
+    public Color EraseColor { get; set; } = new(.4f, 0f, 1f, 1f);
+
     private SpriteRenderer cellHighlighter;
     private CellPainter cellPainter;
     private Dictionary<Painting, Color> colors = new()
@@ -18,12 +19,16 @@ public class CellHighlighter : MonoBehaviour
     }
     protected void Start()
     {
-        colors.Add(Painting.Drawing, new(drawColor.r, drawColor.g, drawColor.b, .25f));
-        colors.Add(Painting.Erasing, new(eraseColor.r, eraseColor.g, eraseColor.b, .25f));
         cellHighlighter = CreatePreafab().GetComponent<SpriteRenderer>();
         cellPainter.WhileOnHover.AddListener(color => SetColor(color));
         cellPainter.OnUnhover.AddListener(color => SetColor(color));
         SetColor(Painting.Clear);
+    }
+
+    public void SetProperties(Color draw, Color erase)
+    {
+        colors[Painting.Drawing] = new(draw.r, draw.g, draw.b, .25f);
+        colors[Painting.Erasing] = new(erase.r, erase.g, erase.b, .25f);   
     }
 
     private GameObject CreatePreafab()

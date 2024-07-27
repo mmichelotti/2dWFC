@@ -1,27 +1,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using static Extensions;
+using static ComponentUtility;
 
-[Flags]
-public enum CellComponents
-{
-    None = 0,
-    CellPainter = 1 << 0,
-    CellHighlighter = 1 << 1,
-    CellDebugger = 1 << 2,
-    CellParticle = 1 << 3,
-    All = ~None
-}
 
 [RequireComponent(typeof(Grid))]
 public class CellGrid : Manager
 {
     public Grid Grid { get; private set; }
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
-    [SerializeField] private CellComponents components;
     [SerializeField] private TileSet tileSet;
+    [SerializeField] private CellComponents components;
+
+    #region flag fields
     [SerializeField] private ParticleSystem vfx;
+    [SerializeField] private Color drawColor = Color.white;
+    [SerializeField] private Color eraseColor = new(.4f, 0f, 1f, 1f);
+    [SerializeField] private float fontSize = 3f;
+    [SerializeField] private Color fontColor = new(0, .8f, .7f, 1f);
+    #endregion
+
+    public CellComponents Components => components;
+
 
     private QuantumGrid quantumGrid;
 
@@ -38,7 +38,7 @@ public class CellGrid : Manager
 
         Action<Vector2Int> initializeCell = pos =>
         {
-            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components).GetComponent<QuantumCell>();
+            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components, drawColor, eraseColor, fontSize, fontColor).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
             quantumCell.ReobserveState(ExcludeGrid(pos));

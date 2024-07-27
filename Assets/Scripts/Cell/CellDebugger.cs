@@ -1,18 +1,17 @@
 using UnityEngine;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 
 [RequireComponent(typeof(QuantumCell))]
 public class CellDebugger : MonoBehaviour
 {
-    [SerializeField] private float size = 2f;
-    [SerializeField] private Color color = new(0,.8f,.7f,1f);
-    private TextMeshPro cellText;
+    public float Size { get; set; } = 3f;
+    public Color Color { get; set; } = new(0,.8f,.7f,1f);
 
+    private TextMeshPro cellText;
     public void Awake()
     {
-        cellText = CreatePrefab().GetComponent<TextMeshPro>();
 
+        cellText = CreatePrefab().GetComponent<TextMeshPro>();
         QuantumCell quantumCell = GetComponent<QuantumCell>();
         quantumCell.OnInitializeState.AddListener(state => SetText(state.Entropy));
         quantumCell.OnCollapseState.AddListener(state => SetText(state.Entropy));
@@ -29,11 +28,18 @@ public class CellDebugger : MonoBehaviour
         prefab.transform.SetParent(transform, false);
 
         TextMeshPro cellText = prefab.AddComponent<TextMeshPro>();
-        cellText.fontSize = size;
-        cellText.color = color;
+        Debug.LogError("Creating Prefab");
+        cellText.fontSize = Size;
+        cellText.color = Color;
         cellText.alignment = TextAlignmentOptions.Center;
 
         return prefab;
+    }
+
+    public void SetProperties(float fontSize, Color fontColor)
+    {
+        cellText.fontSize = fontSize;
+        cellText.color = fontColor;
     }
 
 }

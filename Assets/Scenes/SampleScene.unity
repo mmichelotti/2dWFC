@@ -658,7 +658,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileSet: {fileID: 11400000, guid: bf2a8abc2ee10344c981f9f2209afeec, type: 2}
+  components: -1
   vfx: {fileID: 1163677575482123879, guid: d7bdc846d52cc6c4981eab949c87402d, type: 3}
+  drawColor: {r: 1, g: 0, b: 0, a: 1}
+  eraseColor: {r: 0.8818307, g: 0, b: 1, a: 1}
+  fontSize: 9
+  fontColor: {r: 1, g: 0.827592, b: 0, a: 1}
 --- !u!114 &8498645008213005065
 MonoBehaviour:
   m_ObjectHideFlags: 0
