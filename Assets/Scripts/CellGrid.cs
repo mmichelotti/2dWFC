@@ -20,9 +20,6 @@ public class CellGrid : Manager
     [SerializeField] private Color fontColor = new(0, .8f, .7f, 1f);
     #endregion
 
-    public CellComponents Components => components;
-
-
     private QuantumGrid quantumGrid;
 
     private void Awake()

@@ -1,5 +1,3 @@
-using UnityEngine.Events;
-
 public interface IPositionable<T> { public T Coordinate { get; set; } }
 public interface IRequirable { public DirectionsRequired DirectionsRequired { get; set; } }
 public interface IDebuggable { public abstract void Debug(); }

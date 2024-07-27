@@ -13,6 +13,7 @@ public class CellParticle : MonoBehaviour
         Vfx = Instantiate(vfx, transform);
         Vfx.gameObject.SetActive(false);
     }
+
     private void Play()
     {
         Vfx.gameObject.SetActive(true);

@@ -27,10 +27,17 @@ public static class ComponentUtility
         (TileSet tileSet, ParticleSystem ps = null, Transform parent = null, CellComponents components = CellComponents.All, 
         Color drawColor = default, Color eraseColor = default, float size = 2f, Color color = default)
     {
+
         GameObject cellPrefab = new("Cell");
         QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
         quantumCell.TileSet = tileSet;
 
+        Dictionary<Type, object[]> propertyValues = new Dictionary<Type, object[]>
+        {
+            { typeof(CellParticle), new object[] { ps } },
+            { typeof(CellHighlighter), new object[] { drawColor, eraseColor } },
+            { typeof(CellDebugger), new object[] { size, color } }
+        };
         foreach (var component in ComponentMap)
         {
             if ((components & component.Key) != 0)
