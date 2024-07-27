@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 [Flags]
 public enum CellComponents
@@ -24,43 +25,30 @@ public static class ComponentUtility
     };
 
     public static GameObject CreateCellPrefab
-        (TileSet tileSet, ParticleSystem ps = null, Transform parent = null, CellComponents components = CellComponents.All, 
+        (TileSet tileSet, ParticleSystem ps = null, Transform parent = null, CellComponents components = CellComponents.All,
         Color drawColor = default, Color eraseColor = default, float size = 2f, Color color = default)
     {
-
         GameObject cellPrefab = new("Cell");
         QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
         quantumCell.TileSet = tileSet;
 
-        Dictionary<Type, object[]> propertyValues = new Dictionary<Type, object[]>
+        // Define actions for setting properties
+        var propertySetters = new Dictionary<Type, Action<object>>
         {
-            { typeof(CellParticle), new object[] { ps } },
-            { typeof(CellHighlighter), new object[] { drawColor, eraseColor } },
-            { typeof(CellDebugger), new object[] { size, color } }
+            { typeof(CellParticle), obj => ((CellParticle)obj).SetProperties(ps) },
+            { typeof(CellHighlighter), obj => ((CellHighlighter)obj).SetProperties(drawColor, eraseColor) },
+            { typeof(CellDebugger), obj => ((CellDebugger)obj).SetProperties(size, color) }
         };
-        foreach (var component in ComponentMap)
-        {
-            if ((components & component.Key) != 0)
-            {
-                var addedComponent = cellPrefab.AddComponent(component.Value);
 
-                if (addedComponent is CellParticle cellParticle)
-                {
-                    cellParticle.SetProperties(ps);
-                }
-                if (addedComponent is CellHighlighter cellHighlighter)
-                {
-                    cellHighlighter.SetProperties(drawColor, eraseColor);
-                }
-                if (addedComponent is CellDebugger cellDebugger)
-                {
-                    cellDebugger.SetProperties(size,color);
-                }
-            }
+        foreach (var component in ComponentMap.Where(c => components.HasFlag(c.Key)))
+        {
+            var addedComponent = cellPrefab.AddComponent(component.Value);
+            if (propertySetters.TryGetValue(component.Value, out var setter)) setter(addedComponent);
         }
 
         cellPrefab.transform.parent = parent;
         return cellPrefab;
     }
+
 }
 
