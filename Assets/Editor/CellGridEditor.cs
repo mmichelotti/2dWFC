@@ -2,27 +2,27 @@ using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(CellGrid))]
-public class GridManagerEditor : Editor
+public class CellGridEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        CellGrid gridManager = (CellGrid)target;
+        CellGrid cellGrid = (CellGrid)target;
         EditorGUILayout.Space();
 
         if (GUILayout.Button("AutoFill"))
         {
-            gridManager.FillGrid();
+            cellGrid.FillGrid();
         }
         if (GUILayout.Button("Shuffle"))
         {
-            gridManager.ClearGrid();
-            gridManager.FillGrid();
+            cellGrid.ClearGrid();
+            cellGrid.FillGrid();
         }
 
         if (GUILayout.Button("Clear"))
         {
-            gridManager.ClearGrid();
+            cellGrid.ClearGrid();
         }
         if (GUILayout.Button("Save"))
         {

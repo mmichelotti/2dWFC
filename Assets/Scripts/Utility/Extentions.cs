@@ -1,21 +1,35 @@
 using System;
 using UnityEngine;
+using static UnityEngine.Rendering.STP;
 public static class Extensions
 {
     public static bool IsBetween(this int value, int min, int max) => value >= min && value <= max;
     public static bool IsBetween(this int value, int max) => value >= 0 && value <= max;
     public static bool IsBetween(this int? value, int max) => (value >= 0 && value <= max) && value.HasValue;
 
-    public static GameObject CreateCellPrefab(TileSet tileSet, ParticleSystem ps, Transform parent = null)
+    public static GameObject CreateCellPrefab(TileSet tileSet, ParticleSystem ps, Transform parent = null, CellComponents components = CellComponents.All)
     {
         GameObject cellPrefab = new("Cell");
         QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
         quantumCell.TileSet = tileSet;
-        CellParticle cellParticle = cellPrefab.AddComponent<CellParticle>();
-        cellParticle.Initialize(ps);
-        cellPrefab.AddComponent<CellPainter>();
-        cellPrefab.AddComponent<CellHighlighter>();
-        cellPrefab.AddComponent<CellDebugger>();
+
+        if ((CellComponents.CellPainter & components) != 0)
+        {
+            cellPrefab.AddComponent<CellPainter>();
+        }
+        if ((CellComponents.CellHighlighter & components) != 0)
+        {
+            cellPrefab.AddComponent<CellHighlighter>();
+        }
+        if ((CellComponents.CellDebugger & components) != 0)
+        {
+            cellPrefab.AddComponent<CellDebugger>();
+        }
+        if ((CellComponents.CellParticle & components) != 0)
+        {
+            CellParticle cellParticle = cellPrefab.AddComponent<CellParticle>();
+            cellParticle.Initialize(ps);
+        }
         cellPrefab.transform.parent = parent;
         return cellPrefab;
     }

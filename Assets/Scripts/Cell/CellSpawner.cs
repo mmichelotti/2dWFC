@@ -11,8 +11,8 @@ public class CellSpawner
         quantumCell.OnCollapseState.AddListener(state => Set(state.Collapsed));
         quantumCell.OnResetState.AddListener(state => Reset());
 
-        quantumCell.GetComponent<CellPainter>().OnIndexChange.AddListener(index => Preview(index));
-        quantumCell.GetComponent<CellPainter>().OnUnhover.AddListener(_ => StopPreview());
+        quantumCell.GetComponent<CellPainter>()?.OnIndexChange.AddListener(index => Preview(index));
+        quantumCell.GetComponent<CellPainter>()?.OnUnhover.AddListener(_ => StopPreview());
     }
 
     private void Preview(int index)

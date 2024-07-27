@@ -3,11 +3,23 @@ using UnityEngine;
 using System;
 using static Extensions;
 
+[Flags]
+public enum CellComponents
+{
+    None = 0,
+    CellPainter = 1 << 0,
+    CellHighlighter = 1 << 1,
+    CellDebugger = 1 << 2,
+    CellParticle = 1 << 3,
+    All = ~None
+}
+
 [RequireComponent(typeof(Grid))]
 public class CellGrid : Manager
 {
     public Grid Grid { get; private set; }
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
+    [SerializeField] private CellComponents components;
     [SerializeField] private TileSet tileSet;
     [SerializeField] private ParticleSystem vfx;
 
@@ -26,7 +38,7 @@ public class CellGrid : Manager
 
         Action<Vector2Int> initializeCell = pos =>
         {
-            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform).GetComponent<QuantumCell>();
+            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
             quantumCell.ReobserveState(ExcludeGrid(pos));
