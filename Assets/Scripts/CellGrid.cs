@@ -18,6 +18,11 @@ public class CellGrid : Manager
     [SerializeField] private Color eraseColor = new(.4f, 0f, 1f, 1f);
     [SerializeField] private float fontSize = 3f;
     [SerializeField] private Color fontColor = new(0, .8f, .7f, 1f);
+
+    [SerializeField] private AudioClip spawn;
+    [SerializeField] private AudioClip erase;
+    [SerializeField] private AudioClip scroll;
+    [SerializeField] private AudioClip hover;
     #endregion
 
     private QuantumGrid quantumGrid;
@@ -35,7 +40,11 @@ public class CellGrid : Manager
 
         Action<Vector2Int> initializeCell = pos =>
         {
-            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components, drawColor, eraseColor, fontSize, fontColor).GetComponent<QuantumCell>();
+            AudioClip[] audioClip = new AudioClip[]
+            {
+                spawn, erase, scroll, hover
+            };
+            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components, drawColor, eraseColor, fontSize, fontColor, audioClip).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
             quantumCell.ReobserveState(ExcludeGrid(pos));

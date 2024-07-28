@@ -27,7 +27,7 @@ public class CellHighlighter : MonoBehaviour
 
     public void SetProperties(Color draw, Color erase)
     {
-        colors[Painting.Drawing] = new(draw.r, draw.g, draw.b, .25f);
+        colors[Painting.Drawing] = new(draw.r, draw.g, draw.b, .25f );
         colors[Painting.Erasing] = new(erase.r, erase.g, erase.b, .25f);   
     }
 

@@ -15,6 +15,11 @@ public class CellGridEditor : Editor
     SerializedProperty sizeProp;
     SerializedProperty colorProp;
 
+    SerializedProperty spawnProp;
+    SerializedProperty eraseProp;
+    SerializedProperty scrollProp;
+    SerializedProperty hoverProp;
+
     private static Dictionary<CellComponents, ComponentProperties> componentPropertyMap;
 
     private struct ComponentProperties
@@ -32,6 +37,7 @@ public class CellGridEditor : Editor
         ComponentProperties vfx = new ("Particle Settings", new[] { "vfx" });
         ComponentProperties highlight = new ("Highlight Settings", new[] { "drawColor", "eraseColor" });
         ComponentProperties debug = new ("Debug Settings", new[] { "fontSize", "fontColor" });
+        ComponentProperties audio = new("Audio Settings", new[] { "spawn", "erase", "scroll", "hover" });
 
         serializedObject.FindProperty(vfx.Components[0]);
         drawColorProp = serializedObject.FindProperty(highlight.Components[0]);
@@ -39,11 +45,17 @@ public class CellGridEditor : Editor
         sizeProp = serializedObject.FindProperty(debug.Components[0]);
         colorProp = serializedObject.FindProperty(debug.Components[1]);
 
+        spawnProp = serializedObject.FindProperty(audio.Components[0]);
+        eraseProp = serializedObject.FindProperty(audio.Components[1]);
+        scrollProp = serializedObject.FindProperty(audio.Components[2]);
+        hoverProp = serializedObject.FindProperty(audio.Components[3]);
+
         componentPropertyMap = new Dictionary<CellComponents, ComponentProperties>
         {
             { CellComponents.CellParticle, vfx },
             { CellComponents.CellHighlighter, highlight },
-            { CellComponents.CellDebugger, debug }
+            { CellComponents.CellDebugger, debug },
+            { CellComponents.CellAudioPlayer, audio }
         };
     }
 
