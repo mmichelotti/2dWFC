@@ -460,22 +460,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: erase
-      value: 
-      objectReference: {fileID: 8300000, guid: 4133564e7d6a92a45a8de072e9784773, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: hover
-      value: 
-      objectReference: {fileID: 8300000, guid: 1b1a715da888beb4d84e983d62283eff, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: spawn
-      value: 
-      objectReference: {fileID: 8300000, guid: 9627dff3c69eec3438121423a0567c30, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: scroll
-      value: 
-      objectReference: {fileID: 8300000, guid: 622cbc9b67f156d4da3f4bc64a11c60c, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
       propertyPath: components
       value: -1
       objectReference: {fileID: 0}

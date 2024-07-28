@@ -22,13 +22,13 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     public void InitializeState(bool invoke = true)
     {
         State = new(TileSet.AllConfigurations);
-        if(invoke) OnInitializeState.Invoke(State);
+        if (invoke) OnInitializeState.Invoke(State);
     }
     public void ResetState(bool invoke = true)
     {
         InitializeState();
         Constrain(default);
-        if(invoke) OnResetState.Invoke(State);
+        if (invoke) OnResetState.Invoke(State);
     }
     
     public void UpdateState(bool invoke = true)
@@ -39,13 +39,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
             .ToList();
 
         State.Update(newState);
-        if(invoke) OnUpdateState.Invoke(State);
-    }
-
-    public void ObserveState(DirectionsRequired dr, bool invoke = true)
-    {
-        Constrain(dr);
-        UpdateState(invoke);
+        if (invoke) OnUpdateState.Invoke(State);
     }
     public void CollapseState(int? index = null, bool invoke = true)
     {
@@ -54,4 +48,9 @@ public class QuantumCell : Cell, IQuantizable<Tile>
         if (invoke) OnCollapseState.Invoke(State);
     }
 
+    public void ObserveState(DirectionsRequired dr, bool invoke = true)
+    {
+        Constrain(dr);
+        UpdateState(invoke);
+    }
 }

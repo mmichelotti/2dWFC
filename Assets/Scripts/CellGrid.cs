@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static ComponentUtility;
+using System.Collections;
 
 
 [RequireComponent(typeof(Grid))]
@@ -66,7 +67,7 @@ public class CellGrid : Manager
     
     public void SpawnCell(Vector2Int pos, int? index = null)
     {
-        Cells[pos].ObserveState(ExcludeGrid(pos));
+        Cells[pos].UpdateState();
         Cells[pos].CollapseState(index);
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
@@ -90,19 +91,29 @@ public class CellGrid : Manager
 
     public void FillGrid()
     {
+        StartCoroutine(FillGridCoroutine());
+    }
+    public IEnumerator FillGridCoroutine()
+    {
         HashSet<Vector2Int> processedCells = new();
-        Vector2Int currentPos = quantumGrid.LowestEntropy;
+        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions.All);
 
         while (!processedCells.Contains(currentPos))
         {
             SpawnCell(currentPos);
             processedCells.Add(currentPos);
             currentPos = quantumGrid.LowestEntropy;
+
+            yield return new WaitForSeconds(0f); 
         }
     }
     public void ClearGrid()
     {
-        foreach (var cell in Cells.Values) cell.ResetState();
+        foreach (var (pos,cell) in Cells)
+        {
+            cell.ResetState();
+            cell.ObserveState(ExcludeGrid(pos));
+        }
         quantumGrid.ClearQueue();
     }
 }

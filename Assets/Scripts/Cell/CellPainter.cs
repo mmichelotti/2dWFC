@@ -77,7 +77,6 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         InputManager.WhileLeftMouseButton.RemoveListener(leftClickListener);
         InputManager.OnMiddleMouseButtonEnter.RemoveListener(middleClickListener); // Changed from OnMiddleMouseButtonExit to WhileMiddleMouseButton
         OnUnhover.Invoke(Painting.Clear);
-        CurrentIndex = 0;
         isHovered = false;
     }
 

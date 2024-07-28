@@ -25,7 +25,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3074443105439497630}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -70,3 +70,7 @@ MonoBehaviour:
   eraseColor: {r: 0.4, g: 0, b: 1, a: 1}
   fontSize: 3
   fontColor: {r: 0, g: 0.8, b: 0.7, a: 1}
+  spawn: {fileID: 8300000, guid: f9098a39a4dc348459e2e18840207783, type: 3}
+  erase: {fileID: 8300000, guid: e05737c182942aa4bb8437b6c3e4eeb7, type: 3}
+  scroll: {fileID: 8300000, guid: 74b904e65f6c7a84690789cec3a0123b, type: 3}
+  hover: {fileID: 8300000, guid: 2f82314ad03883448a0ae76d664e9518, type: 3}
