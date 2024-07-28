@@ -82,7 +82,7 @@ public class CellGridEditor : Editor
 
         if (GUILayout.Button("AutoFill"))
         {
-            cellGrid.FillGrid();
+             cellGrid.FillGrid();
         }
         if (GUILayout.Button("Shuffle"))
         {
