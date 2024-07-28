@@ -47,7 +47,7 @@ public class CellGrid : Manager
             QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components, drawColor, eraseColor, fontSize, fontColor, audioClip).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
-            quantumCell.ReobserveState(ExcludeGrid(pos));
+            quantumCell.ObserveState(ExcludeGrid(pos), false);
             Cells.Add(pos, quantumCell);
         };
         initializeCell.MatrixLoop(Grid.Size);
@@ -66,7 +66,7 @@ public class CellGrid : Manager
     
     public void SpawnCell(Vector2Int pos, int? index = null)
     {
-        Cells[pos].Constrain(ExcludeGrid(pos));
+        Cells[pos].ObserveState(ExcludeGrid(pos));
         Cells[pos].CollapseState(index);
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
@@ -77,8 +77,13 @@ public class CellGrid : Manager
         QuantumCell currentCell = Cells[pos];
         if (!currentCell.State.HasCollapsed) return;
 
-        currentCell.ReobserveState(RequiredDirections(pos));
-        foreach (var neighbor in quantumGrid.Get(pos, false).Values) neighbor.ReobserveState(RequiredDirections(neighbor.Coordinate));
+        currentCell.ResetState();
+        currentCell.ObserveState(RequiredDirections(pos));
+        foreach (var neighbor in quantumGrid.Get(pos, false).Values)
+        {
+            neighbor.ResetState();
+            neighbor.ObserveState(RequiredDirections(neighbor.Coordinate));
+        }
 
         quantumGrid.UpdateEntropy(pos);
     }

@@ -13,7 +13,6 @@ public struct DirectionsRequired : IFormattable
     public string ToString(string str, IFormatProvider format) => $"Required: {Required.ToStringCustom()}, Excluded {Excluded.ToStringCustom()}";
 }
 
-
 [Flags]
 public enum Directions 
 {
@@ -24,7 +23,6 @@ public enum Directions
     Left = 0b1000,
     All = ~None
 }
-
 
 public enum Shift
 {

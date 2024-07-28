@@ -53,7 +53,12 @@ public class QuantumGrid
 
     public void ResetState(Vector2Int pos, DirectionsRequired dr)
     {
-        foreach (var neighbor in Get(pos, false).Values) neighbor.ReobserveState(dr);
+        foreach (var neighbor in Get(pos, false).Values)
+        {
+            neighbor.ResetState();
+            neighbor.ObserveState(dr);
+        }
+
     }
     public void UpdateState(Vector2Int pos)
     {

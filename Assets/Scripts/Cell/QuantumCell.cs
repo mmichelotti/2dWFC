@@ -19,20 +19,19 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     {
         new CellSpawner(this);
     }
-
-    public void InitializeState()
+    public void InitializeState(bool invoke = true)
     {
         State = new(TileSet.AllConfigurations);
-        OnInitializeState.Invoke(State);
+        if(invoke) OnInitializeState.Invoke(State);
     }
-    public void ResetState()
+    public void ResetState(bool invoke = true)
     {
         InitializeState();
         Constrain(default);
-        OnResetState.Invoke(State);
+        if(invoke) OnResetState.Invoke(State);
     }
     
-    public void UpdateState()
+    public void UpdateState(bool invoke = true)
     {
         List<Tile> newState = State.Superposition
             .Where(tile => tile.Directions.HasFlag(DirectionsRequired.Required) &&
@@ -40,20 +39,19 @@ public class QuantumCell : Cell, IQuantizable<Tile>
             .ToList();
 
         State.Update(newState);
-        OnUpdateState.Invoke(State);
+        if(invoke) OnUpdateState.Invoke(State);
     }
 
-    public void ReobserveState(DirectionsRequired dr)
+    public void ObserveState(DirectionsRequired dr, bool invoke = true)
     {
-        ResetState();
         Constrain(dr);
-        UpdateState();
+        UpdateState(invoke);
     }
-    public void CollapseState(int? index = null)
+    public void CollapseState(int? index = null, bool invoke = true)
     {
         if (State.HasCollapsed) return;
-        UpdateState();
         State.Collapse(index);
-        OnCollapseState.Invoke(State);
+        if (invoke) OnCollapseState.Invoke(State);
     }
+
 }

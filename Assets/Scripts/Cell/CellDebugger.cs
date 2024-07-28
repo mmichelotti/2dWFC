@@ -28,7 +28,6 @@ public class CellDebugger : MonoBehaviour
         prefab.transform.SetParent(transform, false);
 
         TextMeshPro cellText = prefab.AddComponent<TextMeshPro>();
-        Debug.LogError("Creating Prefab");
         cellText.fontSize = Size;
         cellText.color = Color;
         cellText.alignment = TextAlignmentOptions.Center;

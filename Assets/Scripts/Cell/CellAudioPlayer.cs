@@ -17,16 +17,19 @@ public class CellAudioPlayer : MonoBehaviour
         QuantumCell quantumCell = GetComponent<QuantumCell>();
         quantumCell.OnCollapseState.AddListener(state => PlaySoundFX(spawn));
         quantumCell.OnResetState.AddListener(state => PlaySoundFX(erase));
-        TryGetComponent<CellPainter>( out CellPainter cellPainter);
-        cellPainter.OnHover?.AddListener(state => PlaySoundFX(hover));
-        cellPainter.OnIndexChange?.AddListener(state => PlaySoundFX(scroll));
-
+        if(TryGetComponent<CellPainter>( out CellPainter cellPainter))
+        {
+            cellPainter.OnHover?.AddListener(state => PlaySoundFX(hover));
+            cellPainter.OnIndexChange?.AddListener(state => PlaySoundFX(scroll));
+        }
     }
     private void PlaySoundFX(AudioClip sfx)
     {
+        audioSource.pitch = Random.Range(1f, 1.1f);
         audioSource.clip = sfx;
         audioSource.Play();
     }
+
 
     public void SetProperties(AudioClip[] audioClip)
     {
