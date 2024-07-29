@@ -6,20 +6,20 @@ public class Grid : MonoBehaviour
     #region properties
     [field: SerializeField] public Vector2Int Size { get; set; }
     [field: SerializeField] public int Area { get; set; }
-    public Vector2Int RandomCoordinate => Extensions.RandomVector(Size);
+    public Vector2Int RandomCoordinate => VectorUtility.RandomVector(Size);
     private Vector2 LocalPosition => transform.localPosition;
     #endregion
 
     #region methods
-    public Vector2Int GetCoordinatesAt(Directions dir)
+    public Vector2Int GetCoordinatesAt(Directions2D dir)
     {
         Vector2 vector = dir.DirectionToMatrix() * new Vector2(Size.x - 1, Size.y - 1);
         return new Vector2Int((int)vector.x, (int)vector.y);
     }
 
-    public Directions Boundaries(Vector2Int pos)
+    public Directions2D Boundaries(Vector2Int pos)
     {
-        Directions exclude = default;
+        Directions2D exclude = default;
         foreach (var (dir, off) in DirectionUtility.OrientationOf)
         {
             if (!IsWithinGrid(pos + off)) exclude |= dir;

@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
-using System.Runtime.CompilerServices;
 
 public enum Painting
 {

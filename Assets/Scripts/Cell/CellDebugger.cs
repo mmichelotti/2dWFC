@@ -4,8 +4,6 @@ using TMPro;
 [RequireComponent(typeof(QuantumCell))]
 public class CellDebugger : MonoBehaviour
 {
-    public float Size { get; set; } = 3f;
-    public Color Color { get; set; } = new(0,.8f,.7f,1f);
 
     private TextMeshPro cellText;
     public void Awake()
@@ -28,8 +26,6 @@ public class CellDebugger : MonoBehaviour
         prefab.transform.SetParent(transform, false);
 
         TextMeshPro cellText = prefab.AddComponent<TextMeshPro>();
-        cellText.fontSize = Size;
-        cellText.color = Color;
         cellText.alignment = TextAlignmentOptions.Center;
 
         return prefab;
@@ -40,5 +36,4 @@ public class CellDebugger : MonoBehaviour
         cellText.fontSize = fontSize;
         cellText.color = fontColor;
     }
-
 }

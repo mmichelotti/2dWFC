@@ -5,9 +5,6 @@ using System.Linq;
 using static ComponentUtility;
 
 
-
-
-
 [CustomEditor(typeof(CellGrid))]
 public class CellGridEditor : Editor
 {

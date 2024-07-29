@@ -30,9 +30,9 @@ public class QuantumGrid
         }
     }
 
-    public Dictionary<Directions,QuantumCell> Get(Vector2Int pos, bool haveCollapsed)
+    public Dictionary<Directions2D,QuantumCell> Get(Vector2Int pos, bool haveCollapsed)
     {
-        Dictionary<Directions, QuantumCell> neighbours = new();
+        Dictionary<Directions2D, QuantumCell> neighbours = new();
         foreach (var (dir,off) in DirectionUtility.OrientationOf)
         {
             if (initialCells.TryGetValue(pos + off, out QuantumCell adjacent))

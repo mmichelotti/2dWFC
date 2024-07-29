@@ -4,9 +4,6 @@ using UnityEngine;
 [RequireComponent(typeof(CellPainter))]
 public class CellHighlighter : MonoBehaviour
 {
-    public Color DrawColor { get; set; } = Color.white;
-    public Color EraseColor { get; set; } = new(.4f, 0f, 1f, 1f);
-
     private SpriteRenderer cellHighlighter;
     private CellPainter cellPainter;
     private Dictionary<Painting, Color> colors = new()

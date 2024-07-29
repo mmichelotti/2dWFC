@@ -1,25 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using static ComponentUtility;
 using System.Collections;
 using System.Linq;
-
-
-public enum AudioType
-{
-    Spawn,
-    Erase,
-    Scroll,
-    Hover
-}
-
-[System.Serializable]
-public class AudioTypeClipPair
-{
-    public AudioType Key;
-    public AudioClip Value;
-}
 
 
 [RequireComponent(typeof(Grid))]
@@ -45,7 +28,7 @@ public class CellGrid : Manager
     [SerializeField] private float fontSize = 3f;
     [SerializeField] private Color fontColor = new(0, .8f, .7f, 1f);
     [SerializeField]
-    private List<AudioTypeClipPair> audioTypes = new();
+    private List<AudioKVP> audioTypes = new();
     #endregion
 
     public GameObject CreateCellPrefab (Transform parent = null)
@@ -53,7 +36,7 @@ public class CellGrid : Manager
         GameObject cellPrefab = new("Cell");
         QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
         quantumCell.TileSet = tileSet;
-        Dictionary<AudioType, AudioClip> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.Key, pair => pair.Value);
+        Dictionary<AudioType, AudioClip> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.AudioType, pair => pair.AudioClip);
         var propertySetters = new Dictionary<Type, Action<object>>
         {
             { typeof(CellParticle), obj => ((CellParticle)obj).SetProperties(vfx) },
@@ -138,7 +121,7 @@ public class CellGrid : Manager
     public IEnumerator FillGridCoroutine()
     {
         HashSet<Vector2Int> processedCells = new();
-        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions.All);
+        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
 
         while (!processedCells.Contains(currentPos))
         {

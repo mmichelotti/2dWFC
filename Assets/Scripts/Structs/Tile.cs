@@ -2,22 +2,15 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public enum RotationOption
-{
-    Default = 1,
-    OneStep = 2,
-    All = 4
-}
-
 [Serializable]
 public struct Tile : IDirectionable, IFormattable, IProbable
 {
     [field: SerializeField] public string Name { get; private set; }
     [field: SerializeField] public Sprite Sprite { get; private set; }
     [field: SerializeField, Range(0, 1)] public float Probability { get; set; }
-    [field: SerializeField] public RotationOption PossibleRotations { get; set; }
-    [field: SerializeField] public Directions Directions { get; set; }
-    [field: SerializeField] public List<Directions> Connections { get; set; }
+    [field: SerializeField] public RotationMode PossibleRotations { get; set; }
+    [field: SerializeField] public Directions2D Directions { get; set; }
+    [field: SerializeField] public List<Directions2D> Connections { get; set; }
     public Vector3 Rotation { get; set; }
 
     public Tile(Tile tile) => 
@@ -49,15 +42,15 @@ public struct Tile : IDirectionable, IFormattable, IProbable
 
     private void Rotate()
     {
-        Directions = Directions.Bitshift(Shift.Right);
+        Directions = Directions.Bitshift(Directions1D.Right);
 
         for (int i = 0; i < Connections.Count; i++)
-            Connections[i] = Connections[i].Bitshift(Shift.Right);
+            Connections[i] = Connections[i].Bitshift(Directions1D.Right);
 
         Rotation += new Vector3(0, 0, 90);
     }
 
-    public readonly bool HasDirection(Directions dir) => Directions.HasFlag(dir);
+    public readonly bool HasDirection(Directions2D dir) => Directions.HasFlag(dir);
     public readonly string ToString(string format, IFormatProvider formatProvider) => $"{Name}, {Directions.ToStringCustom()} roads with {Rotation.z} degrees rotation.";
 
 }

@@ -35,7 +35,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
     {
         List<Tile> newState = State.Superposition
             .Where(tile => tile.Directions.HasFlag(DirectionsRequired.Required) &&
-                           (tile.Directions & DirectionsRequired.Excluded) == Directions.None)
+                           (tile.Directions & DirectionsRequired.Excluded) == Directions2D.None)
             .ToList();
 
         State.Update(newState);

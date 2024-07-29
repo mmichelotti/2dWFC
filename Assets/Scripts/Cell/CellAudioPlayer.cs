@@ -6,7 +6,6 @@ using UnityEngine;
 public class CellAudioPlayer : MonoBehaviour
 {
     private AudioSource audioSource;
-    public AudioClip[] AudioClips { get; set; }
 
     public Dictionary<AudioType, AudioClip> Audio = new();
 
