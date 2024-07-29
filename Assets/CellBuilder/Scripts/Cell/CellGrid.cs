@@ -3,6 +3,9 @@ using UnityEngine;
 using System;
 using System.Collections;
 using System.Linq;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Burst;
 
 
 [RequireComponent(typeof(Grid))]
@@ -65,14 +68,16 @@ public class CellGrid : Manager
         DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
         return required.Exclude(Grid.Boundaries(pos));
     }
-    
+
     public void SpawnCell(Vector2Int pos, int? index = null)
     {
+        if (!Cells.ContainsKey(pos)) return; // Ensure the cell exists to avoid race conditions
         Cells[pos].UpdateState();
         Cells[pos].CollapseState(index);
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
     }
+
 
     public void RemoveCell(Vector2Int pos)
     {
@@ -93,6 +98,8 @@ public class CellGrid : Manager
     public void FillGrid()
     {
         StartCoroutine(FillGridCoroutine());
+        //FillGridNormal();
+        //StartCoroutine(FillGridJobs());
     }
     public IEnumerator FillGridCoroutine()
     {
@@ -105,9 +112,63 @@ public class CellGrid : Manager
             processedCells.Add(currentPos);
             currentPos = quantumGrid.LowestEntropy;
 
-            yield return new WaitForSeconds(0f); 
+            yield return new WaitForEndOfFrame(); 
         }
     }
+    public void FillGridNormal()
+    {
+        HashSet<Vector2Int> processedCells = new();
+        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
+
+        while (!processedCells.Contains(currentPos))
+        {
+            SpawnCell(currentPos);
+            processedCells.Add(currentPos);
+            currentPos = quantumGrid.LowestEntropy;
+        }
+    }
+    private IEnumerator FillGridJobs()
+    {
+        HashSet<Vector2Int> processedCells = new();
+        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
+
+        while (processedCells.Count < Grid.Count)
+        {
+            NativeList<Vector2Int> positions = new NativeList<Vector2Int>(Allocator.Persistent);
+
+            // Collect positions to process
+            for (int i = 0; i < 64 && processedCells.Count < Grid.Count; i++)
+            {
+                if (processedCells.Contains(currentPos))
+                {
+                    currentPos = quantumGrid.LowestEntropy;
+                    continue;
+                }
+
+                positions.Add(currentPos);
+                processedCells.Add(currentPos);
+                currentPos = quantumGrid.LowestEntropy;
+            }
+
+            var spawnCellJob = new SpawnCellJob
+            {
+                Positions = positions
+            };
+
+            JobHandle jobHandle = spawnCellJob.Schedule(positions.Length, 1);
+            yield return new WaitUntil(() => jobHandle.IsCompleted);
+
+            jobHandle.Complete();
+            foreach (var pos in positions)
+            {
+                SpawnCell(pos);
+            }
+            positions.Dispose();
+
+            yield return new WaitForEndOfFrame();  // Ensure coroutine continues in the next frame
+        }
+    }
+
     public void ClearGrid()
     {
         foreach (var (pos,cell) in Cells)
@@ -140,5 +201,20 @@ public class CellGrid : Manager
 
         cellPrefab.transform.parent = parent;
         return cellPrefab;
+    }
+}
+
+
+[BurstCompile]
+struct SpawnCellJob : IJobParallelFor
+{
+    [ReadOnly] public NativeArray<Vector2Int> Positions;
+
+    public void Execute(int index)
+    {
+        // The job does not directly interact with QuantumCell
+        // Instead, it just processes the positions
+        Vector2Int pos = Positions[index];
+        // Add any position-based calculations or operations here
     }
 }

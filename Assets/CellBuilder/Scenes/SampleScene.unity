@@ -301,6 +301,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Builder
       objectReference: {fileID: 0}
+    - target: {fileID: 5511835437568069500, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
+      propertyPath: <Size>k__BackingField.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 5511835437568069500, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
+      propertyPath: <Size>k__BackingField.y
+      value: 11
+      objectReference: {fileID: 0}
     - target: {fileID: 7239352347468795370, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
