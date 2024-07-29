@@ -1,4 +1,6 @@
 public interface IPositionable<T> { public T Coordinate { get; set; } }
+
+
 public interface IRequirable { public DirectionsRequired DirectionsRequired { get; set; } }
 public interface IDebuggable { public abstract void Debug(); }
 public interface IInitializable { public abstract void Init(); }
@@ -17,3 +19,4 @@ public interface IQuantizable<T> where T : IProbable
     public abstract void UpdateState(bool invoke = true);
     public abstract void ResetState(bool invoke = true);
 }
+

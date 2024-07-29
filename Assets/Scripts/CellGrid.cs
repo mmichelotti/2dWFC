@@ -3,6 +3,23 @@ using UnityEngine;
 using System;
 using static ComponentUtility;
 using System.Collections;
+using System.Linq;
+
+
+public enum AudioType
+{
+    Spawn,
+    Erase,
+    Scroll,
+    Hover
+}
+
+[System.Serializable]
+public class AudioTypeClipPair
+{
+    public AudioType Key;
+    public AudioClip Value;
+}
 
 
 [RequireComponent(typeof(Grid))]
@@ -12,6 +29,14 @@ public class CellGrid : Manager
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
     [SerializeField] private TileSet tileSet;
     [SerializeField] private CellComponents components;
+    public static IReadOnlyDictionary<CellComponents, Type> ComponentMap { get; } = new Dictionary<CellComponents, Type>()
+    {
+        { CellComponents.CellPainter, typeof(CellPainter) },
+        { CellComponents.CellHighlighter, typeof(CellHighlighter) },
+        { CellComponents.CellDebugger, typeof(CellDebugger) },
+        { CellComponents.CellParticle, typeof(CellParticle) },
+        { CellComponents.CellAudioPlayer, typeof(CellAudioPlayer) }
+    };
 
     #region flag fields
     [SerializeField] private ParticleSystem vfx;
@@ -19,12 +44,33 @@ public class CellGrid : Manager
     [SerializeField] private Color eraseColor = new(.4f, 0f, 1f, 1f);
     [SerializeField] private float fontSize = 3f;
     [SerializeField] private Color fontColor = new(0, .8f, .7f, 1f);
-
-    [SerializeField] private AudioClip spawn;
-    [SerializeField] private AudioClip erase;
-    [SerializeField] private AudioClip scroll;
-    [SerializeField] private AudioClip hover;
+    [SerializeField]
+    private List<AudioTypeClipPair> audioTypes = new();
     #endregion
+
+    public GameObject CreateCellPrefab (Transform parent = null)
+    {
+        GameObject cellPrefab = new("Cell");
+        QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
+        quantumCell.TileSet = tileSet;
+        Dictionary<AudioType, AudioClip> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.Key, pair => pair.Value);
+        var propertySetters = new Dictionary<Type, Action<object>>
+        {
+            { typeof(CellParticle), obj => ((CellParticle)obj).SetProperties(vfx) },
+            { typeof(CellHighlighter), obj => ((CellHighlighter)obj).SetProperties(drawColor, eraseColor) },
+            { typeof(CellDebugger), obj => ((CellDebugger)obj).SetProperties(fontSize, fontColor) },
+            { typeof(CellAudioPlayer), obj => ((CellAudioPlayer)obj).SetProperties(audioTypeDictionary) }
+        };
+
+        foreach (var component in ComponentMap.Where(c => components.HasFlag(c.Key)))
+        {
+            var addedComponent = cellPrefab.AddComponent(component.Value);
+            if (propertySetters.TryGetValue(component.Value, out var setter)) setter(addedComponent);
+        }
+
+        cellPrefab.transform.parent = parent;
+        return cellPrefab;
+    }
 
     private QuantumGrid quantumGrid;
 
@@ -41,11 +87,7 @@ public class CellGrid : Manager
 
         Action<Vector2Int> initializeCell = pos =>
         {
-            AudioClip[] audioClip = new AudioClip[]
-            {
-                spawn, erase, scroll, hover
-            };
-            QuantumCell quantumCell = CreateCellPrefab(tileSet, vfx, group.transform, components, drawColor, eraseColor, fontSize, fontColor, audioClip).GetComponent<QuantumCell>();
+            QuantumCell quantumCell = CreateCellPrefab(group.transform).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
             quantumCell.ObserveState(ExcludeGrid(pos), false);

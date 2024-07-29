@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -5,24 +6,25 @@ using UnityEngine;
 public class CellAudioPlayer : MonoBehaviour
 {
     private AudioSource audioSource;
+    public AudioClip[] AudioClips { get; set; }
 
-    AudioClip spawn;
-    AudioClip erase;
-    AudioClip scroll;
-    AudioClip hover;
+    public Dictionary<AudioType, AudioClip> Audio = new();
 
     private void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         QuantumCell quantumCell = GetComponent<QuantumCell>();
-        quantumCell.OnCollapseState.AddListener(state => PlaySoundFX(spawn));
-        quantumCell.OnResetState.AddListener(state => PlaySoundFX(erase));
-        if(TryGetComponent<CellPainter>( out CellPainter cellPainter))
+
+        quantumCell.OnCollapseState.AddListener(_ => PlayAudio(AudioType.Spawn));
+        quantumCell.OnResetState.AddListener(_ => PlayAudio(AudioType.Erase));
+
+        if (TryGetComponent<CellPainter>(out CellPainter cellPainter))
         {
-            cellPainter.OnHover?.AddListener(state => PlaySoundFX(hover));
-            cellPainter.OnIndexChange?.AddListener(state => PlaySoundFX(scroll));
+            cellPainter.OnHover?.AddListener(_ => PlayAudio(AudioType.Hover));
+            cellPainter.OnIndexChange?.AddListener(_ => PlayAudio(AudioType.Scroll));
         }
     }
+
     private void PlaySoundFX(AudioClip sfx)
     {
         audioSource.pitch = Random.Range(1f, 1.1f);
@@ -30,13 +32,13 @@ public class CellAudioPlayer : MonoBehaviour
         audioSource.Play();
     }
 
-
-    public void SetProperties(AudioClip[] audioClip)
+    private void PlayAudio(AudioType audioType)
     {
-        this.spawn = audioClip[0];
-        this.erase = audioClip[1];
-        this.scroll = audioClip[2];
-        this.hover = audioClip[3];
+        if (Audio.TryGetValue(audioType, out var clip)) PlaySoundFX(clip);
+    }
+    public void SetProperties(Dictionary<AudioType, AudioClip> audio)
+    {
+        Audio = audio;
     }
 }
     

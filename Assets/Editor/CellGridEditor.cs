@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using static ComponentUtility;
 
+
+
+
+
 [CustomEditor(typeof(CellGrid))]
 public class CellGridEditor : Editor
 {
@@ -15,10 +19,7 @@ public class CellGridEditor : Editor
     SerializedProperty sizeProp;
     SerializedProperty colorProp;
 
-    SerializedProperty spawnProp;
-    SerializedProperty eraseProp;
-    SerializedProperty scrollProp;
-    SerializedProperty hoverProp;
+    SerializedProperty audioProp;
 
     private static Dictionary<CellComponents, ComponentProperties> componentPropertyMap;
 
@@ -37,18 +38,14 @@ public class CellGridEditor : Editor
         ComponentProperties vfx = new ("Particle Settings", new[] { "vfx" });
         ComponentProperties highlight = new ("Highlight Settings", new[] { "drawColor", "eraseColor" });
         ComponentProperties debug = new ("Debug Settings", new[] { "fontSize", "fontColor" });
-        ComponentProperties audio = new("Audio Settings", new[] { "spawn", "erase", "scroll", "hover" });
+        ComponentProperties audio = new("Audio Settings", new[] { "audioTypes" });
 
         serializedObject.FindProperty(vfx.Components[0]);
         drawColorProp = serializedObject.FindProperty(highlight.Components[0]);
         eraseColorProp = serializedObject.FindProperty(highlight.Components[1]);
         sizeProp = serializedObject.FindProperty(debug.Components[0]);
         colorProp = serializedObject.FindProperty(debug.Components[1]);
-
-        spawnProp = serializedObject.FindProperty(audio.Components[0]);
-        eraseProp = serializedObject.FindProperty(audio.Components[1]);
-        scrollProp = serializedObject.FindProperty(audio.Components[2]);
-        hoverProp = serializedObject.FindProperty(audio.Components[3]);
+        audioProp = serializedObject.FindProperty(audio.Components[0]);
 
         componentPropertyMap = new Dictionary<CellComponents, ComponentProperties>
         {
