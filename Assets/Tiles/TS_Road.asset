@@ -15,19 +15,19 @@ MonoBehaviour:
   Tiles:
   - <Name>k__BackingField: Concrete
     <Sprite>k__BackingField: {fileID: 303569289, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
-    <Probability>k__BackingField: 0.276
+    <Probability>k__BackingField: 0.145
     <PossibleRotations>k__BackingField: 1
     <Directions>k__BackingField: 0
     <Connections>k__BackingField: 
   - <Name>k__BackingField: Tree
     <Sprite>k__BackingField: {fileID: -1821114363, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
-    <Probability>k__BackingField: 0.165
+    <Probability>k__BackingField: 0.13
     <PossibleRotations>k__BackingField: 4
     <Directions>k__BackingField: 0
     <Connections>k__BackingField: 
   - <Name>k__BackingField: 1 Way
     <Sprite>k__BackingField: {fileID: 1908179991, guid: 7b8d4c6243dd29b4486c62e36edb817f, type: 3}
-    <Probability>k__BackingField: 0.27
+    <Probability>k__BackingField: 1
     <PossibleRotations>k__BackingField: 4
     <Directions>k__BackingField: 4
     <Connections>k__BackingField: ffffffff

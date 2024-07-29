@@ -36,7 +36,7 @@ public class CellGrid : Manager
         GameObject cellPrefab = new("Cell");
         QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
         quantumCell.TileSet = tileSet;
-        Dictionary<AudioType, AudioClip> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.AudioType, pair => pair.AudioClip);
+        Dictionary<AudioType, AudioSample> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.AudioType, pair => pair.AudioSample);
         var propertySetters = new Dictionary<Type, Action<object>>
         {
             { typeof(CellParticle), obj => ((CellParticle)obj).SetProperties(vfx) },

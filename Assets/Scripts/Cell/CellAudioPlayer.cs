@@ -7,7 +7,7 @@ public class CellAudioPlayer : MonoBehaviour
 {
     private AudioSource audioSource;
 
-    public Dictionary<AudioType, AudioClip> Audio = new();
+    public Dictionary<AudioType, AudioSample> Audio = new();
 
     private void Awake()
     {
@@ -24,18 +24,21 @@ public class CellAudioPlayer : MonoBehaviour
         }
     }
 
-    private void PlaySoundFX(AudioClip sfx)
+    private void PlaySoundFX(AudioClip sfx, float volume)
     {
         audioSource.pitch = Random.Range(1f, 1.1f);
         audioSource.clip = sfx;
+        audioSource.volume = volume;
         audioSource.Play();
     }
 
+
     private void PlayAudio(AudioType audioType)
     {
-        if (Audio.TryGetValue(audioType, out var clip)) PlaySoundFX(clip);
+        if (Audio.TryGetValue(audioType, out var audioKVP))
+            PlaySoundFX(audioKVP.AudioClip, audioKVP.Volume);
     }
-    public void SetProperties(Dictionary<AudioType, AudioClip> audio)
+    public void SetProperties(Dictionary<AudioType, AudioSample> audio)
     {
         Audio = audio;
     }
