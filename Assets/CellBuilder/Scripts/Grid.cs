@@ -6,6 +6,7 @@ public class Grid : MonoBehaviour
     #region properties
     [field: SerializeField] public Vector2Int Size { get; set; }
     [field: SerializeField] public int Area { get; set; }
+    public int Count => Size.x * Size.y;
     public Vector2Int RandomCoordinate => VectorUtility.RandomVector(Size);
     private Vector2 LocalPosition => transform.localPosition;
     #endregion

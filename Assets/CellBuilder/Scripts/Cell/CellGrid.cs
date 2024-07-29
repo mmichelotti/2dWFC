@@ -31,30 +31,6 @@ public class CellGrid : Manager
     private List<AudioKVP> audioTypes = new();
     #endregion
 
-    public GameObject CreateCellPrefab (Transform parent = null)
-    {
-        GameObject cellPrefab = new("Cell");
-        QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
-        quantumCell.TileSet = tileSet;
-        Dictionary<AudioType, AudioSample> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.AudioType, pair => pair.AudioSample);
-        var propertySetters = new Dictionary<Type, Action<object>>
-        {
-            { typeof(CellParticle), obj => ((CellParticle)obj).SetProperties(vfx) },
-            { typeof(CellHighlighter), obj => ((CellHighlighter)obj).SetProperties(drawColor, eraseColor) },
-            { typeof(CellDebugger), obj => ((CellDebugger)obj).SetProperties(fontSize, fontColor) },
-            { typeof(CellAudioPlayer), obj => ((CellAudioPlayer)obj).SetProperties(audioTypeDictionary) }
-        };
-
-        foreach (var component in ComponentMap.Where(c => components.HasFlag(c.Key)))
-        {
-            var addedComponent = cellPrefab.AddComponent(component.Value);
-            if (propertySetters.TryGetValue(component.Value, out var setter)) setter(addedComponent);
-        }
-
-        cellPrefab.transform.parent = parent;
-        return cellPrefab;
-    }
-
     private QuantumGrid quantumGrid;
 
     private void Awake()
@@ -140,5 +116,29 @@ public class CellGrid : Manager
             cell.ObserveState(ExcludeGrid(pos));
         }
         quantumGrid.ClearQueue();
+    }
+
+    public GameObject CreateCellPrefab(Transform parent = null)
+    {
+        GameObject cellPrefab = new("Cell");
+        QuantumCell quantumCell = cellPrefab.AddComponent<QuantumCell>();
+        quantumCell.TileSet = tileSet;
+        Dictionary<AudioType, AudioSample> audioTypeDictionary = audioTypes.ToDictionary(pair => pair.AudioType, pair => pair.AudioSample);
+        var propertySetters = new Dictionary<Type, Action<object>>
+        {
+            { typeof(CellParticle), obj => ((CellParticle)obj).SetProperties(vfx) },
+            { typeof(CellHighlighter), obj => ((CellHighlighter)obj).SetProperties(drawColor, eraseColor) },
+            { typeof(CellDebugger), obj => ((CellDebugger)obj).SetProperties(fontSize, fontColor) },
+            { typeof(CellAudioPlayer), obj => ((CellAudioPlayer)obj).SetProperties(audioTypeDictionary) }
+        };
+
+        foreach (var component in ComponentMap.Where(c => components.HasFlag(c.Key)))
+        {
+            var addedComponent = cellPrefab.AddComponent(component.Value);
+            if (propertySetters.TryGetValue(component.Value, out var setter)) setter(addedComponent);
+        }
+
+        cellPrefab.transform.parent = parent;
+        return cellPrefab;
     }
 }
