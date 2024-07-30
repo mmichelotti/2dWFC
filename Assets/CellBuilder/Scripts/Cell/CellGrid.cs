@@ -55,32 +55,19 @@ public class CellGrid : Manager
             QuantumCell quantumCell = CreateCellPrefab(group.transform).GetComponent<QuantumCell>();
             quantumCell.Initialize(pos, this);
             quantumCell.InitializeState();
-            quantumCell.ObserveState(ExcludeGrid(pos), false);
+            quantumCell.ObserveState(new(default, Grid.Boundaries(pos)), false);
             Cells.Add(pos, quantumCell);
         };
         initializeCell.MatrixLoop(Grid.Size);
         quantumGrid = new QuantumGrid(Cells);
     }
-    private DirectionsRequired ExcludeGrid(Vector2Int pos)
-    {
-        DirectionsRequired dr = new();
-        return dr.Exclude(Grid.Boundaries(pos));
-    }
-    private DirectionsRequired RequiredDirections(Vector2Int pos)
-    {
-        DirectionsRequired required = quantumGrid.GetDirectionsRequired(pos);
-        return required.Exclude(Grid.Boundaries(pos));
-    }
-
     public void SpawnCell(Vector2Int pos, int? index = null)
     {
-        if (!Cells.ContainsKey(pos)) return; // Ensure the cell exists to avoid race conditions
         Cells[pos].UpdateState();
         Cells[pos].CollapseState(index);
         quantumGrid.UpdateState(pos);
         quantumGrid.UpdateEntropy(pos);
     }
-
 
     public void RemoveCell(Vector2Int pos)
     {
@@ -88,11 +75,11 @@ public class CellGrid : Manager
         if (!currentCell.State.HasCollapsed) return;
 
         currentCell.ResetState();
-        currentCell.ObserveState(RequiredDirections(pos));
+        currentCell.ObserveState(quantumGrid.GetDirectionsRequired(pos).Exclude(Grid.Boundaries(pos)));
         foreach (var neighbor in quantumGrid.Get(pos, false).Values)
         {
             neighbor.ResetState();
-            neighbor.ObserveState(RequiredDirections(neighbor.Coordinate));
+            neighbor.ObserveState(quantumGrid.GetDirectionsRequired(neighbor.Coordinate).Exclude(Grid.Boundaries(neighbor.Coordinate)));
         }
 
         quantumGrid.UpdateEntropy(pos);
@@ -128,13 +115,12 @@ public class CellGrid : Manager
         }
     }
 
-
     public void ClearGrid()
     {
         foreach (var (pos,cell) in Cells)
         {
             cell.ResetState();
-            cell.ObserveState(ExcludeGrid(pos));
+            cell.ObserveState(new(default, Grid.Boundaries(pos)), false);
         }
         quantumGrid.ClearQueue();
     }
@@ -164,9 +150,7 @@ public class CellGrid : Manager
     }
 }
 
-
 /*
-
 [BurstCompile]
 public struct SpawnCellJob : IJobParallelFor
 {
@@ -225,5 +209,4 @@ private IEnumerator FillGridJobs()
     }
     areJobsCompleted = true;
 }
-
 */
