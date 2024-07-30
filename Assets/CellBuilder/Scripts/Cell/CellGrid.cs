@@ -6,11 +6,14 @@ using System.Linq;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Burst;
-
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 
 [RequireComponent(typeof(Grid))]
 public class CellGrid : Manager
 {
+    private bool areJobsCompleted = false;
     public Grid Grid { get; private set; }
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
     [SerializeField] private TileSet tileSet;
@@ -97,77 +100,34 @@ public class CellGrid : Manager
 
     public void FillGrid()
     {
-        StartCoroutine(FillGridCoroutine());
         //FillGridNormal();
-        //StartCoroutine(FillGridJobs());
+        StartCoroutine(FillGridCoroutine());
+    }
+
+    public void FillGridNormal()
+    {
+        HashSet<Vector2Int> processedCells = new();
+        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
+        while (!processedCells.Contains(currentPos))
+        {
+            SpawnCell(currentPos);
+            processedCells.Add(currentPos);
+            currentPos = quantumGrid.LowestEntropy;
+        }
     }
     public IEnumerator FillGridCoroutine()
     {
         HashSet<Vector2Int> processedCells = new();
         Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
-
         while (!processedCells.Contains(currentPos))
         {
             SpawnCell(currentPos);
             processedCells.Add(currentPos);
             currentPos = quantumGrid.LowestEntropy;
-
-            yield return new WaitForEndOfFrame(); 
+            yield return new WaitForEndOfFrame();
         }
     }
-    public void FillGridNormal()
-    {
-        HashSet<Vector2Int> processedCells = new();
-        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
 
-        while (!processedCells.Contains(currentPos))
-        {
-            SpawnCell(currentPos);
-            processedCells.Add(currentPos);
-            currentPos = quantumGrid.LowestEntropy;
-        }
-    }
-    private IEnumerator FillGridJobs()
-    {
-        HashSet<Vector2Int> processedCells = new();
-        Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
-
-        while (processedCells.Count < Grid.Count)
-        {
-            NativeList<Vector2Int> positions = new NativeList<Vector2Int>(Allocator.Persistent);
-
-            // Collect positions to process
-            for (int i = 0; i < 64 && processedCells.Count < Grid.Count; i++)
-            {
-                if (processedCells.Contains(currentPos))
-                {
-                    currentPos = quantumGrid.LowestEntropy;
-                    continue;
-                }
-
-                positions.Add(currentPos);
-                processedCells.Add(currentPos);
-                currentPos = quantumGrid.LowestEntropy;
-            }
-
-            var spawnCellJob = new SpawnCellJob
-            {
-                Positions = positions
-            };
-
-            JobHandle jobHandle = spawnCellJob.Schedule(positions.Length, 1);
-            yield return new WaitUntil(() => jobHandle.IsCompleted);
-
-            jobHandle.Complete();
-            foreach (var pos in positions)
-            {
-                SpawnCell(pos);
-            }
-            positions.Dispose();
-
-            yield return new WaitForEndOfFrame();  // Ensure coroutine continues in the next frame
-        }
-    }
 
     public void ClearGrid()
     {
@@ -205,10 +165,14 @@ public class CellGrid : Manager
 }
 
 
+/*
+
 [BurstCompile]
-struct SpawnCellJob : IJobParallelFor
+public struct SpawnCellJob : IJobParallelFor
 {
     [ReadOnly] public NativeArray<Vector2Int> Positions;
+
+    public SpawnCellJob(NativeArray<Vector2Int> positions) => (Positions) = (positions);
 
     public void Execute(int index)
     {
@@ -218,3 +182,48 @@ struct SpawnCellJob : IJobParallelFor
         // Add any position-based calculations or operations here
     }
 }
+
+ //to put within CelLGrid
+private IEnumerator FillGridJobs()
+{
+    Stopwatch stopwatch = new();
+
+    // To handle re-entry, stop any running instances
+    StopCoroutine(nameof(FillGridJobs));
+
+    HashSet<Vector2Int> processedCells = new();
+    Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
+
+    while (processedCells.Count < Grid.Count)
+    {
+        NativeList<Vector2Int> positions = new(Allocator.Persistent);
+
+        // Collect positions to process
+        for (int i = 0; i < 64; i++)
+        {
+            if (processedCells.Contains(currentPos))
+            {
+                currentPos = quantumGrid.LowestEntropy;
+                continue;
+            }
+
+            positions.Add(currentPos);
+            processedCells.Add(currentPos);
+            currentPos = quantumGrid.LowestEntropy;
+        }
+
+        SpawnCellJob spawnCellJob = new(positions);
+
+        JobHandle jobHandle = spawnCellJob.Schedule(positions.Length, 1);
+        yield return new WaitUntil(() => jobHandle.IsCompleted);
+
+        jobHandle.Complete();
+        foreach (var pos in positions) SpawnCell(pos);
+        positions.Dispose();
+
+        yield return new WaitForEndOfFrame();  // Ensure coroutine continues in the next frame
+    }
+    areJobsCompleted = true;
+}
+
+*/
