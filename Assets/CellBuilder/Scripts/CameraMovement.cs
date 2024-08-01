@@ -1,8 +1,6 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-
-[RequireComponent(typeof(PhysicsRaycaster))]
+[RequireComponent(typeof(Camera))]
 public class CameraMovement : MonoBehaviour
 {
 

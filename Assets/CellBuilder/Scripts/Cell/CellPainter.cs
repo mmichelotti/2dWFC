@@ -1,9 +1,8 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
 [RequireComponent(typeof(QuantumCell), typeof(BoxCollider))]
-public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CellPainter : MonoBehaviour, IRayCastable
 {
     public UnityEvent<Painting> OnHover { get; } = new();
     public UnityEvent<Painting> OnUnhover { get; } = new();
@@ -17,6 +16,7 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private QuantumCell quantumCell;
     private bool isHovered;
     private Painting currentPainting;
+
     protected void Start()
     {
         quantumCell = GetComponentInParent<QuantumCell>();
@@ -24,6 +24,7 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         leftClickListener = () => SetCell();
         middleClickListener = () => SetCell(CurrentIndex);
     }
+
     private void UpdateIndex(int value)
     {
         CurrentIndex += value;
@@ -53,23 +54,34 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
                 break;
         }
     }
+
     private void SetCell(int index) => quantumCell.CellGrid.SpawnCell(quantumCell.Coordinate, index);
-    public void OnPointerEnter(PointerEventData eventData)
+
+    public void OnRaycastEnter()
     {
-        InputManager.OnScrollWheel.AddListener(scrollWheelListener);
-        InputManager.WhileLeftMouseButton.AddListener(leftClickListener);
-        InputManager.OnMiddleMouseButtonEnter.AddListener(middleClickListener); // Changed from OnMiddleMouseButtonEnter to WhileMiddleMouseButton
-        OnHover.Invoke(Painting.Drawing);
-        isHovered = true;
+        if (!isHovered)
+        {
+            InputManager.OnScrollWheel.AddListener(scrollWheelListener);
+            InputManager.WhileLeftMouseButton.AddListener(leftClickListener);
+            InputManager.OnMiddleMouseButtonEnter.AddListener(middleClickListener);
+            OnHover.Invoke(Painting.Drawing);
+            isHovered = true;
+        }
     }
 
-    public void OnPointerExit(PointerEventData eventData)
+    public void OnRaycastExit()
     {
-        InputManager.OnScrollWheel.RemoveListener(scrollWheelListener);
-        InputManager.WhileLeftMouseButton.RemoveListener(leftClickListener);
-        InputManager.OnMiddleMouseButtonEnter.RemoveListener(middleClickListener); // Changed from OnMiddleMouseButtonExit to WhileMiddleMouseButton
-        OnUnhover.Invoke(Painting.Clear);
-        isHovered = false;
+        if (isHovered)
+        {
+            InputManager.OnScrollWheel.RemoveListener(scrollWheelListener);
+            InputManager.WhileLeftMouseButton.RemoveListener(leftClickListener);
+            InputManager.OnMiddleMouseButtonEnter.RemoveListener(middleClickListener);
+            OnUnhover.Invoke(Painting.Clear);
+            isHovered = false;
+        }
     }
 
+    public void OnRaycastHover()
+    {
+    }
 }
