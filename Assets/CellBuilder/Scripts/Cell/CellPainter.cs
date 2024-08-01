@@ -2,13 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.Events;
 
-public enum Painting
-{
-    Clear,
-    Drawing,
-    Erasing
-}
-
 [RequireComponent(typeof(QuantumCell), typeof(BoxCollider))]
 public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -38,9 +31,9 @@ public class CellPainter : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (CurrentIndex < 0) CurrentIndex += quantumCell.State.Density;
         OnIndexChange.Invoke(CurrentIndex);
     }
-    
+
     private void Update()
-    { 
+    {
         if (isHovered)
         {
             currentPainting = InputManager.IsLeftShiftPressed ? Painting.Erasing : Painting.Drawing;
