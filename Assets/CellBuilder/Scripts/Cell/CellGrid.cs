@@ -13,7 +13,6 @@ using Unity.VisualScripting;
 [RequireComponent(typeof(Grid))]
 public class CellGrid : Manager
 {
-    private bool areJobsCompleted = false;
     public Grid Grid { get; private set; }
     public Dictionary<Vector2Int, QuantumCell> Cells { get; private set; } = new();
     [SerializeField] private TileSet tileSet;
@@ -85,10 +84,10 @@ public class CellGrid : Manager
         quantumGrid.UpdateEntropy(pos);
     }
 
-    public void FillGrid()
+    public void FillGrid(bool coroutine)
     {
-        //FillGridNormal();
-        StartCoroutine(FillGridCoroutine());
+        if (coroutine) StartCoroutine(FillGridCoroutine());
+        else FillGridNormal();
     }
 
     public void FillGridNormal()
@@ -106,14 +105,27 @@ public class CellGrid : Manager
     {
         HashSet<Vector2Int> processedCells = new();
         Vector2Int currentPos = Grid.GetCoordinatesAt(Directions2D.All);
-        while (!processedCells.Contains(currentPos))
+
+        // Process the initial position
+        SpawnCell(currentPos);
+        processedCells.Add(currentPos);
+        while (true)
         {
-            SpawnCell(currentPos);
-            processedCells.Add(currentPos);
-            currentPos = quantumGrid.LowestEntropy;
+            var lowestEntropyPositions = quantumGrid.LowestEntropyList;
+            if (lowestEntropyPositions.Count == 0) break; // No more cells to process
+
+            foreach (var pos in lowestEntropyPositions)
+            {
+                if (!processedCells.Contains(pos))
+                {
+                    SpawnCell(pos);
+                    processedCells.Add(pos);
+                }
+            }
             yield return new WaitForEndOfFrame();
         }
     }
+
 
     public void ClearGrid()
     {

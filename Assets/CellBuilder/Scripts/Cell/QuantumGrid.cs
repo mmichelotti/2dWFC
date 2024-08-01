@@ -20,7 +20,7 @@ public class QuantumGrid
         {
             while (entropyQueue.Count > 0)
             {
-                var lowestEntropyPos = entropyQueue.Dequeue();
+                var lowestEntropyPos = entropyQueue.DequeueSmallest();
                 if (!initialCells[lowestEntropyPos].State.HasCollapsed)
                 {
                     return lowestEntropyPos;
@@ -29,6 +29,31 @@ public class QuantumGrid
             return Vector2Int.zero;
         }
     }
+    public List<Vector2Int> LowestEntropyList
+    {
+        get
+        {
+            List<Vector2Int> lowestEntropyPositions = new();
+
+            while (entropyQueue.Count > 0)
+            {
+                var concurrentPositions = entropyQueue.DequeueAllSmallest();
+                foreach (var pos in concurrentPositions)
+                {
+                    if (!initialCells[pos].State.HasCollapsed)
+                    {
+                        lowestEntropyPositions.Add(pos);
+                    }
+                }
+                if (lowestEntropyPositions.Count > 0)
+                {
+                    return lowestEntropyPositions;
+                }
+            }
+            return lowestEntropyPositions;
+        }
+    }
+
 
     public Dictionary<Directions2D,QuantumCell> Get(Vector2Int pos, bool haveCollapsed)
     {

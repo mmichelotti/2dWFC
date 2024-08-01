@@ -18,7 +18,7 @@ public class PriorityQueue<T>
         }
     }
 
-    public T Dequeue()
+    public T DequeueSmallest()
     {
         if (elements.Count == 0) throw new InvalidOperationException("The priority queue is empty");
         var element = elements[0];
@@ -42,6 +42,39 @@ public class PriorityQueue<T>
         }
 
         return element.item;
+    }
+    public List<T> DequeueAllSmallest()
+    {
+        if (elements.Count == 0) throw new InvalidOperationException("The priority queue is empty");
+
+        List<T> itemsWithSamePriority = new();
+        var element = elements[0];
+        var topPriority = element.priority;
+
+        while (elements.Count > 0 && elements[0].priority == topPriority)
+        {
+            itemsWithSamePriority.Add(elements[0].item);
+            elements[0] = elements[^1];
+            elements.RemoveAt(elements.Count - 1);
+
+            int c = 0;
+            while (true)
+            {
+                int min = c;
+                int left = 2 * c + 1;
+                int right = 2 * c + 2;
+
+                if (left < elements.Count && elements[left].priority < elements[min].priority) min = left;
+                if (right < elements.Count && elements[right].priority < elements[min].priority) min = right;
+
+                if (min == c) break;
+
+                (elements[c], elements[min]) = (elements[min], elements[c]);
+                c = min;
+            }
+        }
+
+        return itemsWithSamePriority;
     }
 
     public T Peek()

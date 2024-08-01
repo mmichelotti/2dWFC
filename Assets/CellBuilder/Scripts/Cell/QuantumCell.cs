@@ -39,6 +39,7 @@ public class QuantumCell : Cell, IQuantizable<Tile>
             .ToList();
 
         State.Update(newState);
+        if (State.Entropy == 0) CollapseState();
         if (invoke) OnUpdateState.Invoke(State);
     }
     public void CollapseState(int? index = null, bool invoke = true)

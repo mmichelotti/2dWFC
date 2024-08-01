@@ -76,12 +76,12 @@ public class CellGridEditor : Editor
 
         if (GUILayout.Button("AutoFill"))
         {
-             cellGrid.FillGrid();
+             cellGrid.FillGrid(true);
         }
         if (GUILayout.Button("Shuffle"))
         {
             cellGrid.ClearGrid();
-            cellGrid.FillGrid();
+            cellGrid.FillGrid(true);
         }
         if (GUILayout.Button("Clear"))
         {
