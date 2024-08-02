@@ -1,5 +1,5 @@
 {
-    "name": "InputActions",
+    "name": "RoadInputAction",
     "maps": [
         {
             "name": "Player",

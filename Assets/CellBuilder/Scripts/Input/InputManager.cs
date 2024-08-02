@@ -5,7 +5,7 @@ using System;
 
 public class InputManager : Manager
 {
-    private InputActions inputActions;
+    private RoadInputAction inputActions;
     public UnityEvent OnLeftShiftEnter { get; } = new();
     public UnityEvent OnLeftShiftExit { get; } = new();
     public UnityEvent OnLeftMouseButtonEnter { get; } = new();
