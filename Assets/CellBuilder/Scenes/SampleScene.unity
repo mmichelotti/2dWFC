@@ -301,18 +301,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Builder
       objectReference: {fileID: 0}
-    - target: {fileID: 5511835437568069500, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: <Area>k__BackingField
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 5511835437568069500, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: <Size>k__BackingField.x
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 5511835437568069500, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: <Size>k__BackingField.y
-      value: 11
-      objectReference: {fileID: 0}
     - target: {fileID: 7239352347468795370, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -393,54 +381,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: components
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[1].<AudioType>k__BackingField
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[2].<AudioType>k__BackingField
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[3].<AudioType>k__BackingField
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[0].<AudioSample>k__BackingField.Volume
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[1].<AudioSample>k__BackingField.Volume
-      value: 0.588
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[2].<AudioSample>k__BackingField.Volume
-      value: 0.402
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[3].<AudioSample>k__BackingField.Volume
-      value: 0.8
-      objectReference: {fileID: 0}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[0].<AudioSample>k__BackingField.AudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: f9098a39a4dc348459e2e18840207783, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[1].<AudioSample>k__BackingField.AudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: e05737c182942aa4bb8437b6c3e4eeb7, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[2].<AudioSample>k__BackingField.AudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 74b904e65f6c7a84690789cec3a0123b, type: 3}
-    - target: {fileID: 8848061417500694932, guid: c413080c3358bdd4eaf1607109be4f66, type: 3}
-      propertyPath: audioTypes.Array.data[3].<AudioSample>k__BackingField.AudioClip
-      value: 
-      objectReference: {fileID: 8300000, guid: 2f82314ad03883448a0ae76d664e9518, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

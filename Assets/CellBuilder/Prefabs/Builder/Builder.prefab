@@ -71,11 +71,19 @@ MonoBehaviour:
   fontSize: 3
   fontColor: {r: 0, g: 0.8, b: 0.7, a: 1}
   audioTypes:
-  - AudioType: 0
-    AudioClip: {fileID: 8300000, guid: f9098a39a4dc348459e2e18840207783, type: 3}
-  - AudioType: 1
-    AudioClip: {fileID: 8300000, guid: e05737c182942aa4bb8437b6c3e4eeb7, type: 3}
-  - AudioType: 2
-    AudioClip: {fileID: 8300000, guid: 74b904e65f6c7a84690789cec3a0123b, type: 3}
-  - AudioType: 3
-    AudioClip: {fileID: 8300000, guid: 2f82314ad03883448a0ae76d664e9518, type: 3}
+  - <AudioType>k__BackingField: 0
+    <AudioSample>k__BackingField:
+      AudioClip: {fileID: 8300000, guid: f9098a39a4dc348459e2e18840207783, type: 3}
+      Volume: 1
+  - <AudioType>k__BackingField: 1
+    <AudioSample>k__BackingField:
+      AudioClip: {fileID: 8300000, guid: e05737c182942aa4bb8437b6c3e4eeb7, type: 3}
+      Volume: 0.588
+  - <AudioType>k__BackingField: 2
+    <AudioSample>k__BackingField:
+      AudioClip: {fileID: 8300000, guid: 74b904e65f6c7a84690789cec3a0123b, type: 3}
+      Volume: 0.402
+  - <AudioType>k__BackingField: 3
+    <AudioSample>k__BackingField:
+      AudioClip: {fileID: 8300000, guid: 2f82314ad03883448a0ae76d664e9518, type: 3}
+      Volume: 0.8
