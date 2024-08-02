@@ -12,5 +12,4 @@ public class GameManager : MonoBehaviour
         InputManager = this.GetManager<InputManager>();
         RayManager = this.GetManager<RayManager>();
     }
-
 }
